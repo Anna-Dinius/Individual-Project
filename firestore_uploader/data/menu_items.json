@@ -1,0 +1,107 @@
+[
+	{
+		"id": "item_x9f2a7b3k1q8",
+		"name": "Avocado Toast",
+		"description": "Sourdough, avocado, chili flakes",
+		"menu_id": "menu_a9x7k2f3b1q6",
+		"allergens": ["all_a9x7k2f3b1q6"]
+	},
+	{
+		"id": "item_m4z1v8c6e0d3",
+		"name": "Walnut Beet Salad",
+		"description": "Beets, arugula, candied walnuts",
+		"menu_id": "menu_a9x7k2f3b1q6",
+		"allergens": ["all_k6x1p3z8j4r"]
+	},
+	{
+		"id": "item_t5g9n2w7y4p0",
+		"name": "Coconut Curry Bowl",
+		"description": "Rice, veggies, coconut curry sauce",
+		"menu_id": "menu_a9x7k2f3b1q6",
+		"allergens": []
+	},
+	{
+		"id": "item_h2j4l6s0k3x9",
+		"name": "Grilled Chicken Plate",
+		"description": "Herb chicken, roasted vegetables",
+		"menu_id": "menu_m4z8v1c9e0d2",
+		"allergens": ["all_m4z8v1c9e0d2"]
+	},
+	{
+		"id": "item_q8b3d1a6m7z1",
+		"name": "Eggplant Parmesan",
+		"description": "Breaded eggplant, marinara, cheese",
+		"menu_id": "menu_m4z8v1c9e0d2",
+		"allergens": ["all_w1t8g4n6y3z"]
+	},
+	{
+		"id": "item_v3n7y2w5t0g2",
+		"name": "Quinoa Veggie Bowl",
+		"description": "Quinoa, kale, tahini dressing",
+		"menu_id": "menu_m4z8v1c9e0d2",
+		"allergens": []
+	},
+	{
+		"id": "item_k6x9p3z1j4r3",
+		"name": "Lemon Ricotta Pancakes",
+		"description": "Fluffy pancakes with lemon zest",
+		"menu_id": "menu_t5g3n8w6y4p1",
+		"allergens": ["all_w1t8g4n6y3z"]
+	},
+	{
+		"id": "item_y3z7a5b8c1d1",
+		"name": "Tofu Stir Fry",
+		"description": "Tofu, vegetables, sesame soy glaze",
+		"menu_id": "menu_a9x7k2f3b1q6",
+		"allergens": []
+	},
+	{
+		"id": "item_g6h0i2j4k9l2",
+		"name": "Cashew Coconut Curry",
+		"description": "Cashew curry with coconut milk",
+		"menu_id": "menu_a9x7k2f3b1q6",
+		"allergens": ["all_k6x1p3z8j4r"]
+	},
+	{
+		"id": "item_b5c8d1e3f7g3",
+		"name": "Stuffed Bell Peppers",
+		"description": "Quinoa, black beans, tomato sauce",
+		"menu_id": "menu_m4z8v1c9e0d2",
+		"allergens": []
+	},
+	{
+		"id": "item_j2k6l9m0n4p4",
+		"name": "Egg Salad Sandwich",
+		"description": "Classic egg salad on whole wheat",
+		"menu_id": "menu_m4z8v1c9e0d2",
+		"allergens": ["all_q8b1d4a6m7z"]
+	},
+	{
+		"id": "item_u0v4w6x9y2z5",
+		"name": "Smoked Salmon Bagel",
+		"description": "Bagel, cream cheese, smoked salmon",
+		"menu_id": "menu_t5g3n8w6y4p1",
+		"allergens": ["all_t5g3n8w6y4p1"]
+	},
+	{
+		"id": "item_d9e1f2g7h3k6",
+		"name": "Peanut Butter Waffle",
+		"description": "Waffle topped with peanut butter",
+		"menu_id": "menu_t5g3n8w6y4p1",
+		"allergens": ["all_f7c2m9a0b5q"]
+	},
+	{
+		"id": "item_s3q6j8a0b5x7",
+		"name": "Shrimp and Grits",
+		"description": "Savannah-style shrimp and creamy grits",
+		"menu_id": "menu_h2j9l7s0k3x5",
+		"allergens": ["all_v3n5y2w9t0g"]
+	},
+	{
+		"id": "item_f7c2m9a0b5q8",
+		"name": "Buttermilk Fried Chicken",
+		"description": "Crispy chicken with house pickles",
+		"menu_id": "menu_h2j9l7s0k3x5",
+		"allergens": ["all_m4z8v1c9e0d2"]
+	}
+]

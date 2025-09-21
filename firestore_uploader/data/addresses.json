@@ -1,0 +1,30 @@
+[
+	{
+		"id": "add_x7v2k9m3p1q8",
+		"street": "123 Elm Street",
+		"city": "Asheville",
+		"state": "NC",
+		"zipCode": "28801"
+	},
+	{
+		"id": "add_a4b8c2d6e0f3",
+		"street": "456 Pine Avenue",
+		"city": "Boulder",
+		"state": "CO",
+		"zipCode": "80302"
+	},
+	{
+		"id": "add_t9g3n1w5y4z0",
+		"street": "789 Willow Lane",
+		"city": "Madison",
+		"state": "WI",
+		"zipCode": "53703"
+	},
+	{
+		"id": "add_h3j6l2s0k9x5",
+		"street": "321 Cedar Blvd",
+		"city": "Savannah",
+		"state": "GA",
+		"zipCode": "31401"
+	}
+]

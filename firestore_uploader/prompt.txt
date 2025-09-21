@@ -1,0 +1,48 @@
+** AI Prompt for Data Generation **
+
+Given the following data structures, generate sample data for 4 real restaurants (not chain restaurants).  Each restaurant must have only one address. All addresses must be for the USA. Each restaurant must have only one menu. Each menu must have at least 3 menu items. Each menu item must have the allergens attribute, but it can be empty or it can hold a single allergen id. The website attribute is required but can be null. All other attributes of each data structure are required and cannot be empty. When assigning allergen ids to menu items, only use the existing unique allergen ids listed below. At least one disclaimer is required for each restaurant.
+
+restaurants
+
+- id (unique string that starts with "rstr_" followed by 12 randomized characters)
+- name (string, name of the restaurant)
+- menu_id (unique string that starts with "menu_" followed by 12 randomized characters; must be an existing menu_id)
+- address_id (unique string that starts with "add_" followed by 12 randomized characters; must be an existing address_id)
+- hours (array of strings; use one string for each day of the week; abbreviate each day of the week as follows: Monday - M, Tuesday - Tu, Wednesday - W, Thursday - Th, Friday - F, Saturday - Sa, Sunday - Su; follow the format of "dayOfWeek: openingTime am/pm - closingTime am/pm"; if the restaurant is closed on a certain day, follow the format of "dayOfWeek: closed")
+- phone (string in the format of ###-###-####; must be USA phone number)
+- website (string of the url to the restaurant's website; if the restaurant does not have a website, this value can be null)
+- disclaimers (array of strings; 1-sentence disclaimers relevant to restaurants and allergens; could be on cross-contamination, could be on telling customers to let staff know about their allergies before ordering, etc.)
+- cuisine (string; the type of cuisine the restaurant serves)
+
+addresses
+
+- id (unique string that starts with "add_" followed by 12 randomized characters)
+- street (string)
+- city (string)
+- state (two-letter string, state abbreviation)
+- zipCode (string)
+
+menus
+
+- id (unique string that starts with "menu_" followed by 12 randomized characters)
+- restaurant_id (unique string that starts with "rstr_" followed by 12 randomized characters)
+
+menu_items
+
+- id  (unique string that starts with "item_" followed by 12 randomized characters)
+- description (string, short description of the menu item - 10 words or less)
+- name (string, name of the menu item)
+- menu_id (unique string that starts with "menu_" followed by 12 randomized characters)
+- allergens (array of the unique ids (strings) of the allergen the menu item contains)
+
+The unique allergen ids are:
+
+- Lactose (milk) -  all_w1t8g4n6y3z
+- Tree Nuts - all_k6x1p3z8j4r
+- Gluten - all_a9x7k2f3b1q6
+- Eggs - all_q8b1d4a6m7z
+- Shellfish - all_v3n5y2w9t0g
+- Peanuts - all_f7c2m9a0b5q
+- Animal Products - all_h2j9l7s0k3x5
+- Meat - all_m4z8v1c9e0d2
+- Fish - all_t5g3n8w6y4p1

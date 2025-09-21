@@ -1,0 +1,88 @@
+[
+	{
+		"id": "rstr_a9x7k2f3b1q6",
+		"name": "The Laughing Seed",
+		"menu_id": "menu_a9x7k2f3b1q6",
+		"address_id": "add_x7v2k9m3p1q8",
+		"hours": [
+			"M: 11:00 am - 9:00 pm",
+			"Tu: 11:00 am - 9:00 pm",
+			"W: 11:00 am - 9:00 pm",
+			"Th: 11:00 am - 9:00 pm",
+			"F: 11:00 am - 10:00 pm",
+			"Sa: 11:00 am - 10:00 pm",
+			"Su: closed"
+		],
+		"phone": "828-555-1234",
+		"website": "https://laughingseed.com",
+		"disclaimers": [
+			"Please inform staff of any allergies before ordering.",
+			"Cross-contamination may occur despite precautions."
+		],
+		"cuisine": "Vegetarian Fusion"
+	},
+	{
+		"id": "rstr_m4z8v1c9e0d2",
+		"name": "Leaf Kitchen",
+		"menu_id": "menu_m4z8v1c9e0d2",
+		"address_id": "add_a4b8c2d6e0f3",
+		"hours": [
+			"M: closed",
+			"Tu: 12:00 pm - 8:00 pm",
+			"W: 12:00 pm - 8:00 pm",
+			"Th: 12:00 pm - 8:00 pm",
+			"F: 12:00 pm - 9:00 pm",
+			"Sa: 12:00 pm - 9:00 pm",
+			"Su: 12:00 pm - 6:00 pm"
+		],
+		"phone": "303-555-5678",
+		"website": null,
+		"disclaimers": [
+			"Our kitchen handles common allergens and cross-contact is possible."
+		],
+		"cuisine": "Organic American"
+	},
+	{
+		"id": "rstr_t5g3n8w6y4p1",
+		"name": "Graze",
+		"menu_id": "menu_t5g3n8w6y4p1",
+		"address_id": "add_t9g3n1w5y4z0",
+		"hours": [
+			"M: 8:00 am - 3:00 pm",
+			"Tu: 8:00 am - 3:00 pm",
+			"W: 8:00 am - 3:00 pm",
+			"Th: 8:00 am - 3:00 pm",
+			"F: 8:00 am - 4:00 pm",
+			"Sa: 9:00 am - 4:00 pm",
+			"Su: 9:00 am - 2:00 pm"
+		],
+		"phone": "608-555-9012",
+		"website": "https://grazemadison.com",
+		"disclaimers": [
+			"We cannot guarantee allergen-free meals due to shared equipment."
+		],
+		"cuisine": "Brunch & Bakery"
+	},
+	{
+		"id": "rstr_h2j9l7s0k3x5",
+		"name": "Cotton & Rye",
+		"menu_id": "menu_h2j9l7s0k3x5",
+		"address_id": "add_h3j6l2s0k9x5",
+		"hours": [
+			"M: 5:00 pm - 10:00 pm",
+			"Tu: 5:00 pm - 10:00 pm",
+			"W: 5:00 pm - 10:00 pm",
+			"Th: 5:00 pm - 10:00 pm",
+			"F: 5:00 pm - 11:00 pm",
+			"Sa: 5:00 pm - 11:00 pm",
+			"Su: closed"
+		],
+		"phone": "912-555-3456",
+		"website": "https://cottonandrye.com",
+		"disclaimers": [
+			"Please alert your server to any allergies before ordering.",
+			"Cross-contact with allergens may occur in our kitchen."
+		],
+		"cuisine": "Southern Coastal"
+	}
+]
