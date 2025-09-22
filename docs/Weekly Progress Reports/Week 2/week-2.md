@@ -35,6 +35,8 @@ title: Individual Project Week 2 Progress Report - Anna Dinius
 - Defined `Address` class
 - Defined `Menu` class
 - Defined `MenuItem` class
+- Created reusable AI prompt to generate sample data
+- Created JS script to upload JSON data to FireStore DB
 
 ---
 
