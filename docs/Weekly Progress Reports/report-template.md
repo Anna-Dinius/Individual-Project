@@ -1,32 +1,54 @@
 ---
 marp: true
-theme: default
+size: 4:3
 paginate: true
-title: Individual Project Week /# Progress Report - Dinius
+title: Individual Project Week /# Progress Report - Anna Dinius
 ---
 
 # Week # Progress Report
 
-## M/D/2025 - M/D/2025
+## (M/D/2025 - M/D/2025)
 
-> Anna Dinius
-
----
-
-## Progress Summary
+> ### _NomNom Safe_
+>
+> - Anna Dinius
 
 ---
 
-## Goals
+## Milestones Completed
+
+✅ TBD
+✅ TBD
+✅ TBD
 
 ---
 
-## Progress
+## Carryover Items
+
+- TBD
+
+## Surplus Delivery
+
+- TBD
+
+## LoC Summary
+
+- **Total**: #
+- **Counting rules**: Excludes empty lines and comment-only lines. Inline comments on code lines are still counted.
+- **Files scanned**: All files under `lib` and its subdirectories.
 
 ---
 
-## LoC
+- **Breakdown**:
+  - `lib/path/to/file.type`: # lines
 
 ---
 
-## Burn down rate
+## 🔥 Burndown rate
+
+- #/# Week # milestones completed
+  - #% per week
+  - #% per day
+- #/# Sprint 1 milestones completed
+  - #% per week
+  - #% per day
