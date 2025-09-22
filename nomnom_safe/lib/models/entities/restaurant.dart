@@ -1,20 +1,20 @@
-import 'address.dart';
+// import 'address.dart';
 
 class Restaurant {
   final String id;
   final String name;
-  final Address address;
+  final String address_id;
   final String website;
   final List<String> hours;
   final String phone;
   final String cuisine;
   final List<String> disclaimers;
-  final String logoUrl;
+  final String? logoUrl;
 
   Restaurant({
     required this.id,
     required this.name,
-    required this.address,
+    required this.address_id,
     required this.website,
     required this.hours,
     required this.phone,
@@ -26,19 +26,19 @@ class Restaurant {
   factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
     id: json['id'],
     name: json['name'],
-    address: Address.fromJson(json['address']),
-    website: json['website'],
+    address_id: json['address_id'],
+    website: json['website'] ?? 'None',
     hours: List<String>.from(json['hours']),
     phone: json['phone'],
     cuisine: json['cuisine'],
     disclaimers: List<String>.from(json['disclaimers']),
-    logoUrl: json['logoUrl'],
+    logoUrl: json['logoUrl'] ?? 'None',
   );
 
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
-    'address': address.toJson(),
+    'address': address_id,
     'website': website,
     'hours': hours,
     'phone': phone,
@@ -46,4 +46,11 @@ class Restaurant {
     'disclaimers': disclaimers,
     'logoUrl': logoUrl,
   };
+
+  bool get hasWebsite => website.trim().isNotEmpty;
+
+  String get todayHours {
+    final weekday = DateTime.now().weekday;
+    return hours[weekday - 1]; // Dart: 1 = Monday, 7 = Sunday
+  }
 }
