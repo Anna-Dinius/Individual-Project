@@ -10,6 +10,7 @@ class Allergen {
     return Allergen(id: id, label: json['label']);
   }
 
+  // TODO: move to service
   Future<List<String>> getAllergenIds() async {
     final snapshot = await FirebaseFirestore.instance
         .collection('allergens')
@@ -17,6 +18,7 @@ class Allergen {
     return snapshot.docs.map((doc) => doc.id).toList();
   }
 
+  // TODO: move to service
   Future<List<Allergen>> getAllergens() async {
     final snapshot = await FirebaseFirestore.instance
         .collection('allergens')

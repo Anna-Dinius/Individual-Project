@@ -9,5 +9,6 @@ class Menu {
 
   Map<String, dynamic> toJson() => {'id': id, 'restaurant_id': restaurant_id};
 
+  // TODO: remove
   String get full => '$restaurant_id';
 }

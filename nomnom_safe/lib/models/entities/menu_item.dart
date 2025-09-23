@@ -29,5 +29,6 @@ class MenuItem {
     'menu_id': menu_id,
   };
 
+  // TODO: remove if not necessary or add id & menu_id
   String get full => '$name, $description $allergens';
 }

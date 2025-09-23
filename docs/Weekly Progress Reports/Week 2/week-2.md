@@ -71,3 +71,24 @@ title: Individual Project Week 2 Progress Report - Anna Dinius
 - 3/16 Sprint 1 milestones completed
   - ~19% per week
   - ~3% per day
+
+---
+
+## Changes
+
+- Initial AI choice: assisted (#2)
+- Changed to: combination of assisted (#2) and vibe (#3)
+  - My goal is to rely less on AI as I become more familiar with Flutter/Dart
+
+---
+
+## How I Worked With AI During Week 2
+
+- Use AI to generate one small piece of the app at a time
+  - e.g. a widget, a screen, a function
+- Examine the AI's code
+- Use AI to explain pieces of code I don't understand
+- Place the AI's code into my project
+- Test the code to make sure it worked
+- Copy & paste errors into AI (if needed) to debug
+- Use AI to ensure I understand why the errors occurred & why the fix worked
