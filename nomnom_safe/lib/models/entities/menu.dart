@@ -1,14 +1,14 @@
 class Menu {
   final String id;
-  final String restaurant_id;
+  final String restaurantId;
 
-  Menu({required this.id, required this.restaurant_id});
+  Menu({required this.id, required this.restaurantId});
 
   factory Menu.fromJson(Map<String, dynamic> json) =>
-      Menu(id: json['id'], restaurant_id: json['restaurant_id']);
+      Menu(id: json['id'], restaurantId: json['restaurant_id']);
 
-  Map<String, dynamic> toJson() => {'id': id, 'restaurant_id': restaurant_id};
+  Map<String, dynamic> toJson() => {'id': id, 'restaurant_id': restaurantId};
 
   // TODO: remove
-  String get full => '$restaurant_id';
+  String get full => '$restaurantId';
 }

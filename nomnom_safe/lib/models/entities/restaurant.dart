@@ -3,7 +3,7 @@
 class Restaurant {
   final String id;
   final String name;
-  final String address_id;
+  final String addressId;
   final String website;
   final List<String> hours;
   final String phone;
@@ -14,7 +14,7 @@ class Restaurant {
   Restaurant({
     required this.id,
     required this.name,
-    required this.address_id,
+    required this.addressId,
     required this.website,
     required this.hours,
     required this.phone,
@@ -26,7 +26,7 @@ class Restaurant {
   factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
     id: json['id'],
     name: json['name'],
-    address_id: json['address_id'],
+    addressId: json['address_id'],
     website: json['website'] ?? 'None',
     hours: List<String>.from(json['hours']),
     phone: json['phone'],
@@ -38,7 +38,7 @@ class Restaurant {
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
-    'address': address_id,
+    'address': addressId,
     'website': website,
     'hours': hours,
     'phone': phone,

@@ -3,14 +3,14 @@ class MenuItem {
   final String name;
   final String description;
   final List<String> allergens;
-  final String menu_id;
+  final String menuId;
 
   MenuItem({
     required this.id,
     required this.name,
     required this.description,
     required this.allergens,
-    required this.menu_id,
+    required this.menuId,
   });
 
   factory MenuItem.fromJson(Map<String, dynamic> json) => MenuItem(
@@ -18,7 +18,7 @@ class MenuItem {
     name: json['name'],
     description: json['description'],
     allergens: List<String>.from(json['hours']),
-    menu_id: json['menu_id'],
+    menuId: json['menu_id'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -26,9 +26,9 @@ class MenuItem {
     'name': name,
     'description': description,
     'allergens': allergens,
-    'menu_id': menu_id,
+    'menu_id': menuId,
   };
 
-  // TODO: remove if not necessary or add id & menu_id
+  // TODO: remove if not necessary or add id & menuId
   String get full => '$name, $description $allergens';
 }
