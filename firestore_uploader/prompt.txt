@@ -1,6 +1,6 @@
 ** AI Prompt for Data Generation **
 
-Given the following data structures, generate sample data for 4 real restaurants (not chain restaurants).  Each restaurant must have only one address. All addresses must be for the USA. Each restaurant must have only one menu. Each menu must have at least 3 menu items. Each menu item must have the allergens attribute, but it can be empty or it can hold a single allergen id. The website attribute is required but can be null. All other attributes of each data structure are required and cannot be empty. When assigning allergen ids to menu items, only use the existing unique allergen ids listed below. At least one disclaimer is required for each restaurant.
+Given the following data structures, generate sample data for 4 real restaurants (not chain restaurants).  Each restaurant must have only one address. All addresses must be for the USA. Each restaurant must have only one menu. Each menu must have at least 3 menu items. Each menu item must have the allergens attribute, but it can be empty or it can hold a single allergen id. The website attribute is required but can be "None". All other attributes of each data structure are required and cannot be empty. When assigning allergen ids to menu items, only use the existing unique allergen ids listed below. At least one disclaimer is required for each restaurant.
 
 restaurants
 
@@ -10,7 +10,7 @@ restaurants
 - address_id (unique string that starts with "add_" followed by 12 randomized characters; must be an existing address_id)
 - hours (array of strings; use one string for each day of the week; abbreviate each day of the week as follows: Monday - M, Tuesday - Tu, Wednesday - W, Thursday - Th, Friday - F, Saturday - Sa, Sunday - Su; follow the format of "dayOfWeek: openingTime am/pm - closingTime am/pm"; if the restaurant is closed on a certain day, follow the format of "dayOfWeek: closed")
 - phone (string in the format of ###-###-####; must be USA phone number)
-- website (string of the url to the restaurant's website; if the restaurant does not have a website, this value can be null)
+- website (string of the url to the restaurant's website; if the restaurant does not have a website, this value can be "None")
 - disclaimers (array of strings; 1-sentence disclaimers relevant to restaurants and allergens; could be on cross-contamination, could be on telling customers to let staff know about their allergies before ordering, etc.)
 - cuisine (string; the type of cuisine the restaurant serves)
 

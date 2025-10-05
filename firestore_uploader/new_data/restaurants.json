@@ -1,0 +1,24 @@
+[
+	{
+		"id": "rstr_x8k3p9z1m4q7",
+		"name": "Maple Grove Bistro",
+		"menu_id": "menu_a7d9f2k6p3x1",
+		"address_id": "add_q2m8n5z7r4y1",
+		"hours": [
+			"M: 11:00 am - 9:00 pm",
+			"Tu: 11:00 am - 9:00 pm",
+			"W: 11:00 am - 9:00 pm",
+			"Th: 11:00 am - 9:00 pm",
+			"F: 11:00 am - 10:00 pm",
+			"Sa: 12:00 pm - 10:00 pm",
+			"Su: closed"
+		],
+		"phone": "859-555-2374",
+		"website": "None",
+		"disclaimers": [
+			"Please inform your server of any allergies before ordering.",
+			"Cross-contamination with allergens may occur in our kitchen."
+		],
+		"cuisine": "American"
+	}
+]

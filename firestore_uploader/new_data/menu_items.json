@@ -1,0 +1,23 @@
+[
+	{
+		"id": "item_m9q2x7k4p1z8",
+		"description": "Fresh salad with candied pecans",
+		"name": "Harvest Nut Salad",
+		"menu_id": "menu_a7d9f2k6p3x1",
+		"allergens": ["all_k6x1p3z8j4r", "all_w1t8g4n6y3z"]
+	},
+	{
+		"id": "item_t4n7m2q9x5k1",
+		"description": "Pasta with walnut cream sauce",
+		"name": "Walnut Cream Linguine",
+		"menu_id": "menu_a7d9f2k6p3x1",
+		"allergens": ["all_k6x1p3z8j4r", "all_a9x7k2f3b1q6", "all_w1t8g4n6y3z"]
+	},
+	{
+		"id": "item_z3p8k1m6q4n9",
+		"description": "Chocolate tart topped with almonds",
+		"name": "Almond Chocolate Tart",
+		"menu_id": "menu_a7d9f2k6p3x1",
+		"allergens": ["all_k6x1p3z8j4r", "all_q8b1d4a6m7z", "all_w1t8g4n6y3z"]
+	}
+]
