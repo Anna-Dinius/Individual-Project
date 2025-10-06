@@ -35,11 +35,16 @@ title: Individual Project Week /# Progress Report - Anna Dinius
 
 - **Total**: #
 - **Counting rules**: Excludes empty lines and comment-only lines. Inline comments on code lines are still counted.
-- **Files scanned**: All files under `lib` and its subdirectories.
+- **Files scanned**: All files under `lib` and `test` and their subdirectories.
 
 ---
 
-- **Breakdown**:
+- **Breakdown** (1/2):
+  - `lib/path/to/file.type`: # lines
+
+---
+
+- **Breakdown** (2/2):
   - `lib/path/to/file.type`: # lines
 
 ---
@@ -47,8 +52,9 @@ title: Individual Project Week /# Progress Report - Anna Dinius
 ## 🔥 Burndown rate
 
 - #/# Week # milestones completed
-  - #% per week
-  - #% per day
-- #/# Sprint 1 milestones completed
-  - #% per week
-  - #% per day
+  - ~#% total
+  - ~#% per day
+- #/16 Sprint 1 milestones completed
+  - ~#% total
+  - ~#% per week
+  - ~#% per day
