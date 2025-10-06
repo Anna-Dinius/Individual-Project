@@ -4,6 +4,7 @@
 import os
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+nomnom_root = os.path.join(ROOT, 'nomnom_safe')
 paths = [os.path.join(ROOT, 'nomnom_safe/lib'), os.path.join(ROOT, 'nomnom_safe/test')]
 files = []
 for p in paths:
@@ -30,6 +31,6 @@ for fp in sorted(files):
 
 print('Files scanned:')
 for fp in sorted(counts.keys()):
-    rel = os.path.relpath(fp, ROOT)
+    rel = os.path.relpath(fp, nomnom_root)
     print(f"- `{rel}`: {counts[fp]}")
 print(f"Total: {total}")
