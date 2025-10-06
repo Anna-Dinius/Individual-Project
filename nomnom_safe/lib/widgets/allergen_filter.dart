@@ -21,25 +21,51 @@ class AllergenFilter extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: Text.rich(
+            TextSpan(
+              children: [
+                const TextSpan(text: "Select the allergens you want to "),
+                TextSpan(
+                  text: "avoid",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const TextSpan(text: ":"),
+              ],
+            ),
+          ),
+        ),
         Wrap(
           spacing: 8,
-          children: allergens.map((allergen) {
-            final isSelected = selectedAllergens.contains(allergen);
-            return FilterChip(
-              label: Text(allergen),
-              selected: isSelected,
-              onSelected: (_) => onToggle(allergen),
-              selectedColor: Colors.green[300],
-              checkmarkColor: Colors.white,
-            );
-          }).toList(),
+          runSpacing: 6,
+          children: [
+            ...allergens.map((allergen) {
+              final isSelected = selectedAllergens.contains(allergen);
+              return FilterChip(
+                label: Text(allergen),
+                selected: isSelected,
+                onSelected: (_) => onToggle(allergen),
+                selectedColor: Colors.green[300],
+                checkmarkColor: Colors.white,
+              );
+            }),
+          ],
         ),
-        if (showClearButton && onClear != null)
-          TextButton.icon(
-            onPressed: onClear,
-            icon: const Icon(Icons.clear),
-            label: const Text('Clear Filters'),
+        Visibility(
+          visible: showClearButton && onClear != null,
+          maintainSize: true,
+          maintainAnimation: true,
+          maintainState: true,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: TextButton.icon(
+              onPressed: onClear,
+              icon: const Icon(Icons.clear),
+              label: const Text('Clear Filters'),
+            ),
           ),
+        ),
       ],
     );
   }

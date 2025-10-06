@@ -9,44 +9,53 @@ class RestaurantCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RestaurantScreen(restaurant: restaurant),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RestaurantScreen(restaurant: restaurant),
+            ),
+          );
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Card(
+          margin: const EdgeInsets.all(8),
+          elevation: 3,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-        );
-      },
-      borderRadius: BorderRadius.circular(12),
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        elevation: 3,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                restaurant.name,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                restaurant.cuisine,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: Colors.grey[700]),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Today: ${restaurant.todayHours}',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: Colors.green[700]),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  restaurant.name,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    'Cuisine: ${restaurant.cuisine}',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.grey[700]),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 4),
+                  child: Text(
+                    'Today: ${restaurant.todayHours}',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: Colors.green[700]),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

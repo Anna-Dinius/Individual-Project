@@ -5,6 +5,7 @@ import '../widgets/restaurant_card.dart';
 import '../widgets/allergen_filter.dart';
 import '../services/allergen_service.dart';
 import '../services/restaurant_service.dart';
+import '../utilities/allergen_utility.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -115,6 +116,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     showClearButton: selectedAllergens.isNotEmpty,
                   ),
                 ),
+          Visibility(
+            visible: selectedAllergens.isNotEmpty,
+            maintainSize: true,
+            maintainAnimation: true,
+            maintainState: true,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+              child: Text(
+                "The following restaurants offer at least one menu item that doesn't contain ${formatAllergenList(selectedAllergens, "or")}:",
+              ),
+            ),
+          ),
           Expanded(
             child: filteredRestaurants.isEmpty
                 ? const Center(child: Text('No restaurants match your filters'))
