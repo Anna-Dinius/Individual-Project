@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/entities/restaurant.dart';
+import '../models/restaurant.dart';
 import '../widgets/restaurant_card.dart';
 import '../widgets/allergen_filter.dart';
 import '../services/allergen_service.dart';

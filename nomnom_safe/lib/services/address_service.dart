@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/entities/address.dart';
-import '../models/entities/restaurant.dart';
+import '../models/address.dart';
+import '../models/restaurant.dart';
 
 class AddressService {
   final FirebaseFirestore _firestore;

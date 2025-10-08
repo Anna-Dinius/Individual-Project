@@ -1,4 +1,4 @@
-import '../models/entities/restaurant.dart';
+import '../models/restaurant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RestaurantService {

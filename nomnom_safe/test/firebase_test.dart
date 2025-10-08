@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:nomnom_safe/models/entities/restaurant.dart';
+import 'package:nomnom_safe/models/restaurant.dart';
 import 'package:nomnom_safe/services/allergen_service.dart';
 import 'package:nomnom_safe/services/restaurant_service.dart';
 import 'package:nomnom_safe/services/address_service.dart';

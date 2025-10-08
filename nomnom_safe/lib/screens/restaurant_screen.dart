@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/entities/restaurant.dart';
-import '../models/entities/address.dart';
+import '../models/restaurant.dart';
+import '../models/address.dart';
 import '../services/address_service.dart';
 import '../widgets/restaurant_link.dart';
 

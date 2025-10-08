@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/entities/allergen.dart';
+import '../models/allergen.dart';
 
 class AllergenService {
   final FirebaseFirestore _firestore;
