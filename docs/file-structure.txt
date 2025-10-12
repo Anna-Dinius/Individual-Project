@@ -1,0 +1,91 @@
+Individual-Project-Repo/
+├── docs/
+│   ├── preliminary/
+│   ├── Weekly Progress Reports/
+│   │   ├── Week 1/
+│   │   │   ├── week-1.md
+│   │   │   └── week-1.pdf
+│   │   ├── Week 2/
+│   │   │   ├── week-2.md
+│   │   │   └── week-2.pdf
+│   │   ├── Week 3/
+│   │   │   ├── week-3.md
+│   │   │   └── week-3.pdf
+│   │   ├── Week 4/
+│   │   │   ├── week-4-detailed.md
+│   │   │   ├── week-4.md
+│   │   │   └── week-4.pdf
+│   │   ├── loc-prompt.txt
+│   │   └── report-template.md
+│   └── file-structure.txt
+├── firestore_uploader/
+│   ├── data/
+│   │   ├── addresses.json
+│   │   ├── menu_items.json
+│   │   ├── menus.json
+│   │   └── restaurants.json
+│   ├── new_data/
+│   │   ├── addresses.json
+│   │   ├── menu_items.json
+│   │   ├── menus.json
+│   │   └── restaurants.json
+│   ├── data_generation_prompt.txt
+│   └── firestore_uploader.js
+├── nomnom_safe/
+│   ├── lib/
+│   │   ├── models/
+│   │   │   ├── address.dart
+│   │   │   ├── allergen.dart
+│   │   │   ├── menu.dart
+│   │   │   ├── menu_item.dart
+│   │   │   └── restaurant.dart
+│   │   ├── screens/
+│   │   │   ├── home_screen.dart
+│   │   │   └── restaurant_screen.dart
+│   │   ├── services/
+│   │   │   ├── address_service.dart
+│   │   │   ├── allergen_service.dart
+│   │   │   └── restaurant_service.dart
+│   │   ├── theme/
+│   │   │   ├── nomnom_theme.dart
+│   │   │   └── theme_constants.dart
+│   │   ├── utils/
+│   │   │   ├── allergen_utility.dart
+│   │   │   └── restaurant_utility.dart
+│   │   ├── widgets/
+│   │   │   ├── allergen_chip.dart
+│   │   │   ├── allergen_filter.dart
+│   │   │   ├── nomnom_safe_appbar.dart
+│   │   │   ├── restaurant_card.dart
+│   │   │   └── restaurant_link.dart
+│   │   ├── firebase_options.dart
+│   │   └── main.dart
+│   ├── tests/
+│   │   ├── models/
+│   │   │   ├── address_model_test.dart
+│   │   │   ├── allergen_model_test.dart
+│   │   │   ├── menu_item_model_test.dart
+│   │   │   ├── menu_model_test.dart
+│   │   │   └── restaurant_model_test.dart
+│   │   ├── services/
+│   │   │   ├── address_service_test.dart
+│   │   │   ├── allergen_service_test.dart
+│   │   │   └── restaurant_service_test.dart
+│   │   ├── utilities/
+│   │   │   └── allergen_utility_test.dart
+│   │   ├── widgets/
+│   │   │   ├── allergen_chip_widget_test.dart
+│   │   │   ├── allergen_filter_widget_test.dart
+│   │   │   ├── nomnom_safe_appbar_widget_test.dart
+│   │   │   ├── restaurant_card_widget_test.dart
+│   │   │   └── restaurant_link_widget_test.dart
+│   │   └── main_smoke_test.dart
+│   ├── analysis_options.yaml
+│   ├── firebase.json
+│   ├── pubspec.yaml
+│   └── README.md
+├── scripts/
+│   ├── compare_tree.py
+│   ├── loc_counter.py
+│   └── update_file_tree.py
+└── README.md
