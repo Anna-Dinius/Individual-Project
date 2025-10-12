@@ -1,5 +1,3 @@
-// import 'address.dart';
-
 class Restaurant {
   final String id;
   final String name;
@@ -23,11 +21,12 @@ class Restaurant {
     required this.logoUrl,
   });
 
+  /* Create a Restaurant object from JSON data */
   factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
     id: json['id'],
     name: json['name'],
     addressId: json['address_id'],
-    website: json['website'] ?? 'None',
+    website: json['website'] ?? '',
     hours: List<String>.from(json['hours']),
     phone: json['phone'],
     cuisine: json['cuisine'],
@@ -35,6 +34,7 @@ class Restaurant {
     logoUrl: json['logoUrl'] ?? 'None',
   );
 
+  /* Convert a Restaurant object to JSON data */
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
@@ -47,8 +47,10 @@ class Restaurant {
     'logoUrl': logoUrl,
   };
 
+  /* Check if the restaurant has a website */
   bool get hasWebsite => website.trim().isNotEmpty;
 
+  /* Get today's operating hours based on the current weekday */
   String get todayHours {
     final weekday = DateTime.now().weekday;
     return hours[weekday - 1]; // Dart: 1 = Monday, 7 = Sunday

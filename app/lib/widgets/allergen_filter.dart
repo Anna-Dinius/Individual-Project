@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import '../models/allergen.dart';
+import '../widgets/allergen_chip.dart';
 
+/* Widget to display a list of allergen filter chips and a Clear button */
 class AllergenFilter extends StatelessWidget {
-  final List<String> allergens;
-  final List<String> selectedAllergens;
-  final void Function(String) onToggle;
-  final VoidCallback? onClear;
-  final bool showClearButton;
+  final List<Allergen> availableAllergens; // all allergen options
+  final List<Allergen> selectedAllergens; // currently selected allergens
+  final void Function(Allergen) onToggle; // callback for toggling selection
+  final VoidCallback? onClear; // callback for clearing all selections
+  final bool showClearButton; // whether to show the Clear button
 
   const AllergenFilter({
     super.key,
-    required this.allergens,
+    required this.availableAllergens,
     required this.selectedAllergens,
     required this.onToggle,
     this.onClear,
@@ -21,6 +24,7 @@ class AllergenFilter extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Instructional text
         Padding(
           padding: const EdgeInsets.only(bottom: 4),
           child: Text.rich(
@@ -36,22 +40,22 @@ class AllergenFilter extends StatelessWidget {
             ),
           ),
         ),
+        // Filter chips for each allergen
         Wrap(
           spacing: 8,
           runSpacing: 6,
-          children: [
-            ...allergens.map((allergen) {
-              final isSelected = selectedAllergens.contains(allergen);
-              return FilterChip(
-                label: Text(allergen),
-                selected: isSelected,
-                onSelected: (_) => onToggle(allergen),
-                selectedColor: Colors.green[300],
-                checkmarkColor: Colors.white,
-              );
-            }),
-          ],
+          children: availableAllergens.map((allergen) {
+            final isSelected = selectedAllergens.any(
+              (selectedAllergen) => selectedAllergen.id == allergen.id,
+            );
+            return AllergenChip(
+              allergen: allergen,
+              isSelected: isSelected,
+              onToggle: onToggle,
+            );
+          }).toList(),
         ),
+        // Clear Filters button
         Visibility(
           visible: showClearButton && onClear != null,
           maintainSize: true,

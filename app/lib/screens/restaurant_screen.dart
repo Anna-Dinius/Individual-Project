@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import '../widgets/nomnom_safe_appbar.dart';
 import '../models/restaurant.dart';
-import '../models/address.dart';
 import '../services/address_service.dart';
 import '../widgets/restaurant_link.dart';
 
+/* Screen displaying detailed information about a specific restaurant */
 class RestaurantScreen extends StatefulWidget {
   final Restaurant restaurant;
 
@@ -14,7 +15,8 @@ class RestaurantScreen extends StatefulWidget {
 }
 
 class _RestaurantScreenState extends State<RestaurantScreen> {
-  Address? address;
+  String? address;
+  final AddressService _addressService = AddressService();
 
   @override
   void initState() {
@@ -22,9 +24,10 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     _loadAddress();
   }
 
+  /* Load the restaurant's address from Firestore */
   void _loadAddress() async {
-    final result = await AddressService().getRestaurantAddress(
-      widget.restaurant,
+    final result = await _addressService.getRestaurantAddress(
+      widget.restaurant.addressId,
     );
     if (mounted) {
       setState(() {
@@ -33,19 +36,43 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     }
   }
 
+  /* Build the disclaimers section */
+  Widget _buildDisclaimers(BuildContext context) {
+    final disclaimers = widget.restaurant.disclaimers;
+    if (disclaimers.isEmpty) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Disclaimers:', style: Theme.of(context).textTheme.titleMedium),
+          ...disclaimers.map(
+            (disclaimer) => Text(
+              '- $disclaimer',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("NomNom Safe")),
+      appBar: NomnomSafeAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Restaurant name
             Text(
               widget.restaurant.name,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            // Cuisine type
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(
@@ -53,6 +80,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
+            // Today's operating hours
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(
@@ -60,6 +88,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
+            // All operating hours
             Padding(
               padding: const EdgeInsets.only(top: 16),
               child: Text(
@@ -71,13 +100,15 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
               (line) =>
                   Text(line, style: Theme.of(context).textTheme.bodySmall),
             ),
+            // Address
             Padding(
               padding: const EdgeInsets.only(top: 16),
               child: Text(
-                'Address: ${address?.full ?? 'Loading...'}',
+                'Address: ${address ?? 'Loading...'}',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
+            // Phone number
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(
@@ -85,22 +116,23 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
-            RestaurantLink(url: widget.restaurant.website),
-            if (widget.restaurant.disclaimers.isNotEmpty) ...[
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Text(
-                  'Disclaimers:',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-              ...widget.restaurant.disclaimers.map(
-                (disclaimer) => Text(
-                  '- $disclaimer',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-            ],
+            // Website link
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                const Text('Website: '),
+                widget.restaurant.hasWebsite
+                    ? RestaurantLink(url: widget.restaurant.website)
+                    : const Padding(
+                        padding: EdgeInsets.only(top: 8),
+                        child: Text('none'),
+                      ),
+              ],
+            ),
+            // Disclaimer(s)
+            if (widget.restaurant.disclaimers.isNotEmpty)
+              _buildDisclaimers(context),
           ],
         ),
       ),
