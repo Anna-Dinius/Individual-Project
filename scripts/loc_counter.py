@@ -4,8 +4,8 @@
 import os
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-nomnom_root = os.path.join(ROOT, 'nomnom_safe')
-paths = [os.path.join(ROOT, 'nomnom_safe/lib'), os.path.join(ROOT, 'nomnom_safe/test')]
+nomnom_root = os.path.join(ROOT, 'app')
+paths = [os.path.join(ROOT, 'app/lib'), os.path.join(ROOT, 'app/test')]
 files = []
 for p in paths:
     for dirpath, dirnames, filenames in os.walk(p):
