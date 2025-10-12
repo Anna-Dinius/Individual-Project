@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nomnom_safe/utils/allergen_utility.dart';
+import 'package:nomnom_safe/utils/allergen_utils.dart';
 import 'package:nomnom_safe/models/allergen.dart';
 
 void main() {
