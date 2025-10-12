@@ -6,7 +6,7 @@ import '../widgets/restaurant_card.dart';
 import '../widgets/allergen_filter.dart';
 import '../services/allergen_service.dart';
 import '../services/restaurant_service.dart';
-import '../utils/allergen_utility.dart';
+import '../utils/allergen_utils.dart';
 
 /* Main screen displaying allergen filters and a list of restaurants */
 class HomeScreen extends StatefulWidget {
