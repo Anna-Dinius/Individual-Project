@@ -71,6 +71,8 @@ title: Individual Project Week 5 Progress Report - Anna Dinius
   - `lib\widgets\restaurant_card.dart`: 85
   - `lib\widgets\restaurant_link.dart`: 60
 
+---
+
 - **Breakdown** (tests: smoke, models, & services):
   - `test\main_smoke_test.dart`: 10
   - `test\models\address_model_test.dart`: 16
