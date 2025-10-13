@@ -10,10 +10,8 @@ class RestaurantService {
 
   /* Fetch all restaurants from Firestore */
   Future<List<Restaurant>> getAllRestaurants() async {
-    // Query Firestore to get all restaurant documents.
-    final snapshot = await FirebaseFirestore.instance
-        .collection('restaurants')
-        .get();
+    // Query Firestore to get all restaurant documents using injected instance.
+    final snapshot = await _firestore.collection('restaurants').get();
 
     // Map each document to a Restaurant object.
     final allRestaurants = snapshot.docs.map((doc) {
@@ -59,7 +57,15 @@ class RestaurantService {
       // Map each menu item to its list of allergens, defaulting to an empty list if none are present.
       final menuItems = menuItemsSnapshot.docs.map((doc) {
         final data = doc.data();
-        return List<String>.from(data['allergens'] ?? []);
+        final rawAllergens = data['allergens'];
+        // Defensive: treat missing/null/non-list allergens as empty list
+        final List<String> allergensList = rawAllergens is List
+            ? rawAllergens
+                  .map((e) => e?.toString() ?? '')
+                  .where((s) => s.isNotEmpty)
+                  .toList()
+            : <String>[];
+        return allergensList;
       }).toList();
 
       // Check if every menu item contains at least one of the selected allergens.
