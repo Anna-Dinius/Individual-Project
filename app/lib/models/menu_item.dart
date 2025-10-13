@@ -18,7 +18,7 @@ class MenuItem {
     id: json['id'],
     name: json['name'],
     description: json['description'],
-    allergens: List<String>.from(json['hours']),
+    allergens: List<String>.from(json['allergens']),
     menuId: json['menu_id'],
   );
 
