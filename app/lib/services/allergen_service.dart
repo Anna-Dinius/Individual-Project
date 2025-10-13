@@ -15,10 +15,13 @@ class AllergenService {
 
     final snapshot = await _firestore.collection('allergens').get();
 
-    return snapshot.docs.map((doc) {
+    final allergens = snapshot.docs.map((doc) {
       final data = doc.data();
       return Allergen.fromJson(doc.id, data);
     }).toList();
+
+    _cachedAllergens = allergens;
+    return allergens;
   }
 
   /* Get map of allergen ids to allergen labels */
