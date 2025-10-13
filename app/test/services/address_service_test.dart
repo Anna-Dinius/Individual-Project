@@ -33,4 +33,21 @@ void main() {
     final empty = await service.getRestaurantAddress('');
     expect(empty, 'Unknown');
   });
+
+  test(
+    'getRestaurantAddress throws if document missing required fields',
+    () async {
+      // create a document missing street/city/state/zipCode
+      await fakeFirestore.collection('addresses').doc('bad').set({
+        'id': 'bad',
+        // missing street/city/state/zipCode
+      });
+
+      // Expect a runtime type error when model tries to construct from incomplete map
+      expect(
+        () async => await service.getRestaurantAddress('bad'),
+        throwsA(isA<TypeError>()),
+      );
+    },
+  );
 }

@@ -45,4 +45,25 @@ void main() {
     final labelToId = await service.getAllergenLabelToIdMap();
     expect(labelToId['Peanuts'], 'a1');
   });
+
+  test(
+    'getAllergens caching behavior (reads from cache on subsequent calls)',
+    () async {
+      final first = await service.getAllergens();
+      expect(first.length, 3);
+
+      // Add another allergen doc to the fake firestore after first fetch
+      await fakeFirestore.collection('allergens').doc('a4').set({
+        'label': 'Soy',
+      });
+
+      // Call getAllergens again - because service is designed to cache, it should still return 3
+      final second = await service.getAllergens();
+      expect(second.length, 3);
+      // Clear cache and verify fetch sees new doc (simulate invalidation)
+      service = AllergenService(fakeFirestore);
+      final third = await service.getAllergens();
+      expect(third.length, 4);
+    },
+  );
 }

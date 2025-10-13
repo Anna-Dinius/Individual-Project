@@ -59,6 +59,43 @@ void main() {
       'allergens': [],
       'menu_id': 'm2',
     });
+
+    // Add a restaurant with no menu to test menuSnapshot.docs.isEmpty branch
+    await fakeFirestore.collection('restaurants').doc('r3').set({
+      'id': 'r3',
+      'name': 'No Menu',
+      'address_id': 'addr3',
+      'website': '',
+      'hours': ['9-5', '9-5', '9-5', '9-5', '9-5', '10-4', '10-4'],
+      'phone': '333',
+      'cuisine': '',
+      'disclaimers': [],
+      'logoUrl': '',
+    });
+
+    await fakeFirestore.collection('restaurants').doc('r1').set({
+      'id': 'r1',
+      'name': 'R One',
+      'address_id': 'addr1',
+      'website': '',
+      'hours': [],
+      'phone': '',
+      'cuisine': '',
+      'disclaimers': [],
+      'logoUrl': '',
+    });
+
+    await fakeFirestore.collection('restaurants').doc('r2').set({
+      'id': 'r2',
+      'name': 'R Two',
+      'address_id': 'addr2',
+      'website': 'https://rtwo.example',
+      'hours': ['9-5', '9-5', '9-5', '9-5', '9-5', '10-4', '10-4'],
+      'phone': '222',
+      'cuisine': 'B',
+      'disclaimers': [],
+      'logoUrl': '',
+    });
   });
 
   test('filterRestaurantsFromList returns all if no allergens', () async {
@@ -67,6 +104,29 @@ void main() {
         .toList();
     final filtered = await service.filterRestaurantsFromList(restaurants, []);
     expect(filtered.length, equals(restaurants.length));
+  });
+
+  test(
+    'filter handles menu_items with missing or non-list allergens gracefully',
+    () async {
+      // Add a malformed menu_item (no allergens key)
+      await fakeFirestore.collection('menu_items').add({'menu_id': 'm2'});
+
+      final restaurants = mockRestaurants
+          .map((r) => Restaurant.fromJson(Map<String, dynamic>.from(r)))
+          .toList();
+
+      // Should not throw; restaurants with at least one allergen-free item should remain
+      final filtered = await service.filterRestaurantsFromList(restaurants, [
+        'a1',
+      ]);
+      expect(filtered.length, greaterThanOrEqualTo(1));
+    },
+  );
+
+  test('filter handles empty restaurants list', () async {
+    final filtered = await service.filterRestaurantsFromList([], ['a1']);
+    expect(filtered, isEmpty);
   });
 
   test(
@@ -80,6 +140,19 @@ void main() {
       ]);
       // r1 should be filtered out because all its items contain a1; r2 remains
       expect(filtered.length, equals(1));
+    },
+  );
+
+  test(
+    'getAllRestaurants uses injected firestore and returns restaurants',
+    () async {
+      final restaurants = await service.getAllRestaurants();
+      expect(restaurants, isA<List<Restaurant>>());
+      // There may be additional test fixture restaurants (e.g., r3). Ensure the two
+      // expected restaurants are present rather than asserting exact count.
+      expect(restaurants.length, greaterThanOrEqualTo(2));
+      final names = restaurants.map((r) => r.name).toList();
+      expect(names, containsAll(['R One', 'R Two']));
     },
   );
 }

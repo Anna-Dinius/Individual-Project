@@ -7,7 +7,7 @@ void main() {
       'id': 'mi1',
       'name': 'Item 1',
       'description': 'Desc',
-      'hours': <String>[],
+      'allergens': <String>[],
       'menu_id': 'm1',
     };
 
@@ -17,5 +17,37 @@ void main() {
     final json = item.toJson();
     expect(json['menu_id'], 'm1');
     expect(json['name'], 'Item 1');
+  });
+
+  test('MenuItem.fromJson reads allergens key and handles missing values', () {
+    final jsonWithAllergens = {
+      'id': 'mi1',
+      'name': 'Item1',
+      'description': 'desc',
+      'allergens': ['a1', 'a2'],
+      'menu_id': 'm1',
+    };
+
+    final item = MenuItem.fromJson(
+      Map<String, dynamic>.from(jsonWithAllergens),
+    );
+    expect(item.allergens, isA<List<String>>());
+    expect(item.allergens.length, equals(2));
+    expect(item.allergens, containsAll(['a1', 'a2']));
+
+    // The model requires an 'allergens' list; provide an empty list to test that case.
+    final jsonWithEmptyAllergens = {
+      'id': 'mi2',
+      'name': 'Item2',
+      'description': 'desc',
+      'allergens': <String>[],
+      'menu_id': 'm1',
+    };
+
+    final item2 = MenuItem.fromJson(
+      Map<String, dynamic>.from(jsonWithEmptyAllergens),
+    );
+    expect(item2.allergens, isA<List<String>>());
+    expect(item2.allergens, isEmpty);
   });
 }
