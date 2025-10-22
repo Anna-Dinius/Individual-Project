@@ -15,7 +15,13 @@ title: Individual Project Week /# Progress Report - Anna Dinius
 
 ---
 
-## Milestones Completed
+## Week # Carryover Items Completed (#/#)
+
+✅ TBD
+
+---
+
+## Week # Milestones Completed (#/#)
 
 ✅ TBD
 ✅ TBD
@@ -27,9 +33,13 @@ title: Individual Project Week /# Progress Report - Anna Dinius
 
 - TBD
 
+---
+
 ## Surplus Delivery
 
 - TBD
+
+---
 
 ## LoC Summary
 
@@ -39,22 +49,39 @@ title: Individual Project Week /# Progress Report - Anna Dinius
 
 ---
 
-- **Breakdown** (1/2):
-  - `lib/path/to/file.type`: # lines
+- **Breakdown** (top-level files, models, & screens):
+  - `lib\file.type`: #
 
 ---
 
-- **Breakdown** (2/2):
-  - `lib/path/to/file.type`: # lines
+- **Breakdown** (services, theme, & utils):
+  - `lib\file.type`: #
+
+---
+
+- **Breakdown** (widgets):
+
+  - `lib\file.type`: #
+
+---
+
+- **Breakdown** (tests: smoke, models, & services):
+  - `lib\file.type`: #
+
+---
+
+- **Breakdown** (tests: utils & widgets):
+  - `lib\file.type`: #
 
 ---
 
 ## 🔥 Burndown rate
 
+- #/# Week # carryover items completed
 - #/# Week # milestones completed
   - ~#% total
   - ~#% per day
-- #/16 Sprint 1 milestones completed
+- #/# Sprint 2 milestones completed
   - ~#% total
   - ~#% per week
   - ~#% per day
