@@ -7,6 +7,8 @@ import '../widgets/allergen_filter.dart';
 import '../services/allergen_service.dart';
 import '../services/restaurant_service.dart';
 import '../utils/allergen_utils.dart';
+import '../widgets/filter.dart';
+import '../utils/restaurant_utils.dart';
 
 /* Main screen displaying allergen filters and a list of restaurants */
 class HomeScreen extends StatefulWidget {
@@ -27,6 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Allergen> selectedAllergens = []; // currently selected allergens
   List<Restaurant> unfilteredRestaurants = []; // all restaurants from Firestore
   List<Restaurant> restaurantList = []; // restaurants to be displayed
+  List<String> selectedCuisines = [];
+  List<String> availableCuisines = [];
 
   @override
   void initState() {
@@ -58,9 +62,26 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         unfilteredRestaurants = allRestaurants;
         restaurantList = allRestaurants;
+        _extractAvailableCuisines();
         isLoadingRestaurants = false;
       });
     }
+  }
+
+  void _extractAvailableCuisines() {
+    setState(() {
+      availableCuisines = extractAvailableCuisines(restaurantList);
+    });
+  }
+
+  void _filterRestaurantsByCuisine(List<String> cuisines) {
+    setState(() {
+      selectedCuisines = cuisines;
+      restaurantList = filterRestaurantsByCuisine(
+        unfilteredRestaurants,
+        cuisines,
+      );
+    });
   }
 
   /* Toggle selection of an allergen and apply the filter */
@@ -96,6 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (mounted) {
       setState(() {
         restaurantList = filteredRestaurants;
+        _extractAvailableCuisines();
         isLoadingRestaurants = false;
       });
     }
@@ -123,6 +145,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     showClearButton: selectedAllergens.isNotEmpty,
                   ),
           ),
+          if (!(selectedAllergens.isNotEmpty && restaurantList.isEmpty) &&
+              availableCuisines.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Filter(
+                label: 'Filter by Cuisine',
+                options: availableCuisines,
+                selectedOptions: selectedCuisines,
+                onChanged: _filterRestaurantsByCuisine,
+              ),
+            ),
           if (selectedAllergens.isNotEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
