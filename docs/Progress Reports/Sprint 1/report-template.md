@@ -81,7 +81,7 @@ title: Individual Project Week /# Progress Report - Anna Dinius
 - #/# Week # milestones completed
   - ~#% total
   - ~#% per day
-- #/# Sprint 2 milestones completed
+- #/# Sprint 1 milestones completed
   - ~#% total
   - ~#% per week
   - ~#% per day
