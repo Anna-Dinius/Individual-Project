@@ -46,6 +46,8 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /android/app/google-services.json
+/android/app/.gradle
+/android/build
 
 # Platform-specific generated files
 **/GeneratedPluginRegistrant.*
