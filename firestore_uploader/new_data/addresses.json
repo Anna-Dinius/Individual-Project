@@ -1,9 +1,37 @@
 [
 	{
-		"id": "add_q2m8n5z7r4y1",
-		"street": "245 Oakwood Lane",
-		"city": "Lexington",
-		"state": "KY",
-		"zipCode": "40507"
+		"id": "add_9f3k1b7x2v0m",
+		"street": "123 Elm Street",
+		"city": "Asheville",
+		"state": "NC",
+		"zipCode": "28801"
+	},
+	{
+		"id": "add_4g7m2c8n5y1z",
+		"street": "456 Oak Avenue",
+		"city": "Boulder",
+		"state": "CO",
+		"zipCode": "80302"
+	},
+	{
+		"id": "add_7h2p9d3k6w8q",
+		"street": "789 Pine Road",
+		"city": "Portland",
+		"state": "OR",
+		"zipCode": "97205"
+	},
+	{
+		"id": "add_2j8v6m4z1c9e",
+		"street": "321 Maple Lane",
+		"city": "Madison",
+		"state": "WI",
+		"zipCode": "53703"
+	},
+	{
+		"id": "add_5y3n8w6t0g1p",
+		"street": "654 Birch Blvd",
+		"city": "Santa Fe",
+		"state": "NM",
+		"zipCode": "87501"
 	}
 ]

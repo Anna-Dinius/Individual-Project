@@ -46,3 +46,10 @@ The unique allergen ids are:
 - Animal Products - all_h2j9l7s0k3x5
 - Meat - all_m4z8v1c9e0d2
 - Fish - all_t5g3n8w6y4p1
+
+Make sure the restaurants you select are not any of the following:
+The Laughing Seed
+Cotton & Rye
+Leaf Kitchen
+Graze
+Maple Grove Bistro

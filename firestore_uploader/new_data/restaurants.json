@@ -1,24 +1,105 @@
 [
 	{
-		"id": "rstr_x8k3p9z1m4q7",
-		"name": "Maple Grove Bistro",
-		"menu_id": "menu_a7d9f2k6p3x1",
-		"address_id": "add_q2m8n5z7r4y1",
+		"id": "rstr_abc123def456",
+		"name": "Table & Twine",
+		"menu_id": "menu_1a2b3c4d5e6f",
+		"address_id": "add_9f3k1b7x2v0m",
 		"hours": [
-			"M: 11:00 am - 9:00 pm",
-			"Tu: 11:00 am - 9:00 pm",
-			"W: 11:00 am - 9:00 pm",
-			"Th: 11:00 am - 9:00 pm",
-			"F: 11:00 am - 10:00 pm",
-			"Sa: 12:00 pm - 10:00 pm",
+			"M: 11 am - 9 pm",
+			"Tu: 11 am - 9 pm",
+			"W: 11 am - 9 pm",
+			"Th: 11 am - 9 pm",
+			"F: 11 am - 10 pm",
+			"Sa: 11 am - 10 pm",
 			"Su: closed"
 		],
-		"phone": "859-555-2374",
+		"phone": "828-555-1234",
 		"website": "None",
 		"disclaimers": [
-			"Please inform your server of any allergies before ordering.",
-			"Cross-contamination with allergens may occur in our kitchen."
+			"Please inform staff of any dairy allergies before ordering."
 		],
 		"cuisine": "American"
+	},
+	{
+		"id": "rstr_ghi789jkl012",
+		"name": "River & Root",
+		"menu_id": "menu_7g8h9i0j1k2l",
+		"address_id": "add_4g7m2c8n5y1z",
+		"hours": [
+			"M: closed",
+			"Tu: 12 pm - 8 pm",
+			"W: 12 pm - 8 pm",
+			"Th: 12 pm - 8 pm",
+			"F: 12 pm - 9 pm",
+			"Sa: 12 pm - 9 pm",
+			"Su: 12 pm - 6 pm"
+		],
+		"phone": "303-555-6789",
+		"website": "https://riverandrootboulder.com",
+		"disclaimers": [
+			"All seafood is processed in a shared facility with shellfish."
+		],
+		"cuisine": "Seafood"
+	},
+	{
+		"id": "rstr_mno345pqr678",
+		"name": "The Forager's Table",
+		"menu_id": "menu_3m4n5o6p7q8r",
+		"address_id": "add_7h2p9d3k6w8q",
+		"hours": [
+			"M: 10 am - 8 pm",
+			"Tu: 10 am - 8 pm",
+			"W: 10 am - 8 pm",
+			"Th: 10 am - 8 pm",
+			"F: 10 am - 9 pm",
+			"Sa: 10 am - 9 pm",
+			"Su: closed"
+		],
+		"phone": "503-555-2468",
+		"website": "https://foragerstablepdx.com",
+		"disclaimers": [
+			"Dishes may contain animal-derived ingredients. Ask for details."
+		],
+		"cuisine": "Rustic Northwest"
+	},
+	{
+		"id": "rstr_stu901vwx234",
+		"name": "Juniper & Sage",
+		"menu_id": "menu_9s0t1u2v3w4x",
+		"address_id": "add_2j8v6m4z1c9e",
+		"hours": [
+			"M: closed",
+			"Tu: 11 am - 7 pm",
+			"W: 11 am - 7 pm",
+			"Th: 11 am - 7 pm",
+			"F: 11 am - 9 pm",
+			"Sa: 11 am - 9 pm",
+			"Su: 11 am - 5 pm"
+		],
+		"phone": "608-555-3344",
+		"website": "https://juniperandsagemadison.com",
+		"disclaimers": ["Please notify us of any food allergies before ordering."],
+		"cuisine": "Vegetarian"
+	},
+	{
+		"id": "rstr_xyz567abc890",
+		"name": "Canyon Hearth",
+		"menu_id": "menu_5y6z7a8b9c0d",
+		"address_id": "add_5y3n8w6t0g1p",
+		"hours": [
+			"M: 12 pm - 8 pm",
+			"Tu: 12 pm - 8 pm",
+			"W: 12 pm - 8 pm",
+			"Th: 12 pm - 8 pm",
+			"F: 12 pm - 10 pm",
+			"Sa: 12 pm - 10 pm",
+			"Su: 12 pm - 6 pm"
+		],
+		"phone": "505-555-7890",
+		"website": "None",
+		"disclaimers": [
+			"Some items may contain peanuts or gluten. Ask your server."
+		],
+		"cuisine": "Southwestern"
 	}
 ]

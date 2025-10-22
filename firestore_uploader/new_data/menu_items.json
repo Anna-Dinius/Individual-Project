@@ -1,23 +1,111 @@
 [
 	{
-		"id": "item_m9q2x7k4p1z8",
-		"description": "Fresh salad with candied pecans",
-		"name": "Harvest Nut Salad",
-		"menu_id": "menu_a7d9f2k6p3x1",
-		"allergens": ["all_k6x1p3z8j4r", "all_w1t8g4n6y3z"]
+		"id": "item_1milk0000001",
+		"name": "Creamy Tomato Soup",
+		"description": "Rich tomato soup with heavy cream",
+		"menu_id": "menu_1a2b3c4d5e6f",
+		"allergens": ["all_w1t8g4n6y3z"]
 	},
 	{
-		"id": "item_t4n7m2q9x5k1",
-		"description": "Pasta with walnut cream sauce",
-		"name": "Walnut Cream Linguine",
-		"menu_id": "menu_a7d9f2k6p3x1",
-		"allergens": ["all_k6x1p3z8j4r", "all_a9x7k2f3b1q6", "all_w1t8g4n6y3z"]
+		"id": "item_2milk0000002",
+		"name": "Cheddar Grilled Cheese",
+		"description": "Toasted bread with melted cheddar",
+		"menu_id": "menu_1a2b3c4d5e6f",
+		"allergens": ["all_w1t8g4n6y3z"]
 	},
 	{
-		"id": "item_z3p8k1m6q4n9",
-		"description": "Chocolate tart topped with almonds",
-		"name": "Almond Chocolate Tart",
-		"menu_id": "menu_a7d9f2k6p3x1",
-		"allergens": ["all_k6x1p3z8j4r", "all_q8b1d4a6m7z", "all_w1t8g4n6y3z"]
+		"id": "item_3milk0000003",
+		"name": "Milk Chocolate Tart",
+		"description": "Chocolate tart with whipped cream",
+		"menu_id": "menu_1a2b3c4d5e6f",
+		"allergens": ["all_w1t8g4n6y3z"]
+	},
+
+	{
+		"id": "item_1fishshell0001",
+		"name": "Grilled Salmon",
+		"description": "Fresh salmon with lemon butter",
+		"menu_id": "menu_7g8h9i0j1k2l",
+		"allergens": ["all_t5g3n8w6y4p1"]
+	},
+	{
+		"id": "item_2fishshell0002",
+		"name": "Shrimp Scampi",
+		"description": "Garlic shrimp over linguine",
+		"menu_id": "menu_7g8h9i0j1k2l",
+		"allergens": ["all_v3n5y2w9t0g"]
+	},
+	{
+		"id": "item_3fishshell0003",
+		"name": "Clam Chowder",
+		"description": "Creamy chowder with clams",
+		"menu_id": "menu_7g8h9i0j1k2l",
+		"allergens": ["all_v3n5y2w9t0g"]
+	},
+
+	{
+		"id": "item_1animal000001",
+		"name": "Bacon Omelette",
+		"description": "Egg omelette with crispy bacon",
+		"menu_id": "menu_3m4n5o6p7q8r",
+		"allergens": ["all_h2j9l7s0k3x5"]
+	},
+	{
+		"id": "item_2animal000002",
+		"name": "Chicken Alfredo",
+		"description": "Pasta with creamy chicken sauce",
+		"menu_id": "menu_3m4n5o6p7q8r",
+		"allergens": ["all_h2j9l7s0k3x5"]
+	},
+	{
+		"id": "item_3animal000003",
+		"name": "Beef Stroganoff",
+		"description": "Beef in creamy mushroom sauce",
+		"menu_id": "menu_3m4n5o6p7q8r",
+		"allergens": ["all_h2j9l7s0k3x5"]
+	},
+
+	{
+		"id": "item_1mixed0000001",
+		"name": "Vegan Lentil Stew",
+		"description": "Hearty stew with lentils and spices",
+		"menu_id": "menu_9s0t1u2v3w4x",
+		"allergens": []
+	},
+	{
+		"id": "item_2mixed0000002",
+		"name": "Quinoa Salad",
+		"description": "Quinoa with veggies and vinaigrette",
+		"menu_id": "menu_9s0t1u2v3w4x",
+		"allergens": ["all_k6x1p3z8j4r"]
+	},
+	{
+		"id": "item_3mixed0000003",
+		"name": "Gluten-Free Pancakes",
+		"description": "Fluffy pancakes without gluten",
+		"menu_id": "menu_9s0t1u2v3w4x",
+		"allergens": ["all_q8b1d4a6m7z"]
+	},
+
+	{
+		"id": "item_1mixed0000004",
+		"name": "Spicy Peanut Noodles",
+		"description": "Rice noodles with peanut sauce",
+		"menu_id": "menu_5y6z7a8b9c0d",
+		"allergens": ["all_f7c2m9a0b5q"]
+	},
+	{
+		"id": "item_2mixed0000005",
+		"name": "BBQ Pulled Pork",
+		"description": "Slow-cooked pork with BBQ sauce",
+		"menu_id": "menu_5y6z7a8b9c0d",
+		"allergens": ["all_m4z8v1c9e0d2"]
+	},
+	{
+		"id": "item_3mixed0000006",
+		"name": "Nut-Free Brownie",
+		"description": "Chocolate brownie without nuts",
+		"menu_id": "menu_5y6z7a8b9c0d",
+		"allergens": ["all_a9x7k2f3b1q6"]
 	}
 ]
