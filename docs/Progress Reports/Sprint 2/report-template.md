@@ -80,7 +80,7 @@ title: Individual Project Week /# Progress Report - Anna Dinius
 
 ---
 
-## 🔥 Burndown rate
+## 🔥 Burndown rates
 
 - #/# week # _carryover items_ completed
 - #/# week # _milestones/requirements_ completed
