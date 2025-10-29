@@ -1,3 +1,5 @@
+import 'menu.dart';
+
 class Restaurant {
   final String id;
   final String name;
@@ -8,6 +10,7 @@ class Restaurant {
   final String cuisine;
   final List<String> disclaimers;
   final String? logoUrl;
+  final Menu? menu;
 
   Restaurant({
     required this.id,
@@ -19,6 +22,7 @@ class Restaurant {
     required this.cuisine,
     required this.disclaimers,
     required this.logoUrl,
+    this.menu,
   });
 
   /* Create a Restaurant object from JSON data */
@@ -32,6 +36,7 @@ class Restaurant {
     cuisine: json['cuisine'],
     disclaimers: List<String>.from(json['disclaimers']),
     logoUrl: json['logoUrl'] ?? 'None',
+    menu: json['menu'] != null ? Menu.fromJson(json['menu']) : null,
   );
 
   /* Convert a Restaurant object to JSON data */
@@ -45,6 +50,7 @@ class Restaurant {
     'cuisine': cuisine,
     'disclaimers': disclaimers,
     'logoUrl': logoUrl,
+    'menu': menu?.toJson(),
   };
 
   /* Check if the restaurant has a website */

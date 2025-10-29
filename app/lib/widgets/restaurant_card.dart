@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/restaurant.dart';
-import '../screens/restaurant_screen.dart';
+import '../screens/menu_screen.dart';
 
 /* A card widget that displays basic information about a restaurant.
-   Used on the main restaurant list screen. */
+   Clicking the card navigates to the menu screen for the restaurant. */
 class RestaurantCard extends StatefulWidget {
   final Restaurant restaurant;
 
@@ -50,7 +50,7 @@ class _RestaurantCardState extends State<RestaurantCard> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        RestaurantScreen(restaurant: widget.restaurant),
+                        MenuScreen(restaurant: widget.restaurant),
                   ),
                 );
               },

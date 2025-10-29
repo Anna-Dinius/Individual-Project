@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'screens/home_screen.dart';
+import 'screens/menu_screen.dart';
+import 'screens/restaurant_screen.dart';
 import 'theme/nomnom_theme.dart';
+import 'models/restaurant.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +24,23 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: nomnomTheme,
       home: const HomeScreen(),
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/menu':
+            return MaterialPageRoute(
+              builder: (context) =>
+                  MenuScreen(restaurant: settings.arguments as Restaurant),
+            );
+          case '/restaurant':
+            return MaterialPageRoute(
+              builder: (context) => RestaurantScreen(
+                restaurant: settings.arguments as Restaurant,
+              ),
+            );
+          default:
+            return null;
+        }
+      },
     );
   }
 }
