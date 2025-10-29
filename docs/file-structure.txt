@@ -1,37 +1,7 @@
 Individual-Project-Repo/
-├── docs/
-│   ├── preliminary/
-│   ├── Weekly Progress Reports/
-│   │   ├── Week 1/
-│   │   │   ├── week-1.md
-│   │   │   └── week-1.pdf
-│   │   ├── Week 2/
-│   │   │   ├── week-2.md
-│   │   │   └── week-2.pdf
-│   │   ├── Week 3/
-│   │   │   ├── week-3.md
-│   │   │   └── week-3.pdf
-│   │   ├── Week 4/
-│   │   │   ├── week-4-detailed.md
-│   │   │   ├── week-4.md
-│   │   │   └── week-4.pdf
-│   │   ├── loc-prompt.txt
-│   │   └── report-template.md
-│   └── file-structure.txt
-├── firestore_uploader/
-│   ├── data/
-│   │   ├── addresses.json
-│   │   ├── menu_items.json
-│   │   ├── menus.json
-│   │   └── restaurants.json
-│   ├── new_data/
-│   │   ├── addresses.json
-│   │   ├── menu_items.json
-│   │   ├── menus.json
-│   │   └── restaurants.json
-│   ├── data_generation_prompt.txt
-│   └── firestore_uploader.js
-├── nomnom_safe/
+├── .vscode/
+│   └── settings.json
+├── app/
 │   ├── lib/
 │   │   ├── models/
 │   │   │   ├── address.dart
@@ -50,17 +20,18 @@ Individual-Project-Repo/
 │   │   │   ├── nomnom_theme.dart
 │   │   │   └── theme_constants.dart
 │   │   ├── utils/
-│   │   │   ├── allergen_utility.dart
-│   │   │   └── restaurant_utility.dart
+│   │   │   ├── allergen_utils.dart
+│   │   │   └── restaurant_utils.dart
 │   │   ├── widgets/
 │   │   │   ├── allergen_chip.dart
 │   │   │   ├── allergen_filter.dart
+│   │   │   ├── filter.dart
 │   │   │   ├── nomnom_safe_appbar.dart
 │   │   │   ├── restaurant_card.dart
 │   │   │   └── restaurant_link.dart
 │   │   ├── firebase_options.dart
 │   │   └── main.dart
-│   ├── tests/
+│   ├── test/
 │   │   ├── models/
 │   │   │   ├── address_model_test.dart
 │   │   │   ├── allergen_model_test.dart
@@ -71,11 +42,13 @@ Individual-Project-Repo/
 │   │   │   ├── address_service_test.dart
 │   │   │   ├── allergen_service_test.dart
 │   │   │   └── restaurant_service_test.dart
-│   │   ├── utilities/
-│   │   │   └── allergen_utility_test.dart
+│   │   ├── utils/
+│   │   │   ├── allergen_utils_test.dart
+│   │   │   └── restaurant_utils_test.dart
 │   │   ├── widgets/
 │   │   │   ├── allergen_chip_widget_test.dart
 │   │   │   ├── allergen_filter_widget_test.dart
+│   │   │   ├── filter_widget_test.dart
 │   │   │   ├── nomnom_safe_appbar_widget_test.dart
 │   │   │   ├── restaurant_card_widget_test.dart
 │   │   │   └── restaurant_link_widget_test.dart
@@ -84,6 +57,51 @@ Individual-Project-Repo/
 │   ├── firebase.json
 │   ├── pubspec.yaml
 │   └── README.md
+├── docs/
+│   ├── preliminary/
+│   ├── Progress Reports/
+│   │   ├── Sprint 1/
+│   │   │   ├── report-template.md
+│   │   │   ├── sprint-1.md
+│   │   │   └── sprint-1.pdf
+│   │   ├── Sprint 2/
+│   │   │   └── report-template.md
+│   │   ├── Week 1/
+│   │   │   ├── week-1.md
+│   │   │   └── week-1.pdf
+│   │   ├── Week 2/
+│   │   │   ├── week-2.md
+│   │   │   └── week-2.pdf
+│   │   ├── Week 3/
+│   │   │   ├── week-3.md
+│   │   │   └── week-3.pdf
+│   │   ├── Week 4/
+│   │   │   ├── week-4-detailed.md
+│   │   │   ├── week-4.md
+│   │   │   └── week-4.pdf
+│   │   ├── Week 5/
+│   │   │   ├── week-5-detailed.md
+│   │   │   ├── week-5.md
+│   │   │   └── week-5.pdf
+│   │   ├── Week 6/
+│   │   │   ├── week-6-detailed.md
+│   │   │   └── week-6.md
+│   │   └── loc-prompt.txt
+│   └── file-structure.txt
+├── firestore_uploader/
+│   ├── data/
+│   │   ├── addresses.json
+│   │   ├── menu_items.json
+│   │   ├── menus.json
+│   │   └── restaurants.json
+│   ├── new_data/
+│   │   ├── addresses.json
+│   │   ├── menu_items.json
+│   │   ├── menus.json
+│   │   └── restaurants.json
+│   ├── data_generation_prompt.txt
+│   ├── firestore_uploader.js
+│   └── get-restaurant-names.py
 ├── scripts/
 │   ├── compare_tree.py
 │   ├── loc_counter.py
