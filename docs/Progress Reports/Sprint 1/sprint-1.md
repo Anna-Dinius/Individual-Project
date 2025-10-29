@@ -5,11 +5,43 @@ paginate: true
 title: Individual Project Sprint 1 Presentation - Anna Dinius
 ---
 
+# Individual Project
+
+## NomNom Safe
+
+> - Anna Dinius
+
+---
+
+## NomNom Safe as a Solution
+
+### Problem:
+
+- **Difficulty accessing reliable allergen and dietary information from independent and locally-owned food service businesses**, who often lack accessible tools for sharing that information
+
+---
+
+## Example: Smokey Bones (4 pages)
+
+![](./screenshots/smokey-bones-spreadsheet.png)
+
+---
+
+## Example: Cheesecake Factory (13 pages)
+
+![](./screenshots/cheesecake-factory-spreadsheet.png)
+
+---
+
+## Example: Dunkin' Donuts (182 pages)
+
+![](./screenshots/dunkin-donuts-spreadsheet.png)
+
+---
+
 # Sprint 1 Retrospective
 
 ## (9/8/2025 - 10/14/2025)
-
-> - Anna Dinius
 
 ---
 
@@ -62,6 +94,8 @@ title: Individual Project Sprint 1 Presentation - Anna Dinius
 
 # Sprint 2 Plan
 
+## (10/20/2025 - 11/23/2025)
+
 ---
 
 ## Goals
@@ -78,7 +112,9 @@ Implement the following features:
 ## Metrics
 
 Total number of features planned: **4**
-Total number of requirements planned: **12**
+Total number of epic requirements planned: **5**
+Total number of sub requirements planned: **15**
+Total number of requirements planned: **20**
 
 ---
 
@@ -94,7 +130,7 @@ Total number of requirements planned: **12**
 
 ## Key Dates
 
-- Individual presentation: During Sprint 2 (TBD)
+- Individual presentation: 10/29/2025
 - Individual milestones:
   1. 10/26: have restaurant filter feature fully implemented
   2. 11/2: have view restaurant menu feature fully implemented
