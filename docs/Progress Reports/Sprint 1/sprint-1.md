@@ -124,7 +124,7 @@ Total number of requirements planned: **20**
 - Week 7: Implement view restaurant menu feature
 - Week 8: Implement filter menu items feature
 - Week 9: Implement user profiles feature
-- Week 10: Testing, documentation, error handling
+- Week 10: UI improvements, testing, bug fixing, documentation
 
 ---
 
