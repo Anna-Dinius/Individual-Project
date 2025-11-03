@@ -15,7 +15,7 @@ The script excludes common transient/build folders (.git, build, .dart_tool, .id
 import argparse
 from pathlib import Path
 
-EXCLUDE_DIRS = {'.git', '.idea', '.gradle', 'build', '.dart_tool', 'node_modules', '__pycache__', 'android', 'ios', 'linux', 'macos', 'web', 'windows'}
+EXCLUDE_DIRS = {'.vscode', '.git', '.idea', '.gradle', 'build', '.dart_tool', 'node_modules', '__pycache__', 'android', 'coverage', 'ios', 'linux', 'macos', 'web', 'windows'}
 EXCLUDE_FILES = {'pubspec.lock', '.DS_Store', '.flutter-plugins-dependencies', '.gitignore', '.metadata', 'nomnom_safe.iml', 'pubspec.lock', 'serviceAccountKey.json'}
 
 def is_excluded(path: Path) -> bool:
