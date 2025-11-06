@@ -8,7 +8,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 
 admin.initializeApp({
-	credential: admin.credential.cert(require('./serviceAccountKey.json')),
+	credential: admin.credential.cert(require('../serviceAccountKey.json')),
 });
 
 const db = admin.firestore();
