@@ -33,7 +33,7 @@ menu_items
 - description (string, short description of the menu item - 10 words or less)
 - name (string, name of the menu item)
 - menu_id (unique string that starts with "menu_" followed by 12 randomized characters)
-- allergens (array of the unique ids (strings) of the allergen the menu item contains)
+- allergens (array of the unique ids (strings) of the allergen the menu item contains; can contain more than one allergen id)
 
 The unique allergen ids are:
 
@@ -49,7 +49,12 @@ The unique allergen ids are:
 
 Make sure the restaurants you select are not any of the following:
 The Laughing Seed
+Table & Twine
+River & Root
 Cotton & Rye
 Leaf Kitchen
+The Forager's Table
+Juniper & Sage
 Graze
 Maple Grove Bistro
+Canyon Hearth
