@@ -91,25 +91,33 @@ Individual-Project-Repo/
 │   │   │   ├── week-6-detailed.md
 │   │   │   ├── week-6.md
 │   │   │   └── week-6.pdf
-│   │   ├── Week 7/
-│   │   │   ├── week-7-detailed.md
-│   │   │   └── week-7.md
-│   │   └── loc-prompt.txt
+│   │   └── Week 7/
+│   │       ├── week-7-detailed.md
+│   │       ├── week-7.md
+│   │       └── week-7.pdf
 │   └── file-structure.txt
-├── firestore_uploader/
-│   ├── data/
-│   │   ├── addresses.json
-│   │   ├── menu_items.json
-│   │   ├── menus.json
-│   │   └── restaurants.json
-│   ├── new_data/
-│   │   ├── addresses.json
-│   │   ├── menu_items.json
-│   │   ├── menus.json
-│   │   └── restaurants.json
-│   ├── data_generation_prompt.txt
-│   ├── firestore_uploader.js
-│   └── get-restaurant-names.py
+├── firestore/
+│   ├── firestore_uploader/
+│   │   ├── data/
+│   │   │   ├── addresses.json
+│   │   │   ├── menu_items.json
+│   │   │   ├── menus.json
+│   │   │   └── restaurants.json
+│   │   ├── new_data/
+│   │   │   ├── addresses.json
+│   │   │   ├── menu_items.json
+│   │   │   ├── menus.json
+│   │   │   └── restaurants.json
+│   │   ├── assign_unique_menu_item_ids.js
+│   │   ├── delete_menu_items.js
+│   │   ├── firestore_uploader.js
+│   │   ├── get-menu-ids.py
+│   │   ├── get-restaurant-names.py
+│   │   ├── menu_item_data_generation_prompt.txt
+│   │   ├── restaurant_data_generation_prompt.txt
+│   │   └── upload_menu_items.js
+│   ├── add_item_type_attribute_to_menu_items.js
+│   └── rename_item_type_field.js
 ├── scripts/
 │   ├── compare_tree.py
 │   ├── loc_counter.py
