@@ -3,6 +3,7 @@ import '../widgets/nomnom_safe_appbar.dart';
 import '../models/restaurant.dart';
 import '../models/menu_item.dart';
 import '../widgets/allergen_filter.dart';
+import '../widgets/filter.dart';
 import '../models/allergen.dart';
 import '../services/allergen_service.dart';
 import '../services/menu_service.dart';
@@ -25,6 +26,15 @@ class _MenuScreenState extends State<MenuScreen> {
   List<Allergen> selectedAllergens = [];
   List<MenuItem> filteredMenuItems = [];
   List<MenuItem> allMenuItems = [];
+  // Item type filter state
+  static const List<String> availableItemTypes = [
+    'Sides',
+    'Entrees',
+    'Desserts',
+    'Drinks',
+    'Appetizers',
+  ];
+  List<String> selectedItemTypes = [];
   Menu? restaurantMenu;
 
   bool isLoadingAllergens = true;
@@ -85,15 +95,29 @@ class _MenuScreenState extends State<MenuScreen> {
     final selectedAllergenIds = selectedAllergens.map((a) => a.id).toList();
 
     setState(() {
-      if (selectedAllergenIds.isEmpty) {
-        filteredMenuItems = allMenuItems;
-      } else {
-        filteredMenuItems = allMenuItems.where((item) {
+      // Start from all items
+      var results = List<MenuItem>.from(allMenuItems);
+
+      // Apply allergen filtering (exclude items containing any selected allergen)
+      if (selectedAllergenIds.isNotEmpty) {
+        results = results.where((item) {
           return !item.allergens.any(
             (allergen) => selectedAllergenIds.contains(allergen),
           );
         }).toList();
       }
+
+      // Apply item type filtering (include only items whose itemType is selected)
+      if (selectedItemTypes.isNotEmpty) {
+        results = results.where((item) {
+          // Convert plural capitalized display names to singular lowercase for comparison
+          return selectedItemTypes
+              .map((type) => type.toLowerCase().replaceAll(RegExp('s\$'), ''))
+              .contains(item.itemType.toLowerCase());
+        }).toList();
+      }
+
+      filteredMenuItems = results;
     });
   }
 
@@ -164,6 +188,22 @@ class _MenuScreenState extends State<MenuScreen> {
                     onClear: _clearAllergens,
                     showClearButton: selectedAllergens.isNotEmpty,
                   ),
+          ),
+          // Item type filter (uses reusable Filter widget)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Filter(
+              label: 'Item types',
+              options: availableItemTypes,
+              selectedOptions: selectedItemTypes,
+              onChanged: (selected) {
+                setState(() {
+                  // Keep original capitalization for display
+                  selectedItemTypes = selected.toList();
+                  _updateFilteredMenuItems();
+                });
+              },
+            ),
           ),
           // Filter description text
           if (selectedAllergens.isNotEmpty)

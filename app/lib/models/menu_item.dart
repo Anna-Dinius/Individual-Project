@@ -3,6 +3,7 @@ class MenuItem {
   final String name;
   final String description;
   final List<String> allergens;
+  final String itemType;
   final String menuId;
 
   MenuItem({
@@ -10,6 +11,7 @@ class MenuItem {
     required this.name,
     required this.description,
     required this.allergens,
+    required this.itemType,
     required this.menuId,
   });
 
@@ -18,7 +20,8 @@ class MenuItem {
     id: json['id'],
     name: json['name'],
     description: json['description'],
-    allergens: List<String>.from(json['allergens']),
+    allergens: List<String>.from(json['allergens'] ?? []),
+    itemType: json['item_type'] ?? '',
     menuId: json['menu_id'],
   );
 
@@ -28,6 +31,7 @@ class MenuItem {
     'name': name,
     'description': description,
     'allergens': allergens,
+    'item_type': itemType,
     'menu_id': menuId,
   };
 }
