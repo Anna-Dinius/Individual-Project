@@ -10,11 +10,23 @@ import 'screens/profile_screen.dart';
 import 'screens/edit_profile_screen.dart';
 import 'theme/nomnom_theme.dart';
 import 'models/restaurant.dart';
+import 'providers/auth_state_provider.dart';
+import 'package:provider/provider.dart';
+import 'navigation/route_tracker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+
+  final authStateProvider = AuthStateProvider();
+  await authStateProvider.loadCurrentUser(); // Load profile before UI starts
+
+  runApp(
+    ChangeNotifierProvider<AuthStateProvider>.value(
+      value: authStateProvider,
+      child: const MyApp(),
+    ),
+  );
 }
 
 /* Root widget of the NomNom Safe application */
@@ -27,37 +39,49 @@ class MyApp extends StatelessWidget {
       title: 'NomNom Safe',
       debugShowCheckedModeBanner: false,
       theme: nomnomTheme,
+      navigatorObservers: [routeObserver],
       home: const HomeScreen(),
       onGenerateRoute: (settings) {
+        currentRouteName = settings.name; // Track current route globally
+
         switch (settings.name) {
           case '/home':
-            return MaterialPageRoute(builder: (context) => const HomeScreen());
+            return MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+              settings: settings,
+            );
           case '/menu':
             return MaterialPageRoute(
               builder: (context) =>
                   MenuScreen(restaurant: settings.arguments as Restaurant),
+              settings: settings,
             );
           case '/restaurant':
             return MaterialPageRoute(
               builder: (context) => RestaurantScreen(
                 restaurant: settings.arguments as Restaurant,
               ),
+              settings: settings,
             );
           case '/sign-in':
             return MaterialPageRoute(
               builder: (context) => const SignInScreen(),
+              settings: settings,
             );
           case '/sign-up':
             return MaterialPageRoute(
               builder: (context) => const SignUpScreen(),
+              settings: settings,
             );
           case '/profile':
             return MaterialPageRoute(
               builder: (context) => const ProfileScreen(),
+              settings: settings,
             );
           case '/edit-profile':
             return MaterialPageRoute(
               builder: (context) => const EditProfileScreen(),
+              settings: settings,
             );
           default:
             return null;

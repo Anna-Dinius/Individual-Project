@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../services/auth_service.dart';
+import '../models/user.dart';
 
 /// AuthStateProvider notifies listeners when authentication state changes
 class AuthStateProvider extends ChangeNotifier {
@@ -57,6 +58,11 @@ class AuthStateProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> loadCurrentUser() async {
+    await _authService.loadCurrentUser();
+    notifyListeners();
+  }
+
   /// Get current user (for profile display)
-  dynamic get currentUser => _authService.currentUser;
+  User? get currentUser => _authService.currentUser;
 }

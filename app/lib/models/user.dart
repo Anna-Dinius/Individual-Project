@@ -3,7 +3,6 @@ class User {
   final String firstName;
   final String lastName;
   final String email;
-  final String password;
   final List<String> allergies;
 
   User({
@@ -11,7 +10,6 @@ class User {
     required this.firstName,
     required this.lastName,
     required this.email,
-    required this.password,
     this.allergies = const [],
   });
 
@@ -21,7 +19,6 @@ class User {
     firstName: json['first_name'],
     lastName: json['last_name'],
     email: json['email'],
-    password: json['password'],
     allergies: List<String>.from(json['allergies'] ?? []),
   );
 
@@ -31,7 +28,6 @@ class User {
     'first_name': firstName,
     'last_name': lastName,
     'email': email,
-    'password': password,
     'allergies': allergies,
   };
 

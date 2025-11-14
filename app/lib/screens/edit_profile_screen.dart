@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/nomnom_safe_appbar.dart';
 import '../providers/auth_state_provider.dart';
+import '../navigation/route_tracker.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -9,7 +10,7 @@ class EditProfileScreen extends StatefulWidget {
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
+class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
   late TextEditingController _emailController;
@@ -22,6 +23,37 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   bool _isConfirmPasswordVisible = false;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+  }
+
+  @override
+  void dispose() {
+    // Unsubscribe from route observer
+    routeObserver.unsubscribe(this);
+
+    // Dispose controllers
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void didPush() {
+    currentRouteName = '/edit-profile';
+  }
+
+  @override
+  void didPopNext() {
+    currentRouteName = '/edit-profile';
+  }
+
+  @override
   void initState() {
     super.initState();
     _authProvider = AuthStateProvider();
@@ -30,8 +62,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       _firstNameController = TextEditingController(text: user.firstName);
       _lastNameController = TextEditingController(text: user.lastName);
       _emailController = TextEditingController(text: user.email);
-      _passwordController = TextEditingController(text: user.password);
-      _confirmPasswordController = TextEditingController(text: user.password);
+      _passwordController = TextEditingController();
+      _confirmPasswordController = TextEditingController();
     } else {
       _firstNameController = TextEditingController();
       _lastNameController = TextEditingController();
@@ -41,16 +73,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
-  @override
-  void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
-  }
-
   Future<void> _handleSaveChanges() async {
     setState(() {
       _isLoading = true;
@@ -58,6 +80,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
 
     try {
+      if (_passwordController.text != _confirmPasswordController.text) {
+        setState(() {
+          _errorMessage = 'Passwords do not match';
+          _isLoading = false;
+        });
+        return;
+      }
+
       await _authProvider.updateUserProfile(
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
@@ -65,6 +95,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         password: _passwordController.text,
         allergies: _authProvider.currentUser?.allergies,
       );
+      await _authProvider.loadCurrentUser();
 
       if (mounted) {
         Navigator.of(context).pop();

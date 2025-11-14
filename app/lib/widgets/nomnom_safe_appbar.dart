@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../providers/auth_state_provider.dart';
+import 'package:nomnom_safe/utils/navigation_utils.dart';
 
 /// Global instance of AuthStateProvider to be used throughout the app
 final authStateProvider = AuthStateProvider();
@@ -33,9 +34,11 @@ class NomnomSafeAppBar extends StatelessWidget implements PreferredSizeWidget {
               // Profile button
               IconButton(
                 icon: const Icon(Icons.person),
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/profile');
-                },
+                onPressed: () => navigateIfNotCurrent(
+                  context,
+                  '/profile',
+                  blockIfCurrent: ['/profile', '/edit-profile'],
+                ),
                 tooltip: 'Profile',
               ),
               // Sign Out button

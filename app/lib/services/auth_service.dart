@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user.dart';
 
@@ -5,6 +6,7 @@ import '../models/user.dart';
 class AuthService {
   static final AuthService _instance = AuthService._internal();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final fb_auth.FirebaseAuth _auth = fb_auth.FirebaseAuth.instance;
 
   User? _currentUser;
 
@@ -17,8 +19,21 @@ class AuthService {
   /// Get the currently logged-in user, or null if not authenticated
   User? get currentUser => _currentUser;
 
+  Future<void> loadCurrentUser() async {
+    final fbUser = _auth.currentUser;
+    if (fbUser != null) {
+      final userDoc = await _firestore
+          .collection('users')
+          .doc(fbUser.uid)
+          .get();
+      if (userDoc.exists) {
+        _currentUser = User.fromJson({...userDoc.data()!, 'id': fbUser.uid});
+      }
+    }
+  }
+
   /// Check if a user is currently logged in
-  bool get isSignedIn => _currentUser != null;
+  bool get isSignedIn => _auth.currentUser != null;
 
   /// Sign up a new user with validation.
   /// Throws Exception if email already exists or validation fails.
@@ -45,32 +60,24 @@ class AuthService {
     }
 
     try {
-      // Check if email already exists in Firestore
-      final existingUser = await _firestore
-          .collection('users')
-          .where('email', isEqualTo: email)
-          .limit(1)
-          .get();
+      final userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      final uid = userCredential.user!.uid;
 
-      if (existingUser.docs.isNotEmpty) {
-        throw Exception('Email already in use');
-      }
-
-      // Create new user document in Firestore
-      final docRef = _firestore.collection('users').doc();
       final newUser = User(
-        id: docRef.id,
+        id: uid,
         firstName: firstName,
         lastName: lastName,
         email: email,
-        password: password, // Note: In production, hash this before storing!
         allergies: allergies ?? [],
       );
 
-      await docRef.set(newUser.toJson());
+      await _firestore.collection('users').doc(uid).set(newUser.toJson());
       _currentUser = newUser;
-    } on FirebaseException catch (e) {
-      throw Exception('Firestore error: ${e.message}');
+    } on fb_auth.FirebaseAuthException catch (e) {
+      throw Exception('Auth error: ${e.code}');
     }
   }
 
@@ -82,28 +89,21 @@ class AuthService {
     }
 
     try {
-      // Query Firestore for user with matching email and password
-      final querySnapshot = await _firestore
-          .collection('users')
-          .where('email', isEqualTo: email)
-          .where('password', isEqualTo: password)
-          .limit(1)
-          .get();
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      final uid = _auth.currentUser!.uid;
 
-      if (querySnapshot.docs.isEmpty) {
-        throw Exception('Invalid email or password');
-      }
+      final userDoc = await _firestore.collection('users').doc(uid).get();
+      if (!userDoc.exists) throw Exception('User profile not found');
 
-      // Load user from Firestore document
-      final userDoc = querySnapshot.docs.first;
-      _currentUser = User.fromJson({...userDoc.data(), 'id': userDoc.id});
-    } on FirebaseException catch (e) {
-      throw Exception('Firestore error: ${e.message}');
+      _currentUser = User.fromJson({...userDoc.data()!, 'id': uid});
+    } on fb_auth.FirebaseAuthException catch (e) {
+      throw Exception('Auth error: ${e.code}');
     }
   }
 
   /// Sign out the current user
   Future<void> signOut() async {
+    await _auth.signOut();
     _currentUser = null;
   }
 
@@ -115,9 +115,8 @@ class AuthService {
     required String password,
     List<String>? allergies,
   }) async {
-    if (_currentUser == null) {
-      throw Exception('No user is currently signed in');
-    }
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) throw Exception('No user is currently signed in');
 
     if (firstName.isEmpty || lastName.isEmpty) {
       throw Exception('First name and last name are required');
@@ -130,38 +129,26 @@ class AuthService {
     }
 
     try {
-      // Check if new email is already in use by another user
-      if (email != _currentUser!.email) {
-        final existingUser = await _firestore
-            .collection('users')
-            .where('email', isEqualTo: email)
-            .limit(1)
-            .get();
+      // Update email and password in Firebase Auth
+      final user = _auth.currentUser!;
+      if (email != user.email) await user.verifyBeforeUpdateEmail(email);
+      await user.updatePassword(password);
 
-        if (existingUser.docs.isNotEmpty) {
-          throw Exception('Email already in use');
-        }
-      }
-
-      // Create updated user object
+      // Update metadata in Firestore
       final updatedUser = User(
-        id: _currentUser!.id,
+        id: uid,
         firstName: firstName,
         lastName: lastName,
         email: email,
-        password: password,
         allergies: allergies ?? [],
       );
 
-      // Update in Firestore
-      await _firestore
-          .collection('users')
-          .doc(_currentUser!.id)
-          .set(updatedUser.toJson());
-
+      await _firestore.collection('users').doc(uid).set(updatedUser.toJson());
       _currentUser = updatedUser;
+    } on fb_auth.FirebaseAuthException catch (e) {
+      throw Exception('Auth update error: ${e.code}');
     } on FirebaseException catch (e) {
-      throw Exception('Firestore error: ${e.message}');
+      throw Exception('Firestore error: ${e.code}');
     }
   }
 }

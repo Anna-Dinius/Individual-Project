@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../widgets/nomnom_safe_appbar.dart';
 import '../services/allergen_service.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_state_provider.dart';
+import '../navigation/route_tracker.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -9,8 +12,30 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
   late final AllergenService _allergenService;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPush() {
+    currentRouteName = '/profile';
+  }
+
+  @override
+  void didPopNext() {
+    currentRouteName = '/profile';
+  }
 
   @override
   void initState() {
@@ -20,6 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authStateProvider = Provider.of<AuthStateProvider>(context);
     final user = authStateProvider.currentUser;
 
     if (user == null) {
@@ -119,8 +145,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 32),
             // Edit button
             ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/edit-profile');
+              onPressed: () async {
+                await Navigator.of(
+                  context,
+                ).pushNamed('/edit-profile'); // Wait for user to return
+                await authStateProvider.loadCurrentUser(); // Refresh user data
+                if (mounted) setState(() {}); // Trigger rebuild
               },
               child: const Text('Edit Profile'),
             ),
