@@ -67,6 +67,16 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Back button
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () => Navigator.pop(context),
+                tooltip: 'Back',
+              ),
+            ),
+            const SizedBox(height: 12),
             // Restaurant name
             Text(
               widget.restaurant.name,

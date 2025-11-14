@@ -6,14 +6,22 @@ Individual-Project-Repo/
 │   │   │   ├── allergen.dart
 │   │   │   ├── menu.dart
 │   │   │   ├── menu_item.dart
-│   │   │   └── restaurant.dart
+│   │   │   ├── restaurant.dart
+│   │   │   └── user.dart
+│   │   ├── providers/
+│   │   │   └── auth_state_provider.dart
 │   │   ├── screens/
+│   │   │   ├── edit_profile_screen.dart
 │   │   │   ├── home_screen.dart
 │   │   │   ├── menu_screen.dart
-│   │   │   └── restaurant_screen.dart
+│   │   │   ├── profile_screen.dart
+│   │   │   ├── restaurant_screen.dart
+│   │   │   ├── sign_in_screen.dart
+│   │   │   └── sign_up_screen.dart
 │   │   ├── services/
 │   │   │   ├── address_service.dart
 │   │   │   ├── allergen_service.dart
+│   │   │   ├── auth_service.dart
 │   │   │   ├── menu_service.dart
 │   │   │   └── restaurant_service.dart
 │   │   ├── theme/
@@ -91,10 +99,14 @@ Individual-Project-Repo/
 │   │   │   ├── week-6-detailed.md
 │   │   │   ├── week-6.md
 │   │   │   └── week-6.pdf
-│   │   └── Week 7/
-│   │       ├── week-7-detailed.md
-│   │       ├── week-7.md
-│   │       └── week-7.pdf
+│   │   ├── Week 7/
+│   │   │   ├── week-7-detailed.md
+│   │   │   ├── week-7.md
+│   │   │   └── week-7.pdf
+│   │   └── Week 8/
+│   │       ├── week-8-detailed.md
+│   │       ├── week-8.md
+│   │       └── week-8.pdf
 │   └── file-structure.txt
 ├── firestore/
 │   ├── firestore_uploader/
