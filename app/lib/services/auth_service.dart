@@ -115,8 +115,13 @@ class AuthService {
     required String password,
     List<String>? allergies,
   }) async {
-    final uid = _auth.currentUser?.uid;
-    if (uid == null) throw Exception('No user is currently signed in');
+    final fbUser = _auth.currentUser;
+    final uid = fbUser?.uid;
+    if (uid == null || _currentUser == null) {
+      throw Exception('No user is currently signed in');
+    }
+
+    final updates = <String, dynamic>{};
 
     if (firstName.isEmpty || lastName.isEmpty) {
       throw Exception('First name and last name are required');
@@ -128,27 +133,29 @@ class AuthService {
       throw Exception('Password must be at least 6 characters');
     }
 
-    try {
-      // Update email and password in Firebase Auth
-      final user = _auth.currentUser!;
-      if (email != user.email) await user.verifyBeforeUpdateEmail(email);
-      await user.updatePassword(password);
+    // Compare each field
+    if (firstName != _currentUser!.firstName) updates['first_name'] = firstName;
+    if (lastName != _currentUser!.lastName) updates['last_name'] = lastName;
+    if (allergies != null &&
+        allergies.toSet() != _currentUser!.allergies.toSet()) {
+      updates['allergies'] = allergies;
+    }
 
-      // Update metadata in Firestore
-      final updatedUser = User(
-        id: uid,
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        allergies: allergies ?? [],
-      );
+    // Handle email change
+    if (email != fbUser?.email) {
+      await fbUser?.verifyBeforeUpdateEmail(email);
+      updates['pending_email'] = email;
+    }
 
-      await _firestore.collection('users').doc(uid).set(updatedUser.toJson());
-      _currentUser = updatedUser;
-    } on fb_auth.FirebaseAuthException catch (e) {
-      throw Exception('Auth update error: ${e.code}');
-    } on FirebaseException catch (e) {
-      throw Exception('Firestore error: ${e.code}');
+    // Handle password change
+    if (password.isNotEmpty && password.length >= 6) {
+      await fbUser!.updatePassword(password);
+    }
+
+    // Only write if something changed
+    if (updates.isNotEmpty) {
+      await _firestore.collection('users').doc(uid).update(updates);
+      await loadCurrentUser(); // Refresh local copy
     }
   }
 }
