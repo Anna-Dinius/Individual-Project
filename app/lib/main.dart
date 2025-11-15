@@ -42,7 +42,8 @@ class MyApp extends StatelessWidget {
       navigatorObservers: [routeObserver],
       home: const HomeScreen(),
       onGenerateRoute: (settings) {
-        currentRouteName = settings.name; // Track current route globally
+        currentRouteName =
+            settings.name; // Track current route globally before screen builds
 
         switch (settings.name) {
           case '/home':

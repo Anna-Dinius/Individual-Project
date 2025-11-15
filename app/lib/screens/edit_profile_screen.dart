@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/nomnom_safe_appbar.dart';
 import '../providers/auth_state_provider.dart';
 import '../navigation/route_tracker.dart';
+import '../widgets/password_field.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -19,8 +20,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
   late AuthStateProvider _authProvider;
   bool _isLoading = false;
   String? _errorMessage;
-  bool _isPasswordVisible = false;
-  bool _isConfirmPasswordVisible = false;
+  bool _arePasswordsVisible = false;
 
   @override
   void didChangeDependencies() {
@@ -182,62 +182,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
               enabled: !_isLoading,
             ),
             const SizedBox(height: 16),
-            TextField(
+            PasswordField(
               controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _isPasswordVisible
-                        ? Icons.visibility_off
-                        : Icons.visibility,
-                  ),
-                  onPressed: _isLoading
-                      ? null
-                      : () {
-                          setState(() {
-                            _isPasswordVisible = !_isPasswordVisible;
-                          });
-                        },
-                  tooltip: _isPasswordVisible
-                      ? 'Hide password'
-                      : 'Show password',
-                ),
-              ),
-              obscureText: !_isPasswordVisible,
+              label: 'Password',
+              isVisible: _arePasswordsVisible,
+              onToggleVisibility: () {
+                setState(() {
+                  _arePasswordsVisible = !_arePasswordsVisible;
+                });
+              },
               enabled: !_isLoading,
             ),
             const SizedBox(height: 16),
-            TextField(
+            PasswordField(
               controller: _confirmPasswordController,
-              decoration: InputDecoration(
-                labelText: 'Confirm Password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _isConfirmPasswordVisible
-                        ? Icons.visibility_off
-                        : Icons.visibility,
-                  ),
-                  onPressed: _isLoading
-                      ? null
-                      : () {
-                          setState(() {
-                            _isConfirmPasswordVisible =
-                                !_isConfirmPasswordVisible;
-                          });
-                        },
-                  tooltip: _isConfirmPasswordVisible
-                      ? 'Hide password'
-                      : 'Show password',
-                ),
-              ),
-              obscureText: !_isConfirmPasswordVisible,
+              label: 'Confirm Password',
+              isVisible: _arePasswordsVisible,
+              onToggleVisibility: () {
+                setState(() {
+                  _arePasswordsVisible = !_arePasswordsVisible;
+                });
+              },
               enabled: !_isLoading,
             ),
             const SizedBox(height: 32),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/nomnom_safe_appbar.dart';
+import '../navigation/route_tracker.dart';
+import '../widgets/password_field.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -8,7 +10,7 @@ class SignUpScreen extends StatefulWidget {
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends State<SignUpScreen> with RouteAware {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -16,16 +18,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   bool _isLoading = false;
+  bool _arePasswordsVisible = false;
   String? _errorMessage;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+  }
+
+  @override
   void dispose() {
+    // Unsubscribe from route observer
+    routeObserver.unsubscribe(this);
+
+    // Dispose controllers
     _firstNameController.dispose();
     _lastNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didPush() {
+    currentRouteName = '/sign-up';
+  }
+
+  @override
+  void didPopNext() {
+    currentRouteName = '/sign-up';
   }
 
   Future<void> _handleSignUp() async {
@@ -136,27 +159,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
               enabled: !_isLoading,
             ),
             const SizedBox(height: 16),
-            TextField(
+            PasswordField(
               controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              obscureText: true,
+              label: 'Password',
+              isVisible: _arePasswordsVisible,
+              onToggleVisibility: () {
+                setState(() {
+                  _arePasswordsVisible = !_arePasswordsVisible;
+                });
+              },
               enabled: !_isLoading,
             ),
             const SizedBox(height: 16),
-            TextField(
+            PasswordField(
               controller: _confirmPasswordController,
-              decoration: InputDecoration(
-                labelText: 'Confirm Password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              obscureText: true,
+              label: 'Confirm Password',
+              isVisible: _arePasswordsVisible,
+              onToggleVisibility: () {
+                setState(() {
+                  _arePasswordsVisible = !_arePasswordsVisible;
+                });
+              },
               enabled: !_isLoading,
             ),
             const SizedBox(height: 32),
@@ -178,7 +201,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const Text('Already have an account? '),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushReplacementNamed('/sign-in');
+                      if (currentRouteName != '/sign-in') {
+                        Navigator.of(context).pushReplacementNamed('/sign-in');
+                      }
                     },
                     style: TextButton.styleFrom(padding: EdgeInsets.zero),
                     child: const Text('Sign In'),

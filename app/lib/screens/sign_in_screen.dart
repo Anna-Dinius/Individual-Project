@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/nomnom_safe_appbar.dart';
+import '../navigation/route_tracker.dart';
+import '../widgets/password_field.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -8,17 +10,38 @@ class SignInScreen extends StatefulWidget {
   State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _SignInScreenState extends State<SignInScreen> with RouteAware {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
+  bool _isPasswordVisible = false;
   String? _errorMessage;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+  }
+
+  @override
   void dispose() {
+    // Unsubscribe from route observer
+    routeObserver.unsubscribe(this);
+
+    // Dispose controllers
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didPush() {
+    currentRouteName = '/sign-in';
+  }
+
+  @override
+  void didPopNext() {
+    currentRouteName = '/sign-in';
   }
 
   Future<void> _handleSignIn() async {
@@ -104,15 +127,15 @@ class _SignInScreenState extends State<SignInScreen> {
               enabled: !_isLoading,
             ),
             const SizedBox(height: 16),
-            TextField(
+            PasswordField(
               controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              obscureText: true,
+              label: 'Password',
+              isVisible: _isPasswordVisible,
+              onToggleVisibility: () {
+                setState(() {
+                  _isPasswordVisible = !_isPasswordVisible;
+                });
+              },
               enabled: !_isLoading,
             ),
             const SizedBox(height: 32),
@@ -134,7 +157,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   const Text("Don't have an account? "),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushReplacementNamed('/sign-up');
+                      if (currentRouteName != '/sign-in') {
+                        Navigator.of(context).pushReplacementNamed('/sign-up');
+                      }
                     },
                     style: TextButton.styleFrom(padding: EdgeInsets.zero),
                     child: const Text('Sign Up'),

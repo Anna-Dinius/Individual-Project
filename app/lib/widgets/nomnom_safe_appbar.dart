@@ -52,9 +52,11 @@ class NomnomSafeAppBar extends StatelessWidget implements PreferredSizeWidget {
             ] else ...[
               // Sign In button
               TextButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/sign-in');
-                },
+                onPressed: () => navigateIfNotCurrent(
+                  context,
+                  '/sign-in',
+                  blockIfCurrent: ['/sign-in'],
+                ),
                 child: const Text(
                   'Sign In',
                   style: TextStyle(color: Colors.white),
@@ -62,9 +64,11 @@ class NomnomSafeAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               // Sign Up button
               TextButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/sign-up');
-                },
+                onPressed: () => navigateIfNotCurrent(
+                  context,
+                  '/sign-up',
+                  blockIfCurrent: ['/sign-up'],
+                ),
                 child: const Text(
                   'Sign Up',
                   style: TextStyle(color: Colors.white),
