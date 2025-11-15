@@ -112,7 +112,6 @@ class AuthService {
     required String firstName,
     required String lastName,
     required String email,
-    required String password,
     List<String>? allergies,
   }) async {
     final fbUser = _auth.currentUser;
@@ -129,10 +128,6 @@ class AuthService {
     if (email.isEmpty || !email.contains('@')) {
       throw Exception('Valid email is required');
     }
-    if (password.isEmpty || password.length < 6) {
-      throw Exception('Password must be at least 6 characters');
-    }
-
     // Compare each field
     if (firstName != _currentUser!.firstName) updates['first_name'] = firstName;
     if (lastName != _currentUser!.lastName) updates['last_name'] = lastName;
@@ -147,15 +142,46 @@ class AuthService {
       updates['pending_email'] = email;
     }
 
-    // Handle password change
-    if (password.isNotEmpty && password.length >= 6) {
-      await fbUser!.updatePassword(password);
-    }
-
     // Only write if something changed
     if (updates.isNotEmpty) {
       await _firestore.collection('users').doc(uid).update(updates);
       await loadCurrentUser(); // Refresh local copy
+    }
+  }
+
+  Future<bool> reauthenticate(String password) async {
+    final fbUser = _auth.currentUser;
+    if (fbUser == null || fbUser.email == null) {
+      return false;
+    }
+
+    final credential = fb_auth.EmailAuthProvider.credential(
+      email: fbUser.email!,
+      password: password,
+    );
+
+    try {
+      await fbUser.reauthenticateWithCredential(credential);
+      return true;
+    } on fb_auth.FirebaseAuthException catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> updatePassword(String newPassword) async {
+    final fbUser = _auth.currentUser;
+    if (fbUser == null) {
+      throw Exception('No user is currently signed in');
+    }
+
+    if (newPassword.isEmpty || newPassword.length < 6) {
+      throw Exception('Password must be at least 6 characters');
+    }
+
+    try {
+      await fbUser.updatePassword(newPassword);
+    } on fb_auth.FirebaseAuthException catch (e) {
+      throw Exception('Password update failed: ${e.code}');
     }
   }
 }

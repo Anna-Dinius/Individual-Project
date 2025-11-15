@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:nomnom_safe/utils/allergen_utils.dart';
 import '../widgets/nomnom_safe_appbar.dart';
 import '../providers/auth_state_provider.dart';
 import '../navigation/route_tracker.dart';
-import '../widgets/password_field.dart';
+import '../views/edit_profile_view.dart';
+import '../views/verify_current_password_view.dart';
+import '../views/update_password_view.dart';
+import '../controllers/edit_profile_controller.dart';
+import '../services/allergen_service.dart';
+import '../models/allergen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -11,16 +17,30 @@ class EditProfileScreen extends StatefulWidget {
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
+enum ProfileViewState { editProfile, verifyCurrentPassword, updatePassword }
+
 class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   late TextEditingController _confirmPasswordController;
+  final TextEditingController _currentPasswordController =
+      TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmNewPasswordController =
+      TextEditingController();
   late AuthStateProvider _authProvider;
+  late EditProfileController _controller;
   bool _isLoading = false;
   String? _errorMessage;
   bool _arePasswordsVisible = false;
+  List<Allergen> _allAllergens = []; // full list from DB
+  Set<String> _selectedAllergenIds = {}; // store selected allergen IDs
+  ProfileViewState _viewState = ProfileViewState.editProfile;
+
+  // Service classes
+  final AllergenService _allergenService = AllergenService();
 
   @override
   void didChangeDependencies() {
@@ -57,20 +77,45 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
   void initState() {
     super.initState();
     _authProvider = AuthStateProvider();
+    _controller = EditProfileController(authProvider: _authProvider);
+
     final user = _authProvider.currentUser;
     if (user != null) {
       _firstNameController = TextEditingController(text: user.firstName);
       _lastNameController = TextEditingController(text: user.lastName);
       _emailController = TextEditingController(text: user.email);
-      _passwordController = TextEditingController();
-      _confirmPasswordController = TextEditingController();
+      _selectedAllergenIds = user.allergies.toSet();
     } else {
       _firstNameController = TextEditingController();
       _lastNameController = TextEditingController();
       _emailController = TextEditingController();
-      _passwordController = TextEditingController();
-      _confirmPasswordController = TextEditingController();
     }
+
+    _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
+
+    // Load allergens when the widget is first built
+    _fetchAllergens();
+  }
+
+  /* Fetch allergen labels and update the state if the widget is still mounted */
+  void _fetchAllergens() async {
+    final allergens = await _allergenService.getAllergens();
+    if (mounted) {
+      setState(() {
+        _allAllergens = allergens;
+      });
+    }
+  }
+
+  void _handleAllergenChanged(String option, bool checked) {
+    setState(() {
+      if (checked) {
+        _selectedAllergenIds.add(option);
+      } else {
+        _selectedAllergenIds.remove(option);
+      }
+    });
   }
 
   Future<void> _handleSaveChanges() async {
@@ -79,44 +124,130 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
       _errorMessage = null;
     });
 
-    try {
-      if (_passwordController.text != _confirmPasswordController.text) {
-        setState(() {
-          _errorMessage = 'Passwords do not match';
-          _isLoading = false;
-        });
-        return;
-      }
+    final error = await _controller.saveProfileChanges(
+      firstName: _firstNameController.text.trim(),
+      lastName: _lastNameController.text.trim(),
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+      confirmPassword: _confirmPasswordController.text,
+      allergies: _selectedAllergenIds.toList(),
+    );
 
-      await _authProvider.updateUserProfile(
-        firstName: _firstNameController.text.trim(),
-        lastName: _lastNameController.text.trim(),
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-        allergies: _authProvider.currentUser?.allergies,
-      );
-      await _authProvider.loadCurrentUser();
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = error;
+      });
 
-      if (mounted) {
+      if (error == null) {
         Navigator.of(context).pop();
       }
-    } catch (e) {
+    }
+  }
+
+  Future<void> _handleVerifyCurrentPassword() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    final success = await _controller.verifyCurrentPassword(
+      _currentPasswordController.text,
+    );
+
+    setState(() {
+      _isLoading = false;
+      _viewState = success
+          ? ProfileViewState.updatePassword
+          : ProfileViewState.verifyCurrentPassword;
+      _errorMessage = success ? null : 'Incorrect password';
+    });
+  }
+
+  Future<void> _handleUpdatePassword() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    final error = await _controller.updatePassword(
+      newPassword: _newPasswordController.text,
+      confirmPassword: _confirmNewPasswordController.text,
+    );
+
+    if (mounted) {
       setState(() {
-        _errorMessage = e.toString().replaceFirst('Exception: ', '');
+        _isLoading = false;
+        _errorMessage = error;
       });
-    } finally {
-      if (mounted) {
+
+      if (error == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Password changed successfully')),
+        );
         setState(() {
-          _isLoading = false;
+          _viewState = ProfileViewState.editProfile;
+          _newPasswordController.clear();
+          _confirmNewPasswordController.clear();
         });
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: $error')));
       }
+    }
+  }
+
+  Widget _buildCurrentView() {
+    switch (_viewState) {
+      case ProfileViewState.editProfile:
+        return EditProfileView(
+          firstNameController: _firstNameController,
+          lastNameController: _lastNameController,
+          emailController: _emailController,
+          onSave: _handleSaveChanges,
+          onChangePassword: () {
+            setState(() => _viewState = ProfileViewState.verifyCurrentPassword);
+          },
+          isLoading: _isLoading,
+          allAllergens: _allAllergens,
+          allAllergenLabels: extractAllergenLabels(_allAllergens),
+          selectedAllergenIds: _selectedAllergenIds,
+          onAllergenChanged: _handleAllergenChanged,
+        );
+      case ProfileViewState.verifyCurrentPassword:
+        return VerifyCurrentPasswordView(
+          controller: _currentPasswordController,
+          isVisible: _arePasswordsVisible,
+          onToggleVisibility: () {
+            setState(() => _arePasswordsVisible = !_arePasswordsVisible);
+          },
+          onContinue: _handleVerifyCurrentPassword,
+          isLoading: _isLoading,
+          errorMessage: _errorMessage,
+        );
+      case ProfileViewState.updatePassword:
+        return UpdatePasswordView(
+          newPasswordController: _newPasswordController,
+          confirmPasswordController: _confirmNewPasswordController,
+          isVisible: _arePasswordsVisible,
+          onToggleVisibility: () {
+            setState(() => _arePasswordsVisible = !_arePasswordsVisible);
+          },
+          onBack: () {
+            setState(() => _viewState = ProfileViewState.editProfile);
+          },
+          onSubmit: _handleUpdatePassword,
+          isLoading: _isLoading,
+          errorMessage: _errorMessage,
+        );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const NomnomSafeAppBar(title: 'Edit Profile'),
+      appBar: const NomnomSafeAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -132,7 +263,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
               ),
             ),
             const SizedBox(height: 20),
-            if (_errorMessage != null)
+            if (_errorMessage != null &&
+                _viewState != ProfileViewState.verifyCurrentPassword)
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -148,92 +280,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
                 ),
               ),
             if (_errorMessage != null) const SizedBox(height: 16),
-            TextField(
-              controller: _firstNameController,
-              decoration: InputDecoration(
-                labelText: 'First Name',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              enabled: !_isLoading,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _lastNameController,
-              decoration: InputDecoration(
-                labelText: 'Last Name',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              enabled: !_isLoading,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              keyboardType: TextInputType.emailAddress,
-              enabled: !_isLoading,
-            ),
-            const SizedBox(height: 16),
-            PasswordField(
-              controller: _passwordController,
-              label: 'Password',
-              isVisible: _arePasswordsVisible,
-              onToggleVisibility: () {
-                setState(() {
-                  _arePasswordsVisible = !_arePasswordsVisible;
-                });
-              },
-              enabled: !_isLoading,
-            ),
-            const SizedBox(height: 16),
-            PasswordField(
-              controller: _confirmPasswordController,
-              label: 'Confirm Password',
-              isVisible: _arePasswordsVisible,
-              onToggleVisibility: () {
-                setState(() {
-                  _arePasswordsVisible = !_arePasswordsVisible;
-                });
-              },
-              enabled: !_isLoading,
-            ),
-            const SizedBox(height: 32),
-            // Action buttons
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: _isLoading
-                        ? null
-                        : () {
-                            Navigator.of(context).pop();
-                          },
-                    child: const Text('Cancel'),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _handleSaveChanges,
-                    child: _isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Text('Save Changes'),
-                  ),
-                ),
-              ],
-            ),
+            _buildCurrentView(),
           ],
         ),
       ),

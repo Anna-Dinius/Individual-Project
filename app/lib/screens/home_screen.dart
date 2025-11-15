@@ -9,6 +9,8 @@ import '../services/restaurant_service.dart';
 import '../utils/allergen_utils.dart';
 import '../widgets/filter.dart';
 import '../utils/restaurant_utils.dart';
+import '../services/auth_service.dart';
+import '../navigation/route_tracker.dart';
 
 /* Main screen displaying allergen filters and a list of restaurants */
 class HomeScreen extends StatefulWidget {
@@ -18,7 +20,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with RouteAware {
   // Service classes
   final AllergenService _allergenService = AllergenService();
   final RestaurantService _restaurantService = RestaurantService();
@@ -33,12 +35,30 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> availableCuisines = [];
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+  }
+
+  @override
   void initState() {
     super.initState();
 
     // Load allergens when the widget is first built
     _fetchAllergens(); // triggers the async fetch
     _fetchUnfilteredRestaurants();
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    // User returned from EditProfileScreen
+    _fetchAllergens(); // refresh selection
   }
 
   /* Fetch allergen labels and update the state if the widget is still mounted */
@@ -48,6 +68,34 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         availableAllergens = allergens;
       });
+      _applyUserAllergensIfLoggedIn(); // apply user's allergens
+    }
+  }
+
+  void _applyUserAllergensIfLoggedIn() {
+    final user = AuthService().currentUser;
+    if (user == null) {
+      debugPrint('No user is currently signed in.');
+      return;
+    }
+
+    final userAllergenIds = user.allergies;
+    debugPrint('User allergen IDs: $userAllergenIds');
+
+    final matchedAllergens = availableAllergens
+        .where((a) => userAllergenIds.contains(a.label))
+        .toList();
+
+    if (matchedAllergens.isNotEmpty) {
+      debugPrint(
+        'Matched allergens: ${matchedAllergens.map((a) => a.id).toList()}',
+      );
+      setState(() {
+        selectedAllergens = matchedAllergens;
+      });
+      _applyAllergenFilter();
+    } else {
+      debugPrint('No matching allergens found.');
     }
   }
 
@@ -106,6 +154,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /* Apply the allergen filter to the restaurant list */
   Future<void> _applyAllergenFilter() async {
+    if (selectedAllergens.isEmpty) {
+      setState(() {
+        restaurantList = unfilteredRestaurants;
+        _extractAvailableCuisines();
+      });
+      return;
+    }
+
     setState(() {
       isLoadingRestaurants = true;
     });

@@ -86,7 +86,7 @@ class _SignUpScreenState extends State<SignUpScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const NomnomSafeAppBar(title: 'Sign Up'),
+      appBar: const NomnomSafeAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -183,33 +183,38 @@ class _SignUpScreenState extends State<SignUpScreen> with RouteAware {
               enabled: !_isLoading,
             ),
             const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: _isLoading ? null : _handleSignUp,
-              child: _isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text('Sign Up'),
-            ),
-            const SizedBox(height: 24),
-            Center(
-              child: Wrap(
-                alignment: WrapAlignment.center,
-                children: [
-                  const Text('Already have an account? '),
-                  TextButton(
-                    onPressed: () {
-                      if (currentRouteName != '/sign-in') {
-                        Navigator.of(context).pushReplacementNamed('/sign-in');
-                      }
-                    },
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    child: const Text('Sign In'),
-                  ),
-                ],
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _handleSignUp,
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Sign Up'),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Already have an account? '),
+                    TextButton(
+                      onPressed: () {
+                        if (currentRouteName != '/sign-in') {
+                          Navigator.of(
+                            context,
+                          ).pushReplacementNamed('/sign-in');
+                        }
+                      },
+                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                      child: const Text('Sign In'),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),

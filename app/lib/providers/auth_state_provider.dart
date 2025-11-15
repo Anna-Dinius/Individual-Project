@@ -52,7 +52,6 @@ class AuthStateProvider extends ChangeNotifier {
       firstName: firstName,
       lastName: lastName,
       email: email,
-      password: password,
       allergies: allergies,
     );
     notifyListeners();
@@ -60,6 +59,19 @@ class AuthStateProvider extends ChangeNotifier {
 
   Future<void> loadCurrentUser() async {
     await _authService.loadCurrentUser();
+    notifyListeners();
+  }
+
+  Future<bool> reauthenticate(String password) async {
+    try {
+      return await _authService.reauthenticate(password);
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> updatePassword(String newPassword) async {
+    await _authService.updatePassword(newPassword);
     notifyListeners();
   }
 

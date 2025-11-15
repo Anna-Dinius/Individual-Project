@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'multi_select_checkbox_list.dart';
 
 class Filter extends StatelessWidget {
   final String label;
@@ -42,24 +43,18 @@ class Filter extends StatelessWidget {
                 ],
               ),
               content: SingleChildScrollView(
-                child: Column(
-                  children: options.map((option) {
-                    final isSelected = tempSelections.contains(option);
-                    return CheckboxListTile(
-                      title: Text(option),
-                      value: isSelected,
-                      onChanged: (checked) {
-                        setState(() {
-                          if (checked == true) {
-                            tempSelections.add(option);
-                          } else {
-                            tempSelections.remove(option);
-                          }
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity.leading,
-                    );
-                  }).toList(),
+                child: MultiSelectCheckboxList(
+                  options: options,
+                  selected: tempSelections,
+                  onChanged: (option, checked) {
+                    setState(() {
+                      if (checked) {
+                        tempSelections.add(option);
+                      } else {
+                        tempSelections.remove(option);
+                      }
+                    });
+                  },
                 ),
               ),
               actionsAlignment: MainAxisAlignment.spaceBetween,
