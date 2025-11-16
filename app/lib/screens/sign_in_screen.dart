@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nomnom_safe/utils/auth_utils.dart';
+import 'package:nomnom_safe/widgets/text_form_field_with_controller.dart';
 import '../widgets/nomnom_safe_appbar.dart';
 import '../navigation/route_tracker.dart';
 import '../widgets/password_field.dart';
@@ -11,8 +13,9 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> with RouteAware {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   bool _isPasswordVisible = false;
   String? _errorMessage;
@@ -115,60 +118,65 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
                 ),
               ),
             if (_errorMessage != null) const SizedBox(height: 16),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormFieldWithController(
+                    controller: _emailController,
+                    label: 'Email',
+                    isRequired: true,
+                    keyboardType: TextInputType.emailAddress,
+                    enabled: !_isLoading,
+                    validator: validateEmailFormat,
+                  ),
+                  const SizedBox(height: 16),
+                  PasswordField(
+                    controller: _passwordController,
+                    label: 'Password',
+                    isRequired: true,
+                    isVisible: _isPasswordVisible,
+                    onToggleVisibility: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                    enabled: !_isLoading,
+                  ),
+                  const SizedBox(height: 32),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: _isLoading ? null : _handleSignIn,
+                        child: _isLoading
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Text('Sign In'),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              keyboardType: TextInputType.emailAddress,
-              enabled: !_isLoading,
             ),
-            const SizedBox(height: 16),
-            PasswordField(
-              controller: _passwordController,
-              label: 'Password',
-              isVisible: _isPasswordVisible,
-              onToggleVisibility: () {
-                setState(() {
-                  _isPasswordVisible = !_isPasswordVisible;
-                });
-              },
-              enabled: !_isLoading,
-            ),
-            const SizedBox(height: 32),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: _isLoading ? null : _handleSignIn,
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text('Sign In'),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Don't have an account? "),
-                    TextButton(
-                      onPressed: () {
-                        if (currentRouteName != '/sign-up') {
-                          Navigator.of(
-                            context,
-                          ).pushReplacementNamed('/sign-up');
-                        }
-                      },
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      child: const Text('Sign Up'),
-                    ),
-                  ],
+                const Text("Don't have an account? "),
+                TextButton(
+                  onPressed: () {
+                    if (currentRouteName != '/sign-up') {
+                      Navigator.of(context).pushReplacementNamed('/sign-up');
+                    }
+                  },
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                  child: const Text('Sign Up'),
                 ),
               ],
             ),

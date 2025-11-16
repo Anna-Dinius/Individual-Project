@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/nomnom_safe_appbar.dart';
 import '../navigation/route_tracker.dart';
-import '../widgets/password_field.dart';
+import '../views/sign_up_account_view.dart';
+import '../views/sign_up_allergen_view.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -11,15 +12,21 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> with RouteAware {
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  bool _showAllergenView = false;
   bool _isLoading = false;
-  bool _arePasswordsVisible = false;
   String? _errorMessage;
+
+  // Shared state variables
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  List<String> selectedAllergenIds = [];
+
+  void _goToAllergenView() => setState(() => _showAllergenView = true);
+  void _goBackToAccountView() => setState(() => _showAllergenView = false);
 
   @override
   void didChangeDependencies() {
@@ -33,11 +40,11 @@ class _SignUpScreenState extends State<SignUpScreen> with RouteAware {
     routeObserver.unsubscribe(this);
 
     // Dispose controllers
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -59,11 +66,12 @@ class _SignUpScreenState extends State<SignUpScreen> with RouteAware {
 
     try {
       await authStateProvider.signUp(
-        firstName: _firstNameController.text.trim(),
-        lastName: _lastNameController.text.trim(),
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-        confirmPassword: _confirmPasswordController.text,
+        firstName: firstNameController.text.trim(),
+        lastName: lastNameController.text.trim(),
+        email: emailController.text.trim(),
+        password: passwordController.text,
+        confirmPassword: confirmPasswordController.text,
+        allergies: selectedAllergenIds,
       );
 
       if (mounted) {
@@ -85,6 +93,8 @@ class _SignUpScreenState extends State<SignUpScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    final viewTitle = _showAllergenView ? 'Select Allergens' : 'Create Account';
+
     return Scaffold(
       appBar: const NomnomSafeAppBar(),
       body: SingleChildScrollView(
@@ -104,118 +114,31 @@ class _SignUpScreenState extends State<SignUpScreen> with RouteAware {
             ),
             const SizedBox(height: 20),
             Text(
-              'Create Account',
+              viewTitle,
               style: Theme.of(context).textTheme.headlineSmall,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
-            if (_errorMessage != null)
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.error.withAlpha(25),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.error,
+            _showAllergenView
+                ? SignUpAllergenView(
+                    isLoading: _isLoading,
+                    selectedAllergenIds: selectedAllergenIds,
+                    onChanged: (ids) =>
+                        setState(() => selectedAllergenIds = ids),
+                    onBack: _goBackToAccountView,
+                    onSubmit: _handleSignUp,
+                  )
+                : SignUpAccountView(
+                    formKey: _formKey,
+                    firstNameController: firstNameController,
+                    lastNameController: lastNameController,
+                    emailController: emailController,
+                    passwordController: passwordController,
+                    confirmPasswordController: confirmPasswordController,
+                    isLoading: _isLoading,
+                    errorMessage: _errorMessage,
+                    onNext: _goToAllergenView,
                   ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  _errorMessage!,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
-              ),
-            if (_errorMessage != null) const SizedBox(height: 16),
-            TextField(
-              controller: _firstNameController,
-              decoration: InputDecoration(
-                labelText: 'First Name',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              enabled: !_isLoading,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _lastNameController,
-              decoration: InputDecoration(
-                labelText: 'Last Name',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              enabled: !_isLoading,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              keyboardType: TextInputType.emailAddress,
-              enabled: !_isLoading,
-            ),
-            const SizedBox(height: 16),
-            PasswordField(
-              controller: _passwordController,
-              label: 'Password',
-              isVisible: _arePasswordsVisible,
-              onToggleVisibility: () {
-                setState(() {
-                  _arePasswordsVisible = !_arePasswordsVisible;
-                });
-              },
-              enabled: !_isLoading,
-            ),
-            const SizedBox(height: 16),
-            PasswordField(
-              controller: _confirmPasswordController,
-              label: 'Confirm Password',
-              isVisible: _arePasswordsVisible,
-              onToggleVisibility: () {
-                setState(() {
-                  _arePasswordsVisible = !_arePasswordsVisible;
-                });
-              },
-              enabled: !_isLoading,
-            ),
-            const SizedBox(height: 32),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: _isLoading ? null : _handleSignUp,
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text('Sign Up'),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Already have an account? '),
-                    TextButton(
-                      onPressed: () {
-                        if (currentRouteName != '/sign-in') {
-                          Navigator.of(
-                            context,
-                          ).pushReplacementNamed('/sign-in');
-                        }
-                      },
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                      child: const Text('Sign In'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
           ],
         ),
       ),

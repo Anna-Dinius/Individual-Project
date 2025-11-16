@@ -75,27 +75,20 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   void _applyUserAllergensIfLoggedIn() {
     final user = AuthService().currentUser;
     if (user == null) {
-      debugPrint('No user is currently signed in.');
       return;
     }
 
     final userAllergenIds = user.allergies;
-    debugPrint('User allergen IDs: $userAllergenIds');
 
     final matchedAllergens = availableAllergens
-        .where((a) => userAllergenIds.contains(a.label))
+        .where((a) => userAllergenIds.contains(a.id))
         .toList();
 
     if (matchedAllergens.isNotEmpty) {
-      debugPrint(
-        'Matched allergens: ${matchedAllergens.map((a) => a.id).toList()}',
-      );
       setState(() {
         selectedAllergens = matchedAllergens;
       });
       _applyAllergenFilter();
-    } else {
-      debugPrint('No matching allergens found.');
     }
   }
 

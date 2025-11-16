@@ -48,6 +48,7 @@ class VerifyCurrentPasswordView extends StatelessWidget {
           controller: controller,
           label: 'Current Password',
           isVisible: isVisible,
+          isRequired: true,
           onToggleVisibility: onToggleVisibility,
           enabled: !isLoading,
         ),

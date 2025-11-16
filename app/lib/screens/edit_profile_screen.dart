@@ -20,6 +20,7 @@ class EditProfileScreen extends StatefulWidget {
 enum ProfileViewState { editProfile, verifyCurrentPassword, updatePassword }
 
 class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
   late TextEditingController _emailController;
@@ -108,17 +109,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
     }
   }
 
-  void _handleAllergenChanged(String option, bool checked) {
+  void _handleAllergenChanged(String label, bool checked) {
+    final matching = _allAllergens.firstWhere((a) => a.label == label);
+
     setState(() {
       if (checked) {
-        _selectedAllergenIds.add(option);
+        _selectedAllergenIds.add(matching.id);
       } else {
-        _selectedAllergenIds.remove(option);
+        _selectedAllergenIds.remove(matching.id);
       }
     });
   }
 
   Future<void> _handleSaveChanges() async {
+    final isValid = _formKey.currentState?.validate() ?? false;
+    if (!isValid) {
+      // Stop if form is invalid
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fix the errors before saving')),
+      );
+      return;
+    }
+
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -202,6 +214,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
     switch (_viewState) {
       case ProfileViewState.editProfile:
         return EditProfileView(
+          formKey: _formKey,
           firstNameController: _firstNameController,
           lastNameController: _lastNameController,
           emailController: _emailController,
@@ -210,9 +223,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
             setState(() => _viewState = ProfileViewState.verifyCurrentPassword);
           },
           isLoading: _isLoading,
-          allAllergens: _allAllergens,
           allAllergenLabels: extractAllergenLabels(_allAllergens),
-          selectedAllergenIds: _selectedAllergenIds,
+          selectedAllergenLabels: _allAllergens
+              .where((a) => _selectedAllergenIds.contains(a.id))
+              .map((a) => a.label)
+              .toSet(),
           onAllergenChanged: _handleAllergenChanged,
         );
       case ProfileViewState.verifyCurrentPassword:
@@ -228,6 +243,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
         );
       case ProfileViewState.updatePassword:
         return UpdatePasswordView(
+          formKey: _formKey,
           newPasswordController: _newPasswordController,
           confirmPasswordController: _confirmNewPasswordController,
           isVisible: _arePasswordsVisible,
