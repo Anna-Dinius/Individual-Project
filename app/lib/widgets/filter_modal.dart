@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'multi_select_checkbox_list.dart';
 
-class Filter extends StatelessWidget {
-  final String label;
+class FilterModal extends StatelessWidget {
+  final String buttonLabel;
+  final String title;
   final List<String> options;
   final List<String> selectedOptions;
   final ValueChanged<List<String>> onChanged;
 
-  const Filter({
-    required this.label,
+  const FilterModal({
+    required this.buttonLabel,
+    required this.title,
     required this.options,
     required this.selectedOptions,
     required this.onChanged,
@@ -34,7 +36,7 @@ class Filter extends StatelessWidget {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(label),
+                  Text(title),
                   IconButton(
                     icon: const Icon(Icons.close),
                     tooltip: 'Close',
@@ -99,7 +101,7 @@ class Filter extends StatelessWidget {
       cursor: SystemMouseCursors.click,
       child: ElevatedButton.icon(
         icon: const Icon(Icons.filter_alt),
-        label: const Text('Cuisines'),
+        label: Text(buttonLabel),
         onPressed: () => _showMultiSelectDialog(context),
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

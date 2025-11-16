@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/restaurant.dart';
-import '../screens/menu_screen.dart';
+import '../utils/navigation_utils.dart';
 
 /* A card widget that displays basic information about a restaurant.
    Clicking the card navigates to the menu screen for the restaurant. */
@@ -46,12 +46,10 @@ class _RestaurantCardState extends State<RestaurantCard> {
             // Clickable area to navigate to restaurant details screen
             child: InkWell(
               onTap: () {
-                Navigator.push(
+                navigateIfNotCurrent(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        MenuScreen(restaurant: widget.restaurant),
-                  ),
+                  '/menu',
+                  arguments: widget.restaurant,
                 );
               },
               child: Padding(

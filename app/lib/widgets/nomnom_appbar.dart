@@ -6,10 +6,10 @@ import 'package:nomnom_safe/utils/navigation_utils.dart';
 final authStateProvider = AuthStateProvider();
 
 /* Custom AppBar widget for consistency across the app */
-class NomnomSafeAppBar extends StatelessWidget implements PreferredSizeWidget {
+class NomnomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
-  const NomnomSafeAppBar({super.key, this.title = 'Nomnom Safe'});
+  const NomnomAppBar({super.key, this.title = 'Nomnom Safe'});
 
   void _handleSignOut(BuildContext context) async {
     await authStateProvider.signOut();
@@ -31,16 +31,6 @@ class NomnomSafeAppBar extends StatelessWidget implements PreferredSizeWidget {
           automaticallyImplyLeading: false, // Disable automatic back arrow
           actions: [
             if (isSignedIn) ...[
-              // Profile button
-              IconButton(
-                icon: const Icon(Icons.person),
-                onPressed: () => navigateIfNotCurrent(
-                  context,
-                  '/profile',
-                  blockIfCurrent: ['/profile', '/edit-profile'],
-                ),
-                tooltip: 'Profile',
-              ),
               // Sign Out button
               TextButton(
                 onPressed: () => _handleSignOut(context),

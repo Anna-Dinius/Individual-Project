@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nomnom_safe/widgets/filter.dart';
+import 'package:nomnom_safe/widgets/filter_modal.dart';
 
 void main() {
   testWidgets(
@@ -12,8 +12,9 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: Filter(
-              label: 'Filter by Cuisine',
+            body: FilterModal(
+              buttonLabel: 'Cuisines',
+              title: 'Filter by Cuisine',
               options: options,
               selectedOptions: ['Italian'],
               onChanged: (selected) {
@@ -55,8 +56,9 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: Filter(
-            label: 'Test',
+          body: FilterModal(
+            buttonLabel: 'Test',
+            title: 'Test',
             options: options,
             selectedOptions: [],
             onChanged: (selected) {

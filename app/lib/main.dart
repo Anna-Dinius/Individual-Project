@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'screens/home_screen.dart';
 import 'screens/menu_screen.dart';
@@ -11,8 +12,9 @@ import 'screens/edit_profile_screen.dart';
 import 'theme/nomnom_theme.dart';
 import 'models/restaurant.dart';
 import 'providers/auth_state_provider.dart';
-import 'package:provider/provider.dart';
 import 'navigation/route_tracker.dart';
+import 'widgets/nomnom_appbar.dart';
+import 'widgets/nomnom_scaffold.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: nomnomTheme,
       navigatorObservers: [routeObserver],
-      home: const HomeScreen(),
+      home: NomNomScaffold(appBar: NomnomAppBar(), body: const HomeScreen()),
       onGenerateRoute: (settings) {
         currentRouteName =
             settings.name; // Track current route globally before screen builds
@@ -48,40 +50,67 @@ class MyApp extends StatelessWidget {
         switch (settings.name) {
           case '/home':
             return MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
+              builder: (context) => NomNomScaffold(
+                currentIndex: 0,
+                appBar: NomnomAppBar(),
+                body: const HomeScreen(),
+              ),
               settings: settings,
             );
           case '/menu':
             return MaterialPageRoute(
-              builder: (context) =>
-                  MenuScreen(restaurant: settings.arguments as Restaurant),
+              builder: (context) => NomNomScaffold(
+                currentIndex: 1,
+                appBar: NomnomAppBar(),
+                body: MenuScreen(restaurant: settings.arguments as Restaurant),
+              ),
               settings: settings,
             );
           case '/restaurant':
             return MaterialPageRoute(
-              builder: (context) => RestaurantScreen(
-                restaurant: settings.arguments as Restaurant,
+              builder: (context) => NomNomScaffold(
+                currentIndex: 2,
+                appBar: NomnomAppBar(),
+                body: RestaurantScreen(
+                  restaurant: settings.arguments as Restaurant,
+                ),
               ),
               settings: settings,
             );
           case '/sign-in':
             return MaterialPageRoute(
-              builder: (context) => const SignInScreen(),
+              builder: (context) => NomNomScaffold(
+                currentIndex: 3,
+                appBar: NomnomAppBar(),
+                body: SignInScreen(),
+              ),
               settings: settings,
             );
           case '/sign-up':
             return MaterialPageRoute(
-              builder: (context) => const SignUpScreen(),
+              builder: (context) => NomNomScaffold(
+                currentIndex: 4,
+                appBar: NomnomAppBar(),
+                body: SignUpScreen(),
+              ),
               settings: settings,
             );
           case '/profile':
             return MaterialPageRoute(
-              builder: (context) => const ProfileScreen(),
+              builder: (context) => NomNomScaffold(
+                currentIndex: 5,
+                appBar: NomnomAppBar(),
+                body: ProfileScreen(),
+              ),
               settings: settings,
             );
           case '/edit-profile':
             return MaterialPageRoute(
-              builder: (context) => const EditProfileScreen(),
+              builder: (context) => NomNomScaffold(
+                currentIndex: 6,
+                appBar: NomnomAppBar(),
+                body: EditProfileScreen(),
+              ),
               settings: settings,
             );
           default:

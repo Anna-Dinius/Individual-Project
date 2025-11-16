@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import '../widgets/nomnom_safe_appbar.dart';
 import '../models/restaurant.dart';
 import '../models/allergen.dart';
 import '../widgets/restaurant_card.dart';
-import '../widgets/allergen_filter.dart';
 import '../services/allergen_service.dart';
 import '../services/restaurant_service.dart';
 import '../utils/allergen_utils.dart';
-import '../widgets/filter.dart';
+import '../widgets/filter_modal.dart';
 import '../utils/restaurant_utils.dart';
 import '../services/auth_service.dart';
 import '../navigation/route_tracker.dart';
@@ -125,26 +123,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     });
   }
 
-  /* Toggle selection of an allergen and apply the filter */
-  void _toggleAllergen(Allergen allergen) async {
-    setState(() {
-      selectedAllergens = selectedAllergens.contains(allergen)
-          ? selectedAllergens
-                .where((selectedAllergen) => selectedAllergen != allergen)
-                .toList()
-          : [...selectedAllergens, allergen];
-    });
-    await _applyAllergenFilter();
-  }
-
-  /* Clear all selected allergens and reset the restaurant list */
-  void _clearAllergens() async {
-    setState(() {
-      selectedAllergens.clear();
-    });
-    restaurantList = unfilteredRestaurants;
-  }
-
   /* Apply the allergen filter to the restaurant list */
   Future<void> _applyAllergenFilter() async {
     if (selectedAllergens.isEmpty) {
@@ -174,63 +152,80 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: NomnomSafeAppBar(),
-      // Start a vertical layout for the screen content
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            children: [
+              // Allergen Filter
+              Expanded(
+                child: availableAllergens.isEmpty
+                    ? // Show a loading spinner if allergens haven’t loaded yet
+                      Center(child: CircularProgressIndicator())
+                    : // Show the allergen filter widget once allergens are loaded
+                      FilterModal(
+                        buttonLabel: 'Allergens',
+                        title: 'Filter by Allergen',
+                        options: availableAllergens
+                            .map((a) => a.label)
+                            .toList(),
+                        selectedOptions: selectedAllergens
+                            .map((a) => a.label)
+                            .toList(),
+                        onChanged: (selectedLabels) {
+                          final matched = availableAllergens
+                              .where((a) => selectedLabels.contains(a.label))
+                              .toList();
+                          setState(() {
+                            selectedAllergens = matched;
+                          });
+                          _applyAllergenFilter();
+                        },
+                      ),
+              ),
+              const SizedBox(width: 12), // spacing between filters
+              // Cuisine Filter
+              if (!(selectedAllergens.isNotEmpty && restaurantList.isEmpty) &&
+                  availableCuisines.isNotEmpty)
+                Expanded(
+                  child: FilterModal(
+                    buttonLabel: 'Cuisines',
+                    title: 'Filter by Cuisine',
+                    options: availableCuisines,
+                    selectedOptions: selectedCuisines,
+                    onChanged: _filterRestaurantsByCuisine,
+                  ),
+                ),
+            ],
+          ),
+        ),
+        if (selectedAllergens.isNotEmpty)
           Padding(
-            padding: EdgeInsets.all(12),
-            child: availableAllergens.isEmpty
-                ? // Show a loading spinner if allergens haven’t loaded yet
-                  Center(child: CircularProgressIndicator())
-                : // Show the allergen filter widget once allergens are loaded
-                  AllergenFilter(
-                    availableAllergens: availableAllergens,
-                    selectedAllergens: selectedAllergens,
-                    onToggle: _toggleAllergen,
-                    onClear: _clearAllergens,
-                    showClearButton: selectedAllergens.isNotEmpty,
-                  ),
-          ),
-          if (!(selectedAllergens.isNotEmpty && restaurantList.isEmpty) &&
-              availableCuisines.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: Filter(
-                label: 'Filter by Cuisine',
-                options: availableCuisines,
-                selectedOptions: selectedCuisines,
-                onChanged: _filterRestaurantsByCuisine,
-              ),
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+            child: Text(
+              "The following restaurants offer at least one menu item that doesn't contain ${formatAllergenList(extractAllergenLabels(selectedAllergens), "or")}:",
             ),
-          if (selectedAllergens.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-              child: Text(
-                "The following restaurants offer at least one menu item that doesn't contain ${formatAllergenList(extractAllergenLabels(selectedAllergens), "or")}:",
-              ),
-            ),
-          // Make the restaurant list take up remaining space
-          Expanded(
-            child: isLoadingRestaurants
-                ? // Show a loading spinner while restaurants are loading
-                  const Center(child: CircularProgressIndicator())
-                : restaurantList.isEmpty
-                ? // No restaurants match the filters
-                  const Center(child: Text('No restaurants match your filters'))
-                : // Restaurant list
-                  ListView.builder(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    itemCount: restaurantList.length,
-                    itemBuilder: (context, index) {
-                      return RestaurantCard(restaurant: restaurantList[index]);
-                    },
-                  ),
           ),
-        ],
-      ),
+        // Make the restaurant list take up remaining space
+        Expanded(
+          child: isLoadingRestaurants
+              ? // Show a loading spinner while restaurants are loading
+                const Center(child: CircularProgressIndicator())
+              : restaurantList.isEmpty
+              ? // No restaurants match the filters
+                const Center(child: Text('No restaurants match your filters'))
+              : // Restaurant list
+                ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  itemCount: restaurantList.length,
+                  itemBuilder: (context, index) {
+                    return RestaurantCard(restaurant: restaurantList[index]);
+                  },
+                ),
+        ),
+      ],
     );
   }
 }

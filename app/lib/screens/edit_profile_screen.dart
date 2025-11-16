@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nomnom_safe/utils/allergen_utils.dart';
-import '../widgets/nomnom_safe_appbar.dart';
 import '../providers/auth_state_provider.dart';
 import '../navigation/route_tracker.dart';
 import '../views/edit_profile_view.dart';
@@ -262,43 +261,38 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const NomnomSafeAppBar(),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Back button
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context),
-                tooltip: 'Back',
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Back button
+          Align(
+            alignment: Alignment.centerLeft,
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(context),
+              tooltip: 'Back',
+            ),
+          ),
+          const SizedBox(height: 20),
+          if (_errorMessage != null &&
+              _viewState != ProfileViewState.verifyCurrentPassword)
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.error.withAlpha(25),
+                border: Border.all(color: Theme.of(context).colorScheme.error),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                _errorMessage!,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ),
-            const SizedBox(height: 20),
-            if (_errorMessage != null &&
-                _viewState != ProfileViewState.verifyCurrentPassword)
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.error.withAlpha(25),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.error,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  _errorMessage!,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
-              ),
-            if (_errorMessage != null) const SizedBox(height: 16),
-            _buildCurrentView(),
-          ],
-        ),
+          if (_errorMessage != null) const SizedBox(height: 16),
+          _buildCurrentView(),
+        ],
       ),
     );
   }

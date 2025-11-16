@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/nomnom_safe_appbar.dart';
+import '../widgets/nomnom_appbar.dart';
 import '../navigation/route_tracker.dart';
 import '../views/sign_up_account_view.dart';
 import '../views/sign_up_allergen_view.dart';
@@ -95,52 +95,48 @@ class _SignUpScreenState extends State<SignUpScreen> with RouteAware {
   Widget build(BuildContext context) {
     final viewTitle = _showAllergenView ? 'Select Allergens' : 'Create Account';
 
-    return Scaffold(
-      appBar: const NomnomSafeAppBar(),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Back button
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context),
-                tooltip: 'Back',
-              ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Back button
+          Align(
+            alignment: Alignment.centerLeft,
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(context),
+              tooltip: 'Back',
             ),
-            const SizedBox(height: 20),
-            Text(
-              viewTitle,
-              style: Theme.of(context).textTheme.headlineSmall,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 32),
-            _showAllergenView
-                ? SignUpAllergenView(
-                    isLoading: _isLoading,
-                    selectedAllergenIds: selectedAllergenIds,
-                    onChanged: (ids) =>
-                        setState(() => selectedAllergenIds = ids),
-                    onBack: _goBackToAccountView,
-                    onSubmit: _handleSignUp,
-                  )
-                : SignUpAccountView(
-                    formKey: _formKey,
-                    firstNameController: firstNameController,
-                    lastNameController: lastNameController,
-                    emailController: emailController,
-                    passwordController: passwordController,
-                    confirmPasswordController: confirmPasswordController,
-                    isLoading: _isLoading,
-                    errorMessage: _errorMessage,
-                    onNext: _goToAllergenView,
-                  ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            viewTitle,
+            style: Theme.of(context).textTheme.headlineSmall,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 32),
+          _showAllergenView
+              ? SignUpAllergenView(
+                  isLoading: _isLoading,
+                  selectedAllergenIds: selectedAllergenIds,
+                  onChanged: (ids) => setState(() => selectedAllergenIds = ids),
+                  onBack: _goBackToAccountView,
+                  onSubmit: _handleSignUp,
+                )
+              : SignUpAccountView(
+                  formKey: _formKey,
+                  firstNameController: firstNameController,
+                  lastNameController: lastNameController,
+                  emailController: emailController,
+                  passwordController: passwordController,
+                  confirmPasswordController: confirmPasswordController,
+                  isLoading: _isLoading,
+                  errorMessage: _errorMessage,
+                  onNext: _goToAllergenView,
+                ),
+        ],
       ),
     );
   }
