@@ -143,6 +143,71 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
             },
             child: const Text('Edit Profile'),
           ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () async {
+              final passwordController = TextEditingController();
+
+              final confirmed = await showDialog<bool>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Confirm Account Deletion'),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Enter your password to confirm account deletion.',
+                      ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: passwordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Password',
+                        ),
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      child: const Text('Delete'),
+                    ),
+                  ],
+                ),
+              );
+
+              if (confirmed == true) {
+                final authStateProvider = context.read<AuthStateProvider>();
+
+                try {
+                  await authStateProvider.deleteAccount(
+                    password: passwordController.text,
+                  );
+                  if (mounted) {
+                    replaceIfNotCurrent(
+                      context,
+                      AppRoutes.home,
+                      blockIfCurrent: [AppRoutes.home],
+                    );
+                  }
+                } catch (e) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(e.toString())));
+                }
+              }
+            },
+            child: const Text('Delete Account'),
+          ),
         ],
       ),
     );

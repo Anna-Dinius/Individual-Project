@@ -184,4 +184,30 @@ class AuthService {
       throw Exception('Password update failed: ${e.code}');
     }
   }
+
+  Future<void> deleteAccount() async {
+    final fbUser = _auth.currentUser;
+    if (fbUser == null) {
+      throw Exception('No user is currently signed in');
+    }
+
+    try {
+      // Delete Firestore user document
+      await _firestore.collection('users').doc(fbUser.uid).delete();
+
+      // Delete Firebase Auth user
+      await fbUser.delete();
+
+      // Clear local state
+      _currentUser = null;
+    } on fb_auth.FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        throw Exception('Please log in again before deleting your account.');
+      } else {
+        throw Exception('Account deletion failed: ${e.code}');
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
 }

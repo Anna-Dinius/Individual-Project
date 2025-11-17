@@ -75,6 +75,16 @@ class AuthStateProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteAccount({required String password}) async {
+    final success = await _authService.reauthenticate(password);
+    if (!success) {
+      throw Exception('Please log in again before deleting your account.');
+    }
+
+    await _authService.deleteAccount(); // your backend call
+    notifyListeners();
+  }
+
   /// Get current user (for profile display)
   User? get currentUser => _authService.currentUser;
 }
