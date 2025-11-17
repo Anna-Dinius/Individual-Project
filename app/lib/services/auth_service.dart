@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/user.dart';
+import 'package:nomnom_safe/models/user.dart';
 
 /// AuthService manages user authentication and session state using Firebase Firestore.
 class AuthService {

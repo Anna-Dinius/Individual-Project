@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/address.dart';
+import 'package:nomnom_safe/models/address.dart';
 
 /* Service class to handle address-related Firestore operations */
 class AddressService {

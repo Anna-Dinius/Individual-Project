@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../models/restaurant.dart';
-import '../models/menu_item.dart';
-import '../widgets/filter_modal.dart';
-import '../models/allergen.dart';
-import '../services/allergen_service.dart';
-import '../services/menu_service.dart';
-import '../models/menu.dart';
+import 'package:nomnom_safe/models/restaurant.dart';
+import 'package:nomnom_safe/models/menu_item.dart';
+import 'package:nomnom_safe/widgets/filter_modal.dart';
+import 'package:nomnom_safe/models/allergen.dart';
+import 'package:nomnom_safe/services/allergen_service.dart';
+import 'package:nomnom_safe/services/menu_service.dart';
+import 'package:nomnom_safe/models/menu.dart';
+import 'package:nomnom_safe/navigation/route_constants.dart';
 
 class MenuScreen extends StatefulWidget {
   final Restaurant restaurant;
@@ -145,7 +146,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 onPressed: () {
                   Navigator.pushReplacementNamed(
                     context,
-                    '/restaurant',
+                    AppRoutes.restaurant,
                     arguments: widget.restaurant,
                   );
                 },

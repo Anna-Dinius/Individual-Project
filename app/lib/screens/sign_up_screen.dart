@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../widgets/nomnom_appbar.dart';
-import '../navigation/route_tracker.dart';
-import '../views/sign_up_account_view.dart';
-import '../views/sign_up_allergen_view.dart';
+import 'package:nomnom_safe/widgets/nomnom_appbar.dart';
+import 'package:nomnom_safe/navigation/route_tracker.dart';
+import 'package:nomnom_safe/views/sign_up_account_view.dart';
+import 'package:nomnom_safe/views/sign_up_allergen_view.dart';
+import 'package:nomnom_safe/navigation/route_constants.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -50,12 +51,12 @@ class _SignUpScreenState extends State<SignUpScreen> with RouteAware {
 
   @override
   void didPush() {
-    currentRouteName = '/sign-up';
+    currentRouteName = AppRoutes.signUp;
   }
 
   @override
   void didPopNext() {
-    currentRouteName = '/sign-up';
+    currentRouteName = AppRoutes.signUp;
   }
 
   Future<void> _handleSignUp() async {

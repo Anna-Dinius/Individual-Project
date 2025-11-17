@@ -1,4 +1,4 @@
-import '../models/restaurant.dart';
+import 'package:nomnom_safe/models/restaurant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 /* Service class to handle restaurant-related Firestore operations */

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../services/allergen_service.dart';
+import 'package:nomnom_safe/services/allergen_service.dart';
 import 'package:provider/provider.dart';
-import '../providers/auth_state_provider.dart';
-import '../navigation/route_tracker.dart';
+import 'package:nomnom_safe/providers/auth_state_provider.dart';
+import 'package:nomnom_safe/navigation/route_tracker.dart';
+import 'package:nomnom_safe/navigation/route_constants.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -28,12 +29,12 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
 
   @override
   void didPush() {
-    currentRouteName = '/profile';
+    currentRouteName = AppRoutes.profile;
   }
 
   @override
   void didPopNext() {
-    currentRouteName = '/profile';
+    currentRouteName = AppRoutes.profile;
   }
 
   @override
@@ -132,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
             onPressed: () async {
               await Navigator.of(
                 context,
-              ).pushNamed('/edit-profile'); // Wait for user to return
+              ).pushNamed(AppRoutes.editProfile); // Wait for user to return
               await authStateProvider.loadCurrentUser(); // Refresh user data
               if (mounted) setState(() {}); // Trigger rebuild
             },

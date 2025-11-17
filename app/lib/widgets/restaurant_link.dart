@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/link.dart';
-import '../theme/theme_constants.dart';
+import 'package:nomnom_safe/theme/theme_constants.dart';
 
 /* A widget that displays a clickable link to a restaurant's website */
 class RestaurantLink extends StatelessWidget {

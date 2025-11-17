@@ -15,6 +15,7 @@ import 'providers/auth_state_provider.dart';
 import 'navigation/route_tracker.dart';
 import 'widgets/nomnom_appbar.dart';
 import 'widgets/nomnom_scaffold.dart';
+import 'navigation/route_constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
             settings.name; // Track current route globally before screen builds
 
         switch (settings.name) {
-          case '/home':
+          case AppRoutes.home:
             return MaterialPageRoute(
               builder: (context) => NomNomScaffold(
                 currentIndex: 0,
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
               ),
               settings: settings,
             );
-          case '/menu':
+          case AppRoutes.menu:
             return MaterialPageRoute(
               builder: (context) => NomNomScaffold(
                 currentIndex: 1,
@@ -66,7 +67,7 @@ class MyApp extends StatelessWidget {
               ),
               settings: settings,
             );
-          case '/restaurant':
+          case AppRoutes.restaurant:
             return MaterialPageRoute(
               builder: (context) => NomNomScaffold(
                 currentIndex: 2,
@@ -77,7 +78,7 @@ class MyApp extends StatelessWidget {
               ),
               settings: settings,
             );
-          case '/sign-in':
+          case AppRoutes.signIn:
             return MaterialPageRoute(
               builder: (context) => NomNomScaffold(
                 currentIndex: 3,
@@ -86,7 +87,7 @@ class MyApp extends StatelessWidget {
               ),
               settings: settings,
             );
-          case '/sign-up':
+          case AppRoutes.signUp:
             return MaterialPageRoute(
               builder: (context) => NomNomScaffold(
                 currentIndex: 4,
@@ -95,7 +96,7 @@ class MyApp extends StatelessWidget {
               ),
               settings: settings,
             );
-          case '/profile':
+          case AppRoutes.profile:
             return MaterialPageRoute(
               builder: (context) => NomNomScaffold(
                 currentIndex: 5,
@@ -104,7 +105,7 @@ class MyApp extends StatelessWidget {
               ),
               settings: settings,
             );
-          case '/edit-profile':
+          case AppRoutes.editProfile:
             return MaterialPageRoute(
               builder: (context) => NomNomScaffold(
                 currentIndex: 6,

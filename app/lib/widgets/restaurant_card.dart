@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/restaurant.dart';
-import '../utils/navigation_utils.dart';
+import 'package:nomnom_safe/models/restaurant.dart';
+import 'package:nomnom_safe/navigation/nav_utils.dart';
+import 'package:nomnom_safe/navigation/route_constants.dart';
 
 /* A card widget that displays basic information about a restaurant.
    Clicking the card navigates to the menu screen for the restaurant. */
@@ -48,7 +49,7 @@ class _RestaurantCardState extends State<RestaurantCard> {
               onTap: () {
                 navigateIfNotCurrent(
                   context,
-                  '/menu',
+                  AppRoutes.menu,
                   arguments: widget.restaurant,
                 );
               },

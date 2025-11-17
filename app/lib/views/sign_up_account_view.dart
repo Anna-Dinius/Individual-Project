@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nomnom_safe/utils/auth_utils.dart';
 import 'package:nomnom_safe/widgets/password_field.dart';
-import '../navigation/route_tracker.dart';
-import '../widgets/text_form_field_with_controller.dart';
+import 'package:nomnom_safe/navigation/route_tracker.dart';
+import 'package:nomnom_safe/widgets/text_form_field_with_controller.dart';
+import 'package:nomnom_safe/navigation/route_constants.dart';
 
 class SignUpAccountView extends StatefulWidget {
   final GlobalKey<FormState> formKey;
@@ -147,8 +148,8 @@ class _SignUpAccountViewState extends State<SignUpAccountView> {
             const Text('Already have an account? '),
             TextButton(
               onPressed: () {
-                if (currentRouteName != '/sign-in') {
-                  Navigator.of(context).pushReplacementNamed('/sign-in');
+                if (currentRouteName != AppRoutes.signIn) {
+                  Navigator.of(context).pushReplacementNamed(AppRoutes.signIn);
                 }
               },
               style: TextButton.styleFrom(padding: EdgeInsets.zero),

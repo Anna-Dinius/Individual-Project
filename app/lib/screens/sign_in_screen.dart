@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nomnom_safe/utils/auth_utils.dart';
 import 'package:nomnom_safe/widgets/text_form_field_with_controller.dart';
-import '../widgets/nomnom_appbar.dart';
-import '../navigation/route_tracker.dart';
-import '../widgets/password_field.dart';
+import 'package:nomnom_safe/widgets/nomnom_appbar.dart';
+import 'package:nomnom_safe/navigation/route_tracker.dart';
+import 'package:nomnom_safe/widgets/password_field.dart';
+import 'package:nomnom_safe/navigation/route_constants.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -39,12 +40,12 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
 
   @override
   void didPush() {
-    currentRouteName = '/sign-in';
+    currentRouteName = AppRoutes.signIn;
   }
 
   @override
   void didPopNext() {
-    currentRouteName = '/sign-in';
+    currentRouteName = AppRoutes.signIn;
   }
 
   Future<void> _handleSignIn() async {
@@ -165,8 +166,10 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
               const Text("Don't have an account? "),
               TextButton(
                 onPressed: () {
-                  if (currentRouteName != '/sign-up') {
-                    Navigator.of(context).pushReplacementNamed('/sign-up');
+                  if (currentRouteName != AppRoutes.signUp) {
+                    Navigator.of(
+                      context,
+                    ).pushReplacementNamed(AppRoutes.signUp);
                   }
                 },
                 style: TextButton.styleFrom(padding: EdgeInsets.zero),

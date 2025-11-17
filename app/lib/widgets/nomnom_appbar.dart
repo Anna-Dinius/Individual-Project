@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../providers/auth_state_provider.dart';
-import 'package:nomnom_safe/utils/navigation_utils.dart';
+import 'package:nomnom_safe/providers/auth_state_provider.dart';
+import 'package:nomnom_safe/navigation/nav_utils.dart';
+import 'package:nomnom_safe/navigation/route_constants.dart';
 
 /// Global instance of AuthStateProvider to be used throughout the app
 final authStateProvider = AuthStateProvider();
@@ -15,7 +16,9 @@ class NomnomAppBar extends StatelessWidget implements PreferredSizeWidget {
     await authStateProvider.signOut();
     if (context.mounted) {
       // Navigate back to home
-      Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
     }
   }
 
@@ -44,8 +47,8 @@ class NomnomAppBar extends StatelessWidget implements PreferredSizeWidget {
               TextButton(
                 onPressed: () => navigateIfNotCurrent(
                   context,
-                  '/sign-in',
-                  blockIfCurrent: ['/sign-in'],
+                  AppRoutes.signIn,
+                  blockIfCurrent: [AppRoutes.signIn],
                 ),
                 child: const Text(
                   'Sign In',
@@ -56,8 +59,8 @@ class NomnomAppBar extends StatelessWidget implements PreferredSizeWidget {
               TextButton(
                 onPressed: () => navigateIfNotCurrent(
                   context,
-                  '/sign-up',
-                  blockIfCurrent: ['/sign-up'],
+                  AppRoutes.signUp,
+                  blockIfCurrent: [AppRoutes.signUp],
                 ),
                 child: const Text(
                   'Sign Up',

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import '../models/restaurant.dart';
-import '../models/allergen.dart';
-import '../widgets/restaurant_card.dart';
-import '../services/allergen_service.dart';
-import '../services/restaurant_service.dart';
-import '../utils/allergen_utils.dart';
-import '../widgets/filter_modal.dart';
-import '../utils/restaurant_utils.dart';
-import '../services/auth_service.dart';
-import '../navigation/route_tracker.dart';
+import 'package:nomnom_safe/models/restaurant.dart';
+import 'package:nomnom_safe/models/allergen.dart';
+import 'package:nomnom_safe/widgets/restaurant_card.dart';
+import 'package:nomnom_safe/services/allergen_service.dart';
+import 'package:nomnom_safe/services/restaurant_service.dart';
+import 'package:nomnom_safe/utils/allergen_utils.dart';
+import 'package:nomnom_safe/widgets/filter_modal.dart';
+import 'package:nomnom_safe/utils/restaurant_utils.dart';
+import 'package:nomnom_safe/services/auth_service.dart';
+import 'package:nomnom_safe/navigation/route_tracker.dart';
 
 /* Main screen displaying allergen filters and a list of restaurants */
 class HomeScreen extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/allergen.dart';
+import 'package:nomnom_safe/models/allergen.dart';
 
 /* Service class to handle allergen-related Firestore operations */
 class AllergenService {

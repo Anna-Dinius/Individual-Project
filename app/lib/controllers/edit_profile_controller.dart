@@ -1,4 +1,4 @@
-import '../providers/auth_state_provider.dart';
+import 'package:nomnom_safe/providers/auth_state_provider.dart';
 
 class EditProfileController {
   final AuthStateProvider authProvider;

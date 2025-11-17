@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/menu.dart';
-import '../models/menu_item.dart';
+import 'package:nomnom_safe/models/menu.dart';
+import 'package:nomnom_safe/models/menu_item.dart';
 
 /* Service class to handle menu-related Firestore operations */
 class MenuService {

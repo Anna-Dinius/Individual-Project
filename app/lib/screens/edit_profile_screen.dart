@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nomnom_safe/utils/allergen_utils.dart';
-import '../providers/auth_state_provider.dart';
-import '../navigation/route_tracker.dart';
-import '../views/edit_profile_view.dart';
-import '../views/verify_current_password_view.dart';
-import '../views/update_password_view.dart';
-import '../controllers/edit_profile_controller.dart';
-import '../services/allergen_service.dart';
-import '../models/allergen.dart';
+import 'package:nomnom_safe/providers/auth_state_provider.dart';
+import 'package:nomnom_safe/navigation/route_tracker.dart';
+import 'package:nomnom_safe/views/edit_profile_view.dart';
+import 'package:nomnom_safe/views/verify_current_password_view.dart';
+import 'package:nomnom_safe/views/update_password_view.dart';
+import 'package:nomnom_safe/controllers/edit_profile_controller.dart';
+import 'package:nomnom_safe/services/allergen_service.dart';
+import 'package:nomnom_safe/models/allergen.dart';
+import 'package:nomnom_safe/navigation/route_constants.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -65,12 +66,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
 
   @override
   void didPush() {
-    currentRouteName = '/edit-profile';
+    currentRouteName = AppRoutes.editProfile;
   }
 
   @override
   void didPopNext() {
-    currentRouteName = '/edit-profile';
+    currentRouteName = AppRoutes.editProfile;
   }
 
   @override

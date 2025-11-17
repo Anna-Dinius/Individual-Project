@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/password_field.dart';
+import 'package:nomnom_safe/widgets/password_field.dart';
 
 class VerifyCurrentPasswordView extends StatelessWidget {
   final TextEditingController controller;

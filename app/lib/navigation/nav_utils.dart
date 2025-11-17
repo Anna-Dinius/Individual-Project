@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nomnom_safe/navigation/route_constants.dart';
 
 void navigateIfNotCurrent(
   BuildContext context,
@@ -27,10 +28,20 @@ void replaceIfNotCurrent(
 
 int getNavIndexForRoute(String? routeName) {
   switch (routeName) {
-    case '/home':
+    case AppRoutes.home:
       return 0;
-    case '/edit-profile':
+    case AppRoutes.menu:
       return 1;
+    case AppRoutes.restaurant:
+      return 2;
+    case AppRoutes.signIn:
+      return 3;
+    case AppRoutes.signUp:
+      return 4;
+    case AppRoutes.profile:
+      return 5;
+    case AppRoutes.editProfile:
+      return 6;
     default:
       return 0;
   }

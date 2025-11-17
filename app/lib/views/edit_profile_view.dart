@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nomnom_safe/widgets/text_form_field_with_controller.dart';
-import '../widgets/multi_select_checkbox_list.dart';
+import 'package:nomnom_safe/widgets/multi_select_checkbox_list.dart';
 
 class EditProfileView extends StatelessWidget {
   final GlobalKey<FormState> formKey;

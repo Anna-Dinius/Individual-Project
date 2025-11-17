@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nomnom_safe/utils/auth_utils.dart';
-import '../widgets/password_field.dart';
+import 'package:nomnom_safe/widgets/password_field.dart';
 
 class UpdatePasswordView extends StatelessWidget {
   final GlobalKey<FormState> formKey;

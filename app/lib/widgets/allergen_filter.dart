@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/allergen.dart';
-import '../widgets/allergen_chip.dart';
+import 'package:nomnom_safe/models/allergen.dart';
+import 'package:nomnom_safe/widgets/allergen_chip.dart';
 
 /* Widget to display a list of allergen filter chips and a Clear button */
 class AllergenFilter extends StatelessWidget {

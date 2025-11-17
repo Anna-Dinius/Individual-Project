@@ -1,4 +1,4 @@
-import '../models/allergen.dart';
+import 'package:nomnom_safe/models/allergen.dart';
 
 /* Extracts allergen labels from a list of Allergen objects */
 List<String> extractAllergenLabels(List<Allergen> allergens) {

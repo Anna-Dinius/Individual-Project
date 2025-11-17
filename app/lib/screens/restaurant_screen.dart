@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/restaurant.dart';
-import '../services/address_service.dart';
-import '../widgets/restaurant_link.dart';
+import 'package:nomnom_safe/models/restaurant.dart';
+import 'package:nomnom_safe/services/address_service.dart';
+import 'package:nomnom_safe/widgets/restaurant_link.dart';
 
 /* Screen displaying detailed information about a specific restaurant */
 class RestaurantScreen extends StatefulWidget {

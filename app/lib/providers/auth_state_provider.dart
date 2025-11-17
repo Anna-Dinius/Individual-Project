@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import '../services/auth_service.dart';
-import '../models/user.dart';
+import 'package:nomnom_safe/services/auth_service.dart';
+import 'package:nomnom_safe/models/user.dart';
 
 /// AuthStateProvider notifies listeners when authentication state changes
 class AuthStateProvider extends ChangeNotifier {

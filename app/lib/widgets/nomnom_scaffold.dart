@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/auth_state_provider.dart';
-import 'package:nomnom_safe/utils/navigation_utils.dart';
+import 'package:nomnom_safe/providers/auth_state_provider.dart';
+import 'package:nomnom_safe/navigation/nav_utils.dart';
+import 'package:nomnom_safe/navigation/route_constants.dart';
 
 class NomNomScaffold extends StatelessWidget {
   final Widget body;
@@ -39,12 +40,12 @@ class NomNomScaffold extends StatelessWidget {
               ],
               onTap: (index) {
                 if (index == 0) {
-                  replaceIfNotCurrent(context, '/home');
-                } else if (index == 1) {
+                  replaceIfNotCurrent(context, AppRoutes.home);
+                } else if (index == 5) {
                   replaceIfNotCurrent(
                     context,
-                    '/profile',
-                    blockIfCurrent: ['/profile'],
+                    AppRoutes.profile,
+                    blockIfCurrent: [AppRoutes.profile],
                   );
                 }
               },

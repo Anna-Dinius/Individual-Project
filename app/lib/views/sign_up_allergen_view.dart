@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/allergen.dart';
-import '../services/allergen_service.dart';
-import '../widgets/multi_select_checkbox_list.dart';
+import 'package:nomnom_safe/models/allergen.dart';
+import 'package:nomnom_safe/services/allergen_service.dart';
+import 'package:nomnom_safe/widgets/multi_select_checkbox_list.dart';
 
 class SignUpAllergenView extends StatefulWidget {
   final bool isLoading;
