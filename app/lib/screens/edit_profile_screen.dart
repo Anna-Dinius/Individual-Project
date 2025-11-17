@@ -281,7 +281,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
               onPressed: () => replaceIfNotCurrent(
                 context,
                 AppRoutes.profile,
-                blockIfCurrent: [AppRoutes.profile, AppRoutes.editProfile],
+                blockIfCurrent: [AppRoutes.profile],
               ),
               tooltip: 'Back',
             ),

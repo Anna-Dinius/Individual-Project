@@ -162,7 +162,11 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
                           ? const SizedBox(
                               height: 20,
                               width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
                             )
                           : const Text('Sign In'),
                     ),

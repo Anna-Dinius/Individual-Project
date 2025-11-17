@@ -66,7 +66,7 @@ class _SignUpAllergenViewState extends State<SignUpAllergenView> {
               ElevatedButton(
                 onPressed: widget.isLoading ? null : widget.onSubmit,
                 child: widget.isLoading
-                    ? const CircularProgressIndicator()
+                    ? const Center(child: CircularProgressIndicator())
                     : const Text('Create Account'),
               ),
               TextButton(onPressed: widget.onBack, child: const Text('Back')),
