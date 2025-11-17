@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:nomnom_safe/utils/auth_utils.dart';
 import 'package:nomnom_safe/widgets/text_form_field_with_controller.dart';
-import 'package:nomnom_safe/widgets/nomnom_appbar.dart';
 import 'package:nomnom_safe/navigation/route_tracker.dart';
 import 'package:nomnom_safe/widgets/password_field.dart';
 import 'package:nomnom_safe/navigation/route_constants.dart';
+import 'package:nomnom_safe/providers/auth_state_provider.dart';
+import 'package:nomnom_safe/navigation/nav_utils.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -54,6 +56,8 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
       _errorMessage = null;
     });
 
+    final authStateProvider = context.read<AuthStateProvider>();
+
     try {
       await authStateProvider.signIn(
         email: _emailController.text.trim(),
@@ -61,8 +65,12 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
       );
 
       if (mounted) {
-        // Pop back to home screen and trigger AppBar rebuild
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        // Navigate back to home screen and trigger AppBar rebuild
+        replaceIfNotCurrent(
+          context,
+          AppRoutes.home,
+          blockIfCurrent: [AppRoutes.home],
+        );
       }
     } catch (e) {
       setState(() {
@@ -90,7 +98,11 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
             alignment: Alignment.centerLeft,
             child: IconButton(
               icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => replaceIfNotCurrent(
+                context,
+                AppRoutes.home,
+                blockIfCurrent: [AppRoutes.home],
+              ),
               tooltip: 'Back',
             ),
           ),
@@ -166,11 +178,11 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
               const Text("Don't have an account? "),
               TextButton(
                 onPressed: () {
-                  if (currentRouteName != AppRoutes.signUp) {
-                    Navigator.of(
-                      context,
-                    ).pushReplacementNamed(AppRoutes.signUp);
-                  }
+                  navigateIfNotCurrent(
+                    context,
+                    AppRoutes.signUp,
+                    blockIfCurrent: [AppRoutes.signUp],
+                  );
                 },
                 style: TextButton.styleFrom(padding: EdgeInsets.zero),
                 child: const Text('Sign Up'),

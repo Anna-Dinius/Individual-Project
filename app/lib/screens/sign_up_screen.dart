@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nomnom_safe/widgets/nomnom_appbar.dart';
+import 'package:provider/provider.dart';
+import 'package:nomnom_safe/providers/auth_state_provider.dart';
+import 'package:nomnom_safe/navigation/nav_utils.dart';
 import 'package:nomnom_safe/navigation/route_tracker.dart';
 import 'package:nomnom_safe/views/sign_up_account_view.dart';
 import 'package:nomnom_safe/views/sign_up_allergen_view.dart';
@@ -65,6 +67,8 @@ class _SignUpScreenState extends State<SignUpScreen> with RouteAware {
       _errorMessage = null;
     });
 
+    final authStateProvider = context.read<AuthStateProvider>();
+
     try {
       await authStateProvider.signUp(
         firstName: firstNameController.text.trim(),
@@ -76,8 +80,12 @@ class _SignUpScreenState extends State<SignUpScreen> with RouteAware {
       );
 
       if (mounted) {
-        // Pop back to home screen and trigger AppBar rebuild
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        // Navigate back to home screen and trigger AppBar rebuild
+        replaceIfNotCurrent(
+          context,
+          AppRoutes.home,
+          blockIfCurrent: [AppRoutes.home],
+        );
       }
     } catch (e) {
       setState(() {
@@ -107,7 +115,11 @@ class _SignUpScreenState extends State<SignUpScreen> with RouteAware {
             alignment: Alignment.centerLeft,
             child: IconButton(
               icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => replaceIfNotCurrent(
+                context,
+                AppRoutes.home,
+                blockIfCurrent: [AppRoutes.home],
+              ),
               tooltip: 'Back',
             ),
           ),

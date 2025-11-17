@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:nomnom_safe/providers/auth_state_provider.dart';
 import 'package:nomnom_safe/navigation/route_tracker.dart';
 import 'package:nomnom_safe/navigation/route_constants.dart';
+import 'package:nomnom_safe/navigation/nav_utils.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -35,6 +36,9 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
   @override
   void didPopNext() {
     currentRouteName = AppRoutes.profile;
+    context.read<AuthStateProvider>().loadCurrentUser().then((_) {
+      if (mounted) setState(() {});
+    });
   }
 
   @override
@@ -45,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final authStateProvider = Provider.of<AuthStateProvider>(context);
+    final authStateProvider = context.read<AuthStateProvider>();
     final user = authStateProvider.currentUser;
 
     if (user == null) {
@@ -130,12 +134,12 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
           const SizedBox(height: 32),
           // Edit button
           ElevatedButton(
-            onPressed: () async {
-              await Navigator.of(
+            onPressed: () {
+              navigateIfNotCurrent(
                 context,
-              ).pushNamed(AppRoutes.editProfile); // Wait for user to return
-              await authStateProvider.loadCurrentUser(); // Refresh user data
-              if (mounted) setState(() {}); // Trigger rebuild
+                AppRoutes.editProfile,
+                blockIfCurrent: [AppRoutes.editProfile],
+              );
             },
             child: const Text('Edit Profile'),
           ),

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:nomnom_safe/providers/auth_state_provider.dart';
 import 'package:nomnom_safe/navigation/nav_utils.dart';
 import 'package:nomnom_safe/navigation/route_constants.dart';
-
-/// Global instance of AuthStateProvider to be used throughout the app
-final authStateProvider = AuthStateProvider();
 
 /* Custom AppBar widget for consistency across the app */
 class NomnomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -13,64 +11,57 @@ class NomnomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const NomnomAppBar({super.key, this.title = 'Nomnom Safe'});
 
   void _handleSignOut(BuildContext context) async {
+    final authStateProvider = context.read<AuthStateProvider>();
     await authStateProvider.signOut();
+
     if (context.mounted) {
       // Navigate back to home
-      Navigator.of(
+      replaceIfNotCurrent(
         context,
-      ).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
+        AppRoutes.home,
+        blockIfCurrent: [AppRoutes.home],
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: authStateProvider,
-      builder: (context, _) {
-        final isSignedIn = authStateProvider.isSignedIn;
+    final isSignedIn = context.watch<AuthStateProvider>().isSignedIn;
 
-        return AppBar(
-          title: Text(title),
-          automaticallyImplyLeading: false, // Disable automatic back arrow
-          actions: [
-            if (isSignedIn) ...[
-              // Sign Out button
-              TextButton(
-                onPressed: () => _handleSignOut(context),
-                child: const Text(
-                  'Sign Out',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ] else ...[
-              // Sign In button
-              TextButton(
-                onPressed: () => navigateIfNotCurrent(
-                  context,
-                  AppRoutes.signIn,
-                  blockIfCurrent: [AppRoutes.signIn],
-                ),
-                child: const Text(
-                  'Sign In',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              // Sign Up button
-              TextButton(
-                onPressed: () => navigateIfNotCurrent(
-                  context,
-                  AppRoutes.signUp,
-                  blockIfCurrent: [AppRoutes.signUp],
-                ),
-                child: const Text(
-                  'Sign Up',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
-          ],
-        );
-      },
+    return AppBar(
+      title: Text(title),
+      automaticallyImplyLeading: false, // Disable automatic back arrow
+      actions: [
+        if (isSignedIn) ...[
+          // Sign Out button
+          TextButton(
+            onPressed: () => _handleSignOut(context),
+            child: const Text(
+              'Sign Out',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ] else ...[
+          // Sign In button
+          TextButton(
+            onPressed: () => navigateIfNotCurrent(
+              context,
+              AppRoutes.signIn,
+              blockIfCurrent: [AppRoutes.signIn],
+            ),
+            child: const Text('Sign In', style: TextStyle(color: Colors.white)),
+          ),
+          // Sign Up button
+          TextButton(
+            onPressed: () => navigateIfNotCurrent(
+              context,
+              AppRoutes.signUp,
+              blockIfCurrent: [AppRoutes.signUp],
+            ),
+            child: const Text('Sign Up', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ],
     );
   }
 

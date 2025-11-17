@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nomnom_safe/models/restaurant.dart';
 import 'package:nomnom_safe/models/menu_item.dart';
+import 'package:nomnom_safe/navigation/nav_utils.dart';
 import 'package:nomnom_safe/widgets/filter_modal.dart';
 import 'package:nomnom_safe/models/allergen.dart';
 import 'package:nomnom_safe/services/allergen_service.dart';
@@ -131,7 +132,7 @@ class _MenuScreenState extends State<MenuScreen> {
             children: [
               IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => replaceIfNotCurrent(context, AppRoutes.home),
                 tooltip: 'Back to Home',
               ),
               Expanded(
@@ -144,7 +145,7 @@ class _MenuScreenState extends State<MenuScreen> {
               IconButton(
                 icon: const Icon(Icons.restaurant),
                 onPressed: () {
-                  Navigator.pushReplacementNamed(
+                  replaceIfNotCurrent(
                     context,
                     AppRoutes.restaurant,
                     arguments: widget.restaurant,

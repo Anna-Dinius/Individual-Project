@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nomnom_safe/utils/auth_utils.dart';
+import 'package:nomnom_safe/navigation/nav_utils.dart';
 import 'package:nomnom_safe/widgets/password_field.dart';
-import 'package:nomnom_safe/navigation/route_tracker.dart';
 import 'package:nomnom_safe/widgets/text_form_field_with_controller.dart';
 import 'package:nomnom_safe/navigation/route_constants.dart';
 
@@ -148,9 +148,11 @@ class _SignUpAccountViewState extends State<SignUpAccountView> {
             const Text('Already have an account? '),
             TextButton(
               onPressed: () {
-                if (currentRouteName != AppRoutes.signIn) {
-                  Navigator.of(context).pushReplacementNamed(AppRoutes.signIn);
-                }
+                navigateIfNotCurrent(
+                  context,
+                  AppRoutes.signIn,
+                  blockIfCurrent: [AppRoutes.signIn],
+                );
               },
               style: TextButton.styleFrom(padding: EdgeInsets.zero),
               child: const Text('Sign In'),

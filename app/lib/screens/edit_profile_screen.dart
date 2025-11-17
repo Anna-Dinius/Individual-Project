@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:nomnom_safe/utils/allergen_utils.dart';
 import 'package:nomnom_safe/providers/auth_state_provider.dart';
 import 'package:nomnom_safe/navigation/route_tracker.dart';
@@ -9,6 +10,7 @@ import 'package:nomnom_safe/controllers/edit_profile_controller.dart';
 import 'package:nomnom_safe/services/allergen_service.dart';
 import 'package:nomnom_safe/models/allergen.dart';
 import 'package:nomnom_safe/navigation/route_constants.dart';
+import 'package:nomnom_safe/navigation/nav_utils.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -77,7 +79,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
   @override
   void initState() {
     super.initState();
-    _authProvider = AuthStateProvider();
+    _authProvider = context.read<AuthStateProvider>();
     _controller = EditProfileController(authProvider: _authProvider);
 
     final user = _authProvider.currentUser;
@@ -152,7 +154,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
       });
 
       if (error == null) {
-        Navigator.of(context).pop();
+        replaceIfNotCurrent(
+          context,
+          AppRoutes.profile,
+          blockIfCurrent: [AppRoutes.profile, AppRoutes.editProfile],
+        );
       }
     }
   }
@@ -272,7 +278,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
             alignment: Alignment.centerLeft,
             child: IconButton(
               icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => replaceIfNotCurrent(
+                context,
+                AppRoutes.profile,
+                blockIfCurrent: [AppRoutes.profile, AppRoutes.editProfile],
+              ),
               tooltip: 'Back',
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:nomnom_safe/providers/auth_state_provider.dart';
 import 'package:nomnom_safe/navigation/nav_utils.dart';
 import 'package:nomnom_safe/navigation/route_constants.dart';
+import 'package:nomnom_safe/navigation/nav_destination.dart';
 
 class NomNomScaffold extends StatelessWidget {
   final Widget body;
@@ -19,35 +20,30 @@ class NomNomScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<AuthStateProvider>().currentUser;
-    final routeName = ModalRoute.of(context)?.settings.name;
-    final currentIndex = getNavIndexForRoute(routeName);
+    final currentRoute = ModalRoute.of(context)?.settings.name;
+    final currentIndex = getNavIndexForRoute(currentRoute);
 
     return Scaffold(
       appBar: appBar,
       body: body,
       bottomNavigationBar: user != null
           ? BottomNavigationBar(
-              currentIndex: currentIndex,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
-                  label: 'Search',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Profile',
-                ),
-              ],
+              currentIndex: currentIndex >= 0 ? currentIndex : 0,
+              items: bottomNavDestinations
+                  .map(
+                    (d) =>
+                        BottomNavigationBarItem(icon: d.icon, label: d.label),
+                  )
+                  .toList(),
               onTap: (index) {
-                if (index == 0) {
-                  replaceIfNotCurrent(context, AppRoutes.home);
-                } else if (index == 5) {
-                  replaceIfNotCurrent(
-                    context,
-                    AppRoutes.profile,
-                    blockIfCurrent: [AppRoutes.profile],
-                  );
-                }
+                final destination = bottomNavDestinations[index];
+                replaceIfNotCurrent(
+                  context,
+                  destination.route,
+                  blockIfCurrent: destination.route == AppRoutes.profile
+                      ? [AppRoutes.profile, AppRoutes.editProfile]
+                      : [],
+                );
               },
             )
           : null,
