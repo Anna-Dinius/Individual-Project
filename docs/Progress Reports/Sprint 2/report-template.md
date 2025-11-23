@@ -65,7 +65,6 @@ title: Individual Project Week /# Progress Report - Anna Dinius
 ---
 
 - **Breakdown** (widgets):
-
   - `lib\file.type`: #
 
 ---
