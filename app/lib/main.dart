@@ -16,17 +16,26 @@ import 'nav/route_tracker.dart';
 import 'widgets/nomnom_appbar.dart';
 import 'widgets/nomnom_scaffold.dart';
 import 'nav/route_constants.dart';
+import 'services/allergen_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  final allergenService = AllergenService();
+  await allergenService.getAllergens(); // fills cache (list & maps)
+
   final authStateProvider = AuthStateProvider();
   await authStateProvider.loadCurrentUser(); // Load profile before UI starts
 
   runApp(
-    ChangeNotifierProvider<AuthStateProvider>.value(
-      value: authStateProvider,
+    MultiProvider(
+      providers: [
+        Provider<AllergenService>.value(value: allergenService),
+        ChangeNotifierProvider<AuthStateProvider>.value(
+          value: authStateProvider,
+        ),
+      ],
       child: const MyApp(),
     ),
   );

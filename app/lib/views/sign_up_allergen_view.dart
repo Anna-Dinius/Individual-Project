@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nomnom_safe/models/allergen.dart';
 import 'package:nomnom_safe/services/allergen_service.dart';
 import 'package:nomnom_safe/widgets/multi_select_checkbox_list.dart';
 
@@ -24,7 +23,11 @@ class SignUpAllergenView extends StatefulWidget {
 }
 
 class _SignUpAllergenViewState extends State<SignUpAllergenView> {
-  List<Allergen> availableAllergens = [];
+  Map<String, String> allergenIdToLabel = {};
+  Map<String, String> _allergenLabelToId = {};
+  Set<String> _selectedAllergenLabels = {};
+  bool isLoadingAllergens = true;
+  String? allergenError;
 
   @override
   void initState() {
@@ -33,44 +36,82 @@ class _SignUpAllergenViewState extends State<SignUpAllergenView> {
   }
 
   Future<void> _loadAllergens() async {
-    final allergens = await AllergenService().getAllergens();
-    if (mounted) {
-      setState(() => availableAllergens = allergens);
+    try {
+      final idToLabel = await AllergenService().getAllergenIdToLabelMap();
+      final labelToId = await AllergenService().getAllergenLabelToIdMap();
+      final selectedLabels = await AllergenService().idsToLabels(
+        widget.selectedAllergenIds,
+      );
+
+      if (mounted) {
+        setState(() {
+          allergenIdToLabel = idToLabel;
+          _allergenLabelToId = labelToId;
+          _selectedAllergenLabels = selectedLabels.toSet();
+          isLoadingAllergens = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          allergenError = "Error loading allergens.";
+          isLoadingAllergens = false;
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return availableAllergens.isEmpty
-        ? const Center(child: CircularProgressIndicator())
-        : Column(
-            children: [
-              MultiSelectCheckboxList(
-                options: availableAllergens.map((a) => a.label).toList(),
-                selected: availableAllergens
-                    .where((a) => widget.selectedAllergenIds.contains(a.id))
-                    .map((a) => a.label)
-                    .toSet(),
-                onChanged: (label, checked) {
-                  final matchingAllergen = availableAllergens.firstWhere(
-                    (a) => a.label == label,
-                  );
-                  final updated = [...widget.selectedAllergenIds];
-                  checked
-                      ? updated.add(matchingAllergen.id)
-                      : updated.remove(matchingAllergen.id);
-                  widget.onChanged(updated);
-                },
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: widget.isLoading ? null : widget.onSubmit,
-                child: widget.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : const Text('Create Account'),
-              ),
-              TextButton(onPressed: widget.onBack, child: const Text('Back')),
-            ],
-          );
+    if (isLoadingAllergens) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (allergenError != null) {
+      return Center(
+        child: Text(
+          allergenError!,
+          style: TextStyle(color: Theme.of(context).colorScheme.error),
+        ),
+      );
+    }
+    if (allergenIdToLabel.isEmpty && !isLoadingAllergens) {
+      return const Center(child: Text('No allergens available'));
+    }
+
+    return Column(
+      children: [
+        MultiSelectCheckboxList(
+          options: allergenIdToLabel.values.toList(),
+          selected: _selectedAllergenLabels,
+          onChanged: (label, checked) {
+            final id = _allergenLabelToId[label];
+            if (id == null) return;
+
+            final updated = widget.selectedAllergenIds.toSet();
+            if (checked) {
+              updated.add(id);
+            } else {
+              updated.remove(id);
+            }
+
+            setState(() {
+              _selectedAllergenLabels = updated
+                  .map((id) => allergenIdToLabel[id] ?? id)
+                  .toSet();
+            });
+
+            widget.onChanged(updated.toList());
+          },
+        ),
+        const SizedBox(height: 24),
+        ElevatedButton(
+          onPressed: widget.isLoading ? null : widget.onSubmit,
+          child: widget.isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : const Text('Create Account'),
+        ),
+        TextButton(onPressed: widget.onBack, child: const Text('Back')),
+      ],
+    );
   }
 }

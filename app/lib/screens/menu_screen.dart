@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nomnom_safe/services/service_utils.dart';
 import 'package:nomnom_safe/models/restaurant.dart';
 import 'package:nomnom_safe/models/menu_item.dart';
 import 'package:nomnom_safe/nav/nav_utils.dart';
 import 'package:nomnom_safe/widgets/filter_modal.dart';
-import 'package:nomnom_safe/models/allergen.dart';
 import 'package:nomnom_safe/services/allergen_service.dart';
 import 'package:nomnom_safe/services/menu_service.dart';
 import 'package:nomnom_safe/models/menu.dart';
@@ -19,11 +19,14 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  final AllergenService _allergenService = AllergenService();
+  late AllergenService _allergenService;
   final MenuService _menuService = MenuService();
 
-  List<Allergen> availableAllergens = [];
-  List<Allergen> selectedAllergens = [];
+  Map<String, String> allergenIdToLabel = {};
+  Map<String, String> _allergenLabelToId = {};
+  Set<String> _selectedAllergenIds = {};
+  Set<String> _selectedAllergenLabels = {};
+
   List<MenuItem> filteredMenuItems = [];
   List<MenuItem> allMenuItems = [];
   // Item type filter state
@@ -37,13 +40,21 @@ class _MenuScreenState extends State<MenuScreen> {
   List<String> selectedItemTypes = [];
   Menu? restaurantMenu;
 
-  bool isLoadingAllergens = true;
   bool isLoadingMenu = true;
 
   @override
-  void initState() {
-    super.initState();
-    _fetchAllergens();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _allergenService = getAllergenService(context);
+
+    // Only fetch once
+    if (allergenIdToLabel.isEmpty) {
+      _loadData();
+    }
+  }
+
+  Future<void> _loadData() async {
+    await _fetchAllergens();
     _fetchMenuItems();
   }
 
@@ -79,30 +90,42 @@ class _MenuScreenState extends State<MenuScreen> {
     }
   }
 
-  void _fetchAllergens() async {
-    final allergens = await _allergenService.getAllergens();
-    if (mounted) {
-      setState(() {
-        availableAllergens = allergens;
-        isLoadingAllergens = false;
-      });
-      // Recompute filtered items now that we have allergen labels available
-      _updateFilteredMenuItems();
+  Future<void> _fetchAllergens() async {
+    try {
+      final idToLabel = await _allergenService.getAllergenIdToLabelMap();
+      final labelToId = await _allergenService.getAllergenLabelToIdMap();
+      final selectedLabels = await _allergenService.idsToLabels(
+        _selectedAllergenIds.toList(),
+      );
+
+      if (mounted) {
+        setState(() {
+          allergenIdToLabel = idToLabel;
+          _allergenLabelToId = labelToId;
+          _selectedAllergenLabels = selectedLabels.toSet();
+        });
+        // Recompute filtered items now that we have allergen labels available
+        _updateFilteredMenuItems();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not load allergens.')));
+      }
     }
   }
 
   void _updateFilteredMenuItems() {
-    final selectedAllergenIds = selectedAllergens.map((a) => a.id).toList();
-
     setState(() {
       // Start from all items
       var results = List<MenuItem>.from(allMenuItems);
 
       // Apply allergen filtering (exclude items containing any selected allergen)
-      if (selectedAllergenIds.isNotEmpty) {
+      if (_selectedAllergenIds.isNotEmpty) {
         results = results.where((item) {
           return !item.allergens.any(
-            (allergen) => selectedAllergenIds.contains(allergen),
+            (allergenId) => _selectedAllergenIds.contains(allergenId),
           );
         }).toList();
       }
@@ -163,27 +186,25 @@ class _MenuScreenState extends State<MenuScreen> {
             children: [
               // Allergen Filter
               Expanded(
-                child: isLoadingAllergens
-                    ? const Center(child: CircularProgressIndicator())
-                    : FilterModal(
-                        buttonLabel: 'Allergens',
-                        title: 'Filter by Allergen',
-                        options: availableAllergens
-                            .map((a) => a.label)
-                            .toList(),
-                        selectedOptions: selectedAllergens
-                            .map((a) => a.label)
-                            .toList(),
-                        onChanged: (selectedLabels) {
-                          final matched = availableAllergens
-                              .where((a) => selectedLabels.contains(a.label))
-                              .toList();
-                          setState(() {
-                            selectedAllergens = matched;
-                            _updateFilteredMenuItems();
-                          });
-                        },
-                      ),
+                child: FilterModal(
+                  buttonLabel: 'Allergens',
+                  title: 'Filter by Allergen',
+                  options: allergenIdToLabel.values.toList(),
+                  selectedOptions: _selectedAllergenLabels.toList(),
+                  onChanged: (selectedLabels) {
+                    final matchedIds = selectedLabels
+                        .map((label) => _allergenLabelToId[label])
+                        .where((id) => id != null)
+                        .cast<String>()
+                        .toSet();
+
+                    setState(() {
+                      _selectedAllergenIds = matchedIds;
+                      _selectedAllergenLabels = selectedLabels.toSet();
+                      _updateFilteredMenuItems();
+                    });
+                  },
+                ),
               ),
               const SizedBox(width: 12),
               // Item type filter (uses reusable Filter widget)
@@ -206,7 +227,7 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         ),
         // Filter description text
-        if (selectedAllergens.isNotEmpty)
+        if (_selectedAllergenLabels.isNotEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
@@ -216,9 +237,7 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         // Menu items list
         Expanded(
-          child: isLoadingAllergens
-              ? const Center(child: CircularProgressIndicator())
-              : isLoadingMenu
+          child: isLoadingMenu
               ? const Center(child: CircularProgressIndicator())
               : filteredMenuItems.isEmpty
               ? const Center(
@@ -248,10 +267,7 @@ class _MenuScreenState extends State<MenuScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 4),
                                 child: Text(
-                                  'Contains: ${item.allergens.map((id) => availableAllergens.firstWhere(
-                                    (a) => a.id == id,
-                                    orElse: () => Allergen(id: id, label: id),
-                                  ).label).join(", ").toLowerCase()}',
+                                  'Contains: ${item.allergens.map((id) => allergenIdToLabel[id] ?? id).join(", ").toLowerCase()}',
                                   style: TextStyle(
                                     color: Theme.of(context).colorScheme.error,
                                   ),

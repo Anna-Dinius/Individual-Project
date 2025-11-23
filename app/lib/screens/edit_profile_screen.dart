@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nomnom_safe/services/service_utils.dart';
 import 'package:provider/provider.dart';
-import 'package:nomnom_safe/utils/allergen_utils.dart';
 import 'package:nomnom_safe/providers/auth_state_provider.dart';
 import 'package:nomnom_safe/nav/route_tracker.dart';
 import 'package:nomnom_safe/views/edit_profile_view.dart';
@@ -8,7 +8,6 @@ import 'package:nomnom_safe/views/verify_current_password_view.dart';
 import 'package:nomnom_safe/views/update_password_view.dart';
 import 'package:nomnom_safe/controllers/edit_profile_controller.dart';
 import 'package:nomnom_safe/services/allergen_service.dart';
-import 'package:nomnom_safe/models/allergen.dart';
 import 'package:nomnom_safe/nav/route_constants.dart';
 import 'package:nomnom_safe/nav/nav_utils.dart';
 
@@ -38,17 +37,30 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
   bool _isLoading = false;
   String? _errorMessage;
   bool _arePasswordsVisible = false;
-  List<Allergen> _allAllergens = []; // full list from DB
   Set<String> _selectedAllergenIds = {}; // store selected allergen IDs
   ProfileViewState _viewState = ProfileViewState.editProfile;
 
+  Map<String, String> allergenIdToLabel = {};
+  Map<String, String> _allergenLabelToId = {};
+  Set<String> _selectedAllergenLabels = {};
+  bool isLoadingAllergens = true;
+  String? allergenError;
+
   // Service classes
-  final AllergenService _allergenService = AllergenService();
+  late AllergenService _allergenService;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+
+    // Initialize allergen service from Provider or helper
+    _allergenService = getAllergenService(context);
+
+    // Only fetch once when still loading
+    if (isLoadingAllergens) {
+      _fetchAllergens();
+    }
   }
 
   @override
@@ -62,6 +74,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _newPasswordController.dispose();
+    _confirmNewPasswordController.dispose();
 
     super.dispose();
   }
@@ -96,29 +110,47 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
 
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
-
-    // Load allergens when the widget is first built
-    _fetchAllergens();
   }
 
   /* Fetch allergen labels and update the state if the widget is still mounted */
-  void _fetchAllergens() async {
-    final allergens = await _allergenService.getAllergens();
-    if (mounted) {
-      setState(() {
-        _allAllergens = allergens;
-      });
+  Future<void> _fetchAllergens() async {
+    try {
+      final idToLabel = await _allergenService.getAllergenIdToLabelMap();
+      final labelToId = await _allergenService.getAllergenLabelToIdMap();
+      final selectedLabels = await _allergenService.idsToLabels(
+        _selectedAllergenIds.toList(),
+      );
+
+      if (mounted) {
+        setState(() {
+          allergenIdToLabel = idToLabel;
+          _allergenLabelToId = labelToId;
+          isLoadingAllergens = false;
+          _selectedAllergenLabels = selectedLabels
+              .toSet(); // keep a cached set of labels for display
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          allergenError = "Could not load allergen data.";
+          isLoadingAllergens = false;
+        });
+      }
     }
   }
 
   void _handleAllergenChanged(String label, bool checked) {
-    final matching = _allAllergens.firstWhere((a) => a.label == label);
+    final id = _allergenLabelToId[label];
+    if (id == null) return;
 
     setState(() {
       if (checked) {
-        _selectedAllergenIds.add(matching.id);
+        _selectedAllergenIds.add(id);
+        _selectedAllergenLabels.add(label);
       } else {
-        _selectedAllergenIds.remove(matching.id);
+        _selectedAllergenIds.remove(id);
+        _selectedAllergenLabels.remove(label);
       }
     });
   }
@@ -229,11 +261,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
             setState(() => _viewState = ProfileViewState.verifyCurrentPassword);
           },
           isLoading: _isLoading,
-          allAllergenLabels: extractAllergenLabels(_allAllergens),
-          selectedAllergenLabels: _allAllergens
-              .where((a) => _selectedAllergenIds.contains(a.id))
-              .map((a) => a.label)
-              .toSet(),
+          allAllergenLabels: isLoadingAllergens
+              ? [] // show nothing until loaded
+              : allergenIdToLabel.values.toList(),
+          selectedAllergenLabels: isLoadingAllergens
+              ? {} // empty set until loaded
+              : _selectedAllergenLabels,
           onAllergenChanged: _handleAllergenChanged,
         );
       case ProfileViewState.verifyCurrentPassword:

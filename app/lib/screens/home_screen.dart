@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nomnom_safe/services/service_utils.dart';
 import 'package:nomnom_safe/models/restaurant.dart';
-import 'package:nomnom_safe/models/allergen.dart';
 import 'package:nomnom_safe/widgets/restaurant_card.dart';
 import 'package:nomnom_safe/services/allergen_service.dart';
 import 'package:nomnom_safe/services/restaurant_service.dart';
@@ -20,13 +20,18 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with RouteAware {
   // Service classes
-  final AllergenService _allergenService = AllergenService();
+  late AllergenService _allergenService;
   final RestaurantService _restaurantService = RestaurantService();
 
   // State variables
   bool isLoadingRestaurants = true; // controls loading spinner visibility
-  List<Allergen> availableAllergens = []; // allergen options from Firestore
-  List<Allergen> selectedAllergens = []; // currently selected allergens
+  Map<String, String> allergenIdToLabel = {};
+  Map<String, String> _allergenLabelToId = {};
+  Set<String> _selectedAllergenIds =
+      {}; // store IDs instead of Allergen objects
+  Set<String> _selectedAllergenLabels = {}; // cached labels for display
+  bool isLoadingAllergens = true;
+  String? allergenError;
   List<Restaurant> unfilteredRestaurants = []; // all restaurants from Firestore
   List<Restaurant> restaurantList = []; // restaurants to be displayed
   List<String> selectedCuisines = [];
@@ -36,14 +41,18 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   void didChangeDependencies() {
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+    _allergenService = getAllergenService(context);
+
+    if (isLoadingAllergens) {
+      _fetchAllergens();
+    }
   }
 
   @override
   void initState() {
     super.initState();
 
-    // Load allergens when the widget is first built
-    _fetchAllergens(); // triggers the async fetch
+    // Load restaurants when the widget is first built
     _fetchUnfilteredRestaurants();
   }
 
@@ -55,36 +64,53 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   @override
   void didPopNext() {
-    // User returned from EditProfileScreen
+    // User returned from ProfileScreen
     _fetchAllergens(); // refresh selection
   }
 
   /* Fetch allergen labels and update the state if the widget is still mounted */
-  void _fetchAllergens() async {
-    final allergens = await _allergenService.getAllergens();
-    if (mounted) {
-      setState(() {
-        availableAllergens = allergens;
-      });
-      _applyUserAllergensIfLoggedIn(); // apply user's allergens
+  Future<void> _fetchAllergens() async {
+    try {
+      final idToLabel = await _allergenService.getAllergenIdToLabelMap();
+      final labelToId = await _allergenService.getAllergenLabelToIdMap();
+      final selectedLabels = await _allergenService.idsToLabels(
+        _selectedAllergenIds.toList(),
+      );
+
+      if (mounted) {
+        setState(() {
+          allergenIdToLabel = idToLabel;
+          _allergenLabelToId = labelToId;
+          isLoadingAllergens = false;
+          _selectedAllergenLabels = selectedLabels.toSet();
+        });
+      }
+      _applyUserAllergensIfLoggedIn();
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          allergenError = "Error loading allergens.";
+          isLoadingAllergens = false;
+        });
+      }
     }
   }
 
-  void _applyUserAllergensIfLoggedIn() {
+  void _applyUserAllergensIfLoggedIn() async {
     final user = AuthService().currentUser;
     if (user == null) {
       return;
     }
 
-    final userAllergenIds = user.allergies;
+    final userAllergenIds = user.allergies.toSet();
 
-    final matchedAllergens = availableAllergens
-        .where((a) => userAllergenIds.contains(a.id))
-        .toList();
-
-    if (matchedAllergens.isNotEmpty) {
+    if (userAllergenIds.isNotEmpty) {
+      final labels = await _allergenService.idsToLabels(
+        userAllergenIds.toList(),
+      );
       setState(() {
-        selectedAllergens = matchedAllergens;
+        _selectedAllergenIds = userAllergenIds;
+        _selectedAllergenLabels = labels.toSet();
       });
       _applyAllergenFilter();
     }
@@ -125,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   /* Apply the allergen filter to the restaurant list */
   Future<void> _applyAllergenFilter() async {
-    if (selectedAllergens.isEmpty) {
+    if (_selectedAllergenIds.isEmpty) {
       setState(() {
         restaurantList = unfilteredRestaurants;
         _extractAvailableCuisines();
@@ -137,9 +163,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
       isLoadingRestaurants = true;
     });
 
-    final selectedAllergenIds = selectedAllergens.map((a) => a.id).toList();
     final filteredRestaurants = await _restaurantService
-        .filterRestaurantsFromList(unfilteredRestaurants, selectedAllergenIds);
+        .filterRestaurantsFromList(
+          unfilteredRestaurants,
+          _selectedAllergenIds.toList(),
+        );
 
     if (mounted) {
       setState(() {
@@ -161,25 +189,34 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
             children: [
               // Allergen Filter
               Expanded(
-                child: availableAllergens.isEmpty
+                child: isLoadingAllergens
                     ? // Show a loading spinner if allergens haven’t loaded yet
                       Center(child: CircularProgressIndicator())
+                    : allergenError != null
+                    ? Text(
+                        allergenError!,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      )
                     : // Show the allergen filter widget once allergens are loaded
                       FilterModal(
                         buttonLabel: 'Allergens',
                         title: 'Filter by Allergen',
-                        options: availableAllergens
-                            .map((a) => a.label)
-                            .toList(),
-                        selectedOptions: selectedAllergens
-                            .map((a) => a.label)
+                        options: allergenIdToLabel.values.toList(),
+                        selectedOptions: _selectedAllergenIds
+                            .map((id) => allergenIdToLabel[id] ?? id)
                             .toList(),
                         onChanged: (selectedLabels) {
-                          final matched = availableAllergens
-                              .where((a) => selectedLabels.contains(a.label))
-                              .toList();
+                          final matchedIds = selectedLabels
+                              .map((label) => _allergenLabelToId[label])
+                              .where((id) => id != null)
+                              .cast<String>()
+                              .toSet();
+
                           setState(() {
-                            selectedAllergens = matched;
+                            _selectedAllergenIds = matchedIds;
+                            _selectedAllergenLabels = selectedLabels.toSet();
                           });
                           _applyAllergenFilter();
                         },
@@ -187,7 +224,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
               ),
               const SizedBox(width: 12), // spacing between filters
               // Cuisine Filter
-              if (!(selectedAllergens.isNotEmpty && restaurantList.isEmpty) &&
+              if (!(_selectedAllergenIds.isNotEmpty &&
+                      restaurantList.isEmpty) &&
                   availableCuisines.isNotEmpty)
                 Expanded(
                   child: FilterModal(
@@ -201,13 +239,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
             ],
           ),
         ),
-        if (selectedAllergens.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-            child: Text(
-              "The following restaurants offer at least one menu item that doesn't contain ${formatAllergenList(extractAllergenLabels(selectedAllergens), "or")}:",
-            ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+          child: Text(
+            _selectedAllergenIds.isNotEmpty
+                ? "The following restaurants offer at least one menu item that doesn't contain ${formatAllergenList(_selectedAllergenLabels.toList(), "or")}:"
+                : "No allergens selected.",
           ),
+        ),
         // Make the restaurant list take up remaining space
         Expanded(
           child: isLoadingRestaurants

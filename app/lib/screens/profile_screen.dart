@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:nomnom_safe/services/allergen_service.dart';
 import 'package:provider/provider.dart';
+import 'package:nomnom_safe/services/allergen_service.dart';
 import 'package:nomnom_safe/providers/auth_state_provider.dart';
 import 'package:nomnom_safe/nav/route_tracker.dart';
 import 'package:nomnom_safe/nav/route_constants.dart';
 import 'package:nomnom_safe/nav/nav_utils.dart';
+import 'package:nomnom_safe/services/service_utils.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -14,12 +15,22 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
-  late final AllergenService _allergenService;
+  late AllergenService _allergenService;
+
+  Map<String, String> allergenIdToLabel = {};
+  Set<String> _selectedAllergenLabels = {};
+  bool isLoadingAllergens = true;
+  String? allergenError;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+    _allergenService = getAllergenService(context);
+
+    if (allergenIdToLabel.isEmpty && isLoadingAllergens) {
+      _fetchAllergens();
+    }
   }
 
   @override
@@ -44,7 +55,61 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
   @override
   void initState() {
     super.initState();
-    _allergenService = AllergenService();
+  }
+
+  Future<void> _fetchAllergens() async {
+    try {
+      final idToLabel = await _allergenService.getAllergenIdToLabelMap();
+      final user = context.read<AuthStateProvider>().currentUser;
+      final selectedLabels = user != null
+          ? await _allergenService.idsToLabels(user.allergies)
+          : <String>[];
+
+      if (mounted) {
+        setState(() {
+          allergenIdToLabel = idToLabel;
+          _selectedAllergenLabels = selectedLabels.toSet();
+          isLoadingAllergens = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          allergenError = "Error loading allergens.";
+          isLoadingAllergens = false;
+        });
+      }
+    }
+  }
+
+  Widget _buildAllergenSection() {
+    if (isLoadingAllergens) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (allergenError != null) {
+      return Text(
+        '$allergenError',
+        style: TextStyle(color: Theme.of(context).colorScheme.error),
+      );
+    }
+    if (_selectedAllergenLabels.isEmpty) {
+      return Text(
+        'No allergens selected',
+        style: Theme.of(
+          context,
+        ).textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic),
+      );
+    }
+    return Wrap(
+      spacing: 8,
+      children: [
+        for (final label in _selectedAllergenLabels)
+          Chip(
+            label: Text(label),
+            onDeleted: null, // read-only
+          ),
+      ],
+    );
   }
 
   @override
@@ -93,44 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
-          if (user.allergies.isEmpty)
-            Text(
-              'No allergens selected',
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic),
-            )
-          else
-            FutureBuilder<Map<String, String>>(
-              future: _allergenService.getAllergenIdToLabelMap(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (snapshot.hasError) {
-                  return Text(
-                    'Error loading allergens',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                  );
-                }
-
-                final allergenMap = snapshot.data ?? {};
-
-                return Wrap(
-                  spacing: 8,
-                  children: [
-                    for (final allergenId in user.allergies)
-                      Chip(
-                        label: Text(allergenMap[allergenId] ?? allergenId),
-                        onDeleted: null, // Read-only display
-                      ),
-                  ],
-                );
-              },
-            ),
+          _buildAllergenSection(),
           const SizedBox(height: 32),
           // Edit button
           ElevatedButton(
@@ -184,7 +212,6 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
                   ],
                 ),
               );
-
               if (confirmed == true) {
                 final authStateProvider = context.read<AuthStateProvider>();
 
@@ -200,9 +227,9 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
                     );
                   }
                 } catch (e) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(e.toString())));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Account deletion failed.")),
+                  );
                 }
               }
             },
