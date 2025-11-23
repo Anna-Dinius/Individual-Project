@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:nomnom_safe/utils/auth_utils.dart';
 import 'package:nomnom_safe/widgets/text_form_field_with_controller.dart';
-import 'package:nomnom_safe/navigation/route_tracker.dart';
+import 'package:nomnom_safe/nav/route_tracker.dart';
 import 'package:nomnom_safe/widgets/password_field.dart';
-import 'package:nomnom_safe/navigation/route_constants.dart';
+import 'package:nomnom_safe/nav/route_constants.dart';
 import 'package:nomnom_safe/providers/auth_state_provider.dart';
-import 'package:nomnom_safe/navigation/nav_utils.dart';
+import 'package:nomnom_safe/nav/nav_utils.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});

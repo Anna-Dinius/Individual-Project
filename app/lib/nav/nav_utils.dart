@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nomnom_safe/navigation/nav_destination.dart';
+import 'package:nomnom_safe/nav/nav_destination.dart';
 
 void navigateIfNotCurrent(
   BuildContext context,

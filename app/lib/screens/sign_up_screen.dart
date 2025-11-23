@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:nomnom_safe/providers/auth_state_provider.dart';
-import 'package:nomnom_safe/navigation/nav_utils.dart';
-import 'package:nomnom_safe/navigation/route_tracker.dart';
+import 'package:nomnom_safe/nav/nav_utils.dart';
+import 'package:nomnom_safe/nav/route_tracker.dart';
 import 'package:nomnom_safe/views/sign_up_account_view.dart';
 import 'package:nomnom_safe/views/sign_up_allergen_view.dart';
-import 'package:nomnom_safe/navigation/route_constants.dart';
+import 'package:nomnom_safe/nav/route_constants.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});

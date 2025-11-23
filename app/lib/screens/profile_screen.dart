@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:nomnom_safe/services/allergen_service.dart';
 import 'package:provider/provider.dart';
 import 'package:nomnom_safe/providers/auth_state_provider.dart';
-import 'package:nomnom_safe/navigation/route_tracker.dart';
-import 'package:nomnom_safe/navigation/route_constants.dart';
-import 'package:nomnom_safe/navigation/nav_utils.dart';
+import 'package:nomnom_safe/nav/route_tracker.dart';
+import 'package:nomnom_safe/nav/route_constants.dart';
+import 'package:nomnom_safe/nav/nav_utils.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

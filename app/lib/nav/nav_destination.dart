@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nomnom_safe/navigation/route_constants.dart';
+import 'package:nomnom_safe/nav/route_constants.dart';
 
 class NavDestination {
   final String route;

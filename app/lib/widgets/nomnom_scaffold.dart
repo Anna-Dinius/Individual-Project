@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:nomnom_safe/providers/auth_state_provider.dart';
-import 'package:nomnom_safe/navigation/nav_utils.dart';
-import 'package:nomnom_safe/navigation/route_constants.dart';
-import 'package:nomnom_safe/navigation/nav_destination.dart';
+import 'package:nomnom_safe/nav/nav_utils.dart';
+import 'package:nomnom_safe/nav/route_constants.dart';
+import 'package:nomnom_safe/nav/nav_destination.dart';
 
 class NomNomScaffold extends StatelessWidget {
   final Widget body;

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nomnom_safe/models/restaurant.dart';
 import 'package:nomnom_safe/models/menu_item.dart';
-import 'package:nomnom_safe/navigation/nav_utils.dart';
+import 'package:nomnom_safe/nav/nav_utils.dart';
 import 'package:nomnom_safe/widgets/filter_modal.dart';
 import 'package:nomnom_safe/models/allergen.dart';
 import 'package:nomnom_safe/services/allergen_service.dart';
 import 'package:nomnom_safe/services/menu_service.dart';
 import 'package:nomnom_safe/models/menu.dart';
-import 'package:nomnom_safe/navigation/route_constants.dart';
+import 'package:nomnom_safe/nav/route_constants.dart';
 
 class MenuScreen extends StatefulWidget {
   final Restaurant restaurant;

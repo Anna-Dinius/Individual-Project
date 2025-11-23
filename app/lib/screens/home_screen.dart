@@ -8,7 +8,7 @@ import 'package:nomnom_safe/utils/allergen_utils.dart';
 import 'package:nomnom_safe/widgets/filter_modal.dart';
 import 'package:nomnom_safe/utils/restaurant_utils.dart';
 import 'package:nomnom_safe/services/auth_service.dart';
-import 'package:nomnom_safe/navigation/route_tracker.dart';
+import 'package:nomnom_safe/nav/route_tracker.dart';
 
 /* Main screen displaying allergen filters and a list of restaurants */
 class HomeScreen extends StatefulWidget {

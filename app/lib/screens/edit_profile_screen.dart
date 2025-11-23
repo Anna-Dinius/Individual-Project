@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:nomnom_safe/utils/allergen_utils.dart';
 import 'package:nomnom_safe/providers/auth_state_provider.dart';
-import 'package:nomnom_safe/navigation/route_tracker.dart';
+import 'package:nomnom_safe/nav/route_tracker.dart';
 import 'package:nomnom_safe/views/edit_profile_view.dart';
 import 'package:nomnom_safe/views/verify_current_password_view.dart';
 import 'package:nomnom_safe/views/update_password_view.dart';
 import 'package:nomnom_safe/controllers/edit_profile_controller.dart';
 import 'package:nomnom_safe/services/allergen_service.dart';
 import 'package:nomnom_safe/models/allergen.dart';
-import 'package:nomnom_safe/navigation/route_constants.dart';
-import 'package:nomnom_safe/navigation/nav_utils.dart';
+import 'package:nomnom_safe/nav/route_constants.dart';
+import 'package:nomnom_safe/nav/nav_utils.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});

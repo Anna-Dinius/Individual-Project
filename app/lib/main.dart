@@ -12,10 +12,10 @@ import 'screens/edit_profile_screen.dart';
 import 'theme/nomnom_theme.dart';
 import 'models/restaurant.dart';
 import 'providers/auth_state_provider.dart';
-import 'navigation/route_tracker.dart';
+import 'nav/route_tracker.dart';
 import 'widgets/nomnom_appbar.dart';
 import 'widgets/nomnom_scaffold.dart';
-import 'navigation/route_constants.dart';
+import 'nav/route_constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
