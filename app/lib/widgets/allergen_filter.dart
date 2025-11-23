@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nomnom_safe/models/allergen.dart';
 import 'package:nomnom_safe/widgets/allergen_chip.dart';
 
-/* Widget to display a list of allergen filter chips and a Clear button */
+/// Widget to display a list of allergen filter chips and a Clear button
 class AllergenFilter extends StatelessWidget {
   final List<Allergen> availableAllergens; // all allergen options
   final List<Allergen> selectedAllergens; // currently selected allergens

@@ -25,7 +25,7 @@ class Restaurant {
     this.menu,
   });
 
-  /* Create a Restaurant object from JSON data */
+  /// Create a Restaurant object from JSON data
   factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
     id: json['id'],
     name: json['name'],
@@ -39,7 +39,7 @@ class Restaurant {
     menu: json['menu'] != null ? Menu.fromJson(json['menu']) : null,
   );
 
-  /* Convert a Restaurant object to JSON data */
+  /// Convert a Restaurant object to JSON data
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
@@ -53,10 +53,10 @@ class Restaurant {
     'menu': menu?.toJson(),
   };
 
-  /* Check if the restaurant has a website */
+  /// Check if the restaurant has a website
   bool get hasWebsite => website.trim().isNotEmpty;
 
-  /* Get today's operating hours based on the current weekday */
+  /// Get today's operating hours based on the current weekday
   String get todayHours {
     final weekday = DateTime.now().weekday;
     return hours[weekday - 1]; // Dart: 1 = Monday, 7 = Sunday

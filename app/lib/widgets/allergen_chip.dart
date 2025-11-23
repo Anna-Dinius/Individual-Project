@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nomnom_safe/models/allergen.dart';
 
-/* Widget to display an allergen as a selectable chip */
+/// Widget to display an allergen as a selectable chip
 class AllergenChip extends StatelessWidget {
   final Allergen allergen;
   final bool isSelected;

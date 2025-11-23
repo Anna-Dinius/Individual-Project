@@ -1,11 +1,11 @@
 import 'package:nomnom_safe/models/allergen.dart';
 
-/* Extracts allergen labels from a list of Allergen objects */
+/// Extracts allergen labels from a list of Allergen objects
 List<String> extractAllergenLabels(List<Allergen> allergens) {
   return allergens.map((allergen) => allergen.label).toList();
 }
 
-/* Formats a list of allergen labels into a human-readable string */
+/// Formats a list of allergen labels into a human-readable string
 String formatAllergenList(List<String> allergens, String conjunction) {
   if (allergens.isEmpty) return '(no allergens selected)';
   if (allergens.length == 1) return allergens.first.toLowerCase();

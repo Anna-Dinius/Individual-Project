@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'theme_constants.dart';
 
-/* Nomnom theme */
+/// Nomnom theme
 
 final _baseScheme = ColorScheme.fromSeed(seedColor: Color(0xFF034c53));
 

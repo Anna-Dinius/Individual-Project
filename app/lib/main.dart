@@ -41,7 +41,7 @@ void main() async {
   );
 }
 
-/* Root widget of the NomNom Safe application */
+/// Root widget of the NomNom Safe application
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

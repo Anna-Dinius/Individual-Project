@@ -4,7 +4,7 @@ class Allergen {
 
   Allergen({required this.id, required this.label});
 
-  /* Create an Allergen object from JSON data */
+  /// Create an Allergen object from JSON data
   factory Allergen.fromJson(String id, Map<String, dynamic> json) {
     return Allergen(id: id, label: json['label']);
   }

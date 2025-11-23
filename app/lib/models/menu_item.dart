@@ -15,7 +15,7 @@ class MenuItem {
     required this.menuId,
   });
 
-  /* Create a MenuItem object from JSON data */
+  /// Create a MenuItem object from JSON data
   factory MenuItem.fromJson(Map<String, dynamic> json) => MenuItem(
     id: json['id'],
     name: json['name'],
@@ -25,7 +25,7 @@ class MenuItem {
     menuId: json['menu_id'],
   );
 
-  /* Convert a MenuItem object to JSON data */
+  /// Convert a MenuItem object to JSON data
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,

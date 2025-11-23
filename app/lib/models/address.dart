@@ -13,7 +13,7 @@ class Address {
     required this.zipCode,
   });
 
-  /* Create an Address object from JSON data */
+  /// Create an Address object from JSON data
   factory Address.fromJson(Map<String, dynamic> json) => Address(
     id: json['id'],
     street: json['street'],
@@ -22,7 +22,7 @@ class Address {
     zipCode: json['zipCode'],
   );
 
-  /* Convert an Address object to JSON data */
+  /// Convert an Address object to JSON data
   Map<String, dynamic> toJson() => {
     'id': id,
     'street': street,
@@ -31,6 +31,6 @@ class Address {
     'zipCode': zipCode,
   };
 
-  /* Get the full address as a single formatted string */
+  /// Get the full address as a single formatted string
   String get full => '$street, $city, $state $zipCode';
 }

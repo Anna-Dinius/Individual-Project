@@ -1,14 +1,14 @@
 import 'package:nomnom_safe/models/restaurant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/* Service class to handle restaurant-related Firestore operations */
+/// Service class to handle restaurant-related Firestore operations
 class RestaurantService {
   final FirebaseFirestore _firestore;
 
   RestaurantService([FirebaseFirestore? firestore])
     : _firestore = firestore ?? FirebaseFirestore.instance;
 
-  /* Fetch all restaurants from Firestore */
+  /// Fetch all restaurants from Firestore
   Future<List<Restaurant>> getAllRestaurants() async {
     // Query Firestore to get all restaurant documents using injected instance.
     final snapshot = await _firestore.collection('restaurants').get();
@@ -22,7 +22,7 @@ class RestaurantService {
     return allRestaurants;
   }
 
-  /* Filter restaurants based on selected allergen ids */
+  /// Filter restaurants based on selected allergen ids
   Future<List<Restaurant>> filterRestaurantsFromList(
     List<Restaurant> allRestaurants,
     List<String> selectedAllergenIds,

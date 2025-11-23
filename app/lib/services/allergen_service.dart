@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nomnom_safe/models/allergen.dart';
 
-/* Service class to handle allergen-related Firestore operations */
+/// Service class to handle allergen-related Firestore operations
 class AllergenService {
   final FirebaseFirestore _firestore;
 
@@ -12,7 +12,7 @@ class AllergenService {
   AllergenService([FirebaseFirestore? firestore])
     : _firestore = firestore ?? FirebaseFirestore.instance;
 
-  /* Get list of Allergen objects */
+  /// Get list of Allergen objects
   Future<List<Allergen>> getAllergens() async {
     if (_cachedAllergens != null) return _cachedAllergens!;
 
@@ -32,7 +32,7 @@ class AllergenService {
     return allergens;
   }
 
-  /* --- Helper functions --- */
+  /// --- Helper functions ---
   Map<String, String> _buildIdToLabelMap(List<Allergen> allergens) => {
     for (var a in allergens) a.id: a.label,
   };
@@ -47,8 +47,8 @@ class AllergenService {
   List<String> _extractIds(List<Allergen> allergens) =>
       allergens.map((a) => a.id).toList();
 
-  /* --- Public API --- */
-  /* Get map of allergen ids to allergen labels */
+  /// --- Public API ---
+  /// Get map of allergen ids to allergen labels
   Future<Map<String, String>> getAllergenIdToLabelMap() async {
     if (_cachedIdToLabel != null) return _cachedIdToLabel!;
 
@@ -56,7 +56,7 @@ class AllergenService {
     return _cachedIdToLabel!;
   }
 
-  /* Get map of allergen labels to allergen ids */
+  /// Get map of allergen labels to allergen ids
   Future<Map<String, String>> getAllergenLabelToIdMap() async {
     if (_cachedLabelToId != null) return _cachedLabelToId!;
 
@@ -64,7 +64,7 @@ class AllergenService {
     return _buildLabelToIdMap(allergens);
   }
 
-  /* Get list of allergen labels */
+  /// Get list of allergen labels
   Future<List<String>> getAllergenLabels() async {
     if (_cachedAllergens != null) return _extractLabels(_cachedAllergens!);
 
@@ -72,7 +72,7 @@ class AllergenService {
     return _extractLabels(allergens);
   }
 
-  /* Get list of allergen ids */
+  /// Get list of allergen ids
   Future<List<String>> getAllergenIds() async {
     if (_cachedAllergens != null) return _extractIds(_cachedAllergens!);
 

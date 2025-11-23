@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/link.dart';
 import 'package:nomnom_safe/theme/theme_constants.dart';
 
-/* A widget that displays a clickable link to a restaurant's website */
+/// A widget that displays a clickable link to a restaurant's website
 class RestaurantLink extends StatelessWidget {
   final String url; // URL provided by restaurant
   final String? label; // Optional label to display instead of URL
@@ -15,7 +15,7 @@ class RestaurantLink extends StatelessWidget {
     this.padding,
   });
 
-  /* Normalize URL to ensure it has a scheme */
+  /// Normalize URL to ensure it has a scheme
   Uri _normalizeUrl(String url) {
     final hasScheme = url.startsWith(RegExp(r'https?://'));
     return Uri.parse(hasScheme ? url : 'https://$url');

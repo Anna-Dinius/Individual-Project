@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/* NomNom Theme Constants */
+/// NomNom Theme Constants
 class NomNomThemeConstants {
   static const Color linkBlue = Colors.blue;
   static const double linkIconSize = 16;

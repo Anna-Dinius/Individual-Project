@@ -10,7 +10,7 @@ import 'package:nomnom_safe/utils/restaurant_utils.dart';
 import 'package:nomnom_safe/services/auth_service.dart';
 import 'package:nomnom_safe/nav/route_tracker.dart';
 
-/* Main screen displaying allergen filters and a list of restaurants */
+/// Main screen displaying allergen filters and a list of restaurants
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     _fetchAllergens(); // refresh selection
   }
 
-  /* Fetch allergen labels and update the state if the widget is still mounted */
+  /// Fetch allergen labels and update the state if the widget is still mounted
   Future<void> _fetchAllergens() async {
     try {
       final idToLabel = await _allergenService.getAllergenIdToLabelMap();
@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     }
   }
 
-  /* Fetch all restaurants without any filters */
+  /// Fetch all restaurants without any filters
   void _fetchUnfilteredRestaurants() async {
     setState(() {
       isLoadingRestaurants = true;
@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     });
   }
 
-  /* Apply the allergen filter to the restaurant list */
+  /// Apply the allergen filter to the restaurant list
   Future<void> _applyAllergenFilter() async {
     if (_selectedAllergenIds.isEmpty) {
       setState(() {

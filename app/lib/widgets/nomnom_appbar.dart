@@ -4,7 +4,7 @@ import 'package:nomnom_safe/providers/auth_state_provider.dart';
 import 'package:nomnom_safe/nav/nav_utils.dart';
 import 'package:nomnom_safe/nav/route_constants.dart';
 
-/* Custom AppBar widget for consistency across the app */
+/// Custom AppBar widget for consistency across the app
 class NomnomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 

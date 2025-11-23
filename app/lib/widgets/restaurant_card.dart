@@ -3,8 +3,8 @@ import 'package:nomnom_safe/models/restaurant.dart';
 import 'package:nomnom_safe/nav/nav_utils.dart';
 import 'package:nomnom_safe/nav/route_constants.dart';
 
-/* A card widget that displays basic information about a restaurant.
-   Clicking the card navigates to the menu screen for the restaurant. */
+/// A card widget that displays basic information about a restaurant.
+/// Clicking the card navigates to the menu screen for the restaurant.
 class RestaurantCard extends StatefulWidget {
   final Restaurant restaurant;
 

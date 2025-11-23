@@ -7,7 +7,7 @@ class Menu {
 
   Menu({required this.id, required this.restaurantId, required this.items});
 
-  /* Create a Menu object from JSON data */
+  /// Create a Menu object from JSON data
   factory Menu.fromJson(Map<String, dynamic> json) {
     final List<dynamic> itemsJson = json['items'] ?? [];
     return Menu(
@@ -17,7 +17,7 @@ class Menu {
     );
   }
 
-  /* Convert a Menu object to JSON data */
+  /// Convert a Menu object to JSON data
   Map<String, dynamic> toJson() => {
     'id': id,
     'restaurant_id': restaurantId,

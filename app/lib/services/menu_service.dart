@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nomnom_safe/models/menu.dart';
 import 'package:nomnom_safe/models/menu_item.dart';
 
-/* Service class to handle menu-related Firestore operations */
+/// Service class to handle menu-related Firestore operations
 class MenuService {
   final FirebaseFirestore _firestore;
 
   MenuService([FirebaseFirestore? firestore])
     : _firestore = firestore ?? FirebaseFirestore.instance;
 
-  /* Fetch a menu by restaurant ID */
+  /// Fetch a menu by restaurant ID
   Future<Menu?> getMenuByRestaurantId(String restaurantId) async {
     try {
       final menuSnapshot = await _firestore
@@ -27,7 +27,7 @@ class MenuService {
     }
   }
 
-  /* Fetch menu items by menu ID */
+  /// Fetch menu items by menu ID
   Future<List<MenuItem>> getMenuItems(String menuId) async {
     try {
       final itemsSnapshot = await _firestore

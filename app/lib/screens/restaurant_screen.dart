@@ -5,7 +5,7 @@ import 'package:nomnom_safe/widgets/restaurant_link.dart';
 import 'package:nomnom_safe/nav/nav_utils.dart';
 import 'package:nomnom_safe/nav/route_constants.dart';
 
-/* Screen displaying detailed information about a specific restaurant */
+/// Screen displaying detailed information about a specific restaurant
 class RestaurantScreen extends StatefulWidget {
   final Restaurant restaurant;
 
@@ -25,7 +25,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     _loadAddress();
   }
 
-  /* Load the restaurant's address from Firestore */
+  /// Load the restaurant's address from Firestore
   void _loadAddress() async {
     final result = await _addressService.getRestaurantAddress(
       widget.restaurant.addressId,
@@ -37,7 +37,7 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
     }
   }
 
-  /* Build the disclaimers section */
+  /// Build the disclaimers section
   Widget _buildDisclaimers(BuildContext context) {
     final disclaimers = widget.restaurant.disclaimers;
     if (disclaimers.isEmpty) return const SizedBox.shrink();

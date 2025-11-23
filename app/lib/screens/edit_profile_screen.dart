@@ -112,7 +112,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> with RouteAware {
     _confirmPasswordController = TextEditingController();
   }
 
-  /* Fetch allergen labels and update the state if the widget is still mounted */
+  /// Fetch allergen labels and update the state if the widget is still mounted
   Future<void> _fetchAllergens() async {
     try {
       final idToLabel = await _allergenService.getAllergenIdToLabelMap();

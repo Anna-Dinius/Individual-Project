@@ -13,7 +13,7 @@ class User {
     this.allergies = const [],
   });
 
-  /* Create a User object from JSON data */
+  /// Create a User object from JSON data
   factory User.fromJson(Map<String, dynamic> json) => User(
     id: json['id'],
     firstName: json['first_name'],
@@ -22,7 +22,7 @@ class User {
     allergies: List<String>.from(json['allergies'] ?? []),
   );
 
-  /* Convert a User object to JSON data */
+  /// Convert a User object to JSON data
   Map<String, dynamic> toJson() => {
     'id': id,
     'first_name': firstName,
@@ -31,6 +31,6 @@ class User {
     'allergies': allergies,
   };
 
-  /* Get full name */
+  /// Get full name
   String get fullName => '$firstName $lastName';
 }

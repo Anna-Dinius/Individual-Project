@@ -58,7 +58,7 @@ class _MenuScreenState extends State<MenuScreen> {
     _fetchMenuItems();
   }
 
-  /* Fetch menu and menu items for the restaurant */
+  /// Fetch menu and menu items for the restaurant
   Future<void> _fetchMenuItems() async {
     setState(() {
       isLoadingMenu = true;
