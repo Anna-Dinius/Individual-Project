@@ -108,12 +108,12 @@ title: Individual Project Week 8 Progress Report - Anna Dinius
 - 3/5 sprint 2 _epic requirements_ completed
   - 60% total
   - 20% per week
-  - ~7% per day
+  - ~3% per day
 - 9/15 sprint 2 _sub requirements_ completed
   - 60% total
   - 20% per week
-  - ~7% per day
+  - ~3% per day
 - 12/20 sprint 2 _total requirements_ completed
   - 60% total
   - 20% per week
-  - ~7% per day
+  - ~3% per day
