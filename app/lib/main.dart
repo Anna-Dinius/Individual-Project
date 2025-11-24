@@ -18,6 +18,7 @@ import 'widgets/nomnom_scaffold.dart';
 import 'nav/route_constants.dart';
 import 'services/allergen_service.dart';
 import 'controllers/edit_profile_controller.dart';
+import 'controllers/profile_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -111,7 +112,13 @@ class MyApp extends StatelessWidget {
               builder: (context) => NomNomScaffold(
                 currentIndex: 5,
                 appBar: NomnomAppBar(),
-                body: ProfileScreen(),
+                body: ChangeNotifierProvider(
+                  create: (_) => ProfileController(
+                    authProvider: context.read<AuthStateProvider>(),
+                    allergenService: context.read<AllergenService>(),
+                  ),
+                  child: ProfileScreen(),
+                ),
               ),
               settings: settings,
             );
