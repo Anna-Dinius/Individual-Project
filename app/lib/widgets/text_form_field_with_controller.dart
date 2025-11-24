@@ -33,7 +33,10 @@ class TextFormFieldWithController extends StatelessWidget {
       obscureText: obscureText,
       validator:
           validator ??
-          (value) => value == null || value.trim().isEmpty ? 'Required' : null,
+          (isRequired
+              ? (value) =>
+                    value == null || value.trim().isEmpty ? 'Required' : null
+              : null),
       decoration: InputDecoration(
         labelText: displayLabel,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),

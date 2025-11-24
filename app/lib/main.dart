@@ -17,6 +17,7 @@ import 'widgets/nomnom_appbar.dart';
 import 'widgets/nomnom_scaffold.dart';
 import 'nav/route_constants.dart';
 import 'services/allergen_service.dart';
+import 'controllers/edit_profile_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -119,7 +120,12 @@ class MyApp extends StatelessWidget {
               builder: (context) => NomNomScaffold(
                 currentIndex: 6,
                 appBar: NomnomAppBar(),
-                body: EditProfileScreen(),
+                body: ChangeNotifierProvider(
+                  create: (context) => EditProfileController(
+                    authProvider: context.read<AuthStateProvider>(),
+                  ),
+                  child: const EditProfileScreen(),
+                ),
               ),
               settings: settings,
             );

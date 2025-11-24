@@ -41,20 +41,24 @@ class AuthStateProvider extends ChangeNotifier {
   }
 
   /// Update profile and notify listeners
-  Future<void> updateUserProfile({
+  Future<String?> updateProfile({
     required String firstName,
     required String lastName,
     required String email,
     required String password,
+    required String confirmPassword,
     List<String>? allergies,
   }) async {
-    await _authService.updateUserProfile(
+    final error = await _authService.updateProfile(
       firstName: firstName,
       lastName: lastName,
       email: email,
+      password: password,
+      confirmPassword: confirmPassword,
       allergies: allergies,
     );
     notifyListeners();
+    return error;
   }
 
   Future<void> loadCurrentUser() async {
@@ -62,21 +66,30 @@ class AuthStateProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> reauthenticate(String password) async {
+  /// Verify current password
+  Future<bool> verifyPassword(String password) async {
     try {
-      return await _authService.reauthenticate(password);
+      return await _authService.verifyPassword(password);
     } catch (_) {
       return false;
     }
   }
 
-  Future<void> updatePassword(String newPassword) async {
-    await _authService.updatePassword(newPassword);
+  /// Update password with confirmation
+  Future<String?> updatePassword({
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    final error = await _authService.updatePassword(
+      newPassword: newPassword,
+      confirmPassword: confirmPassword,
+    );
     notifyListeners();
+    return error;
   }
 
   Future<void> deleteAccount({required String password}) async {
-    final success = await _authService.reauthenticate(password);
+    final success = await _authService.verifyPassword(password);
     if (!success) {
       throw Exception('Please log in again before deleting your account.');
     }

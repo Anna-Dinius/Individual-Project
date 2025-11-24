@@ -162,13 +162,25 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
           const SizedBox(height: 32),
           // Edit button
           ElevatedButton(
-            onPressed: () {
-              navigateIfNotCurrent(
+            onPressed: () async {
+              final success = await Navigator.of(
                 context,
-                AppRoutes.editProfile,
-                blockIfCurrent: [AppRoutes.editProfile],
-              );
+              ).pushNamed(AppRoutes.editProfile);
+
+              if (success == true && mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Profile updated successfully.'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+
+                // Refresh user data if needed
+                await context.read<AuthStateProvider>().loadCurrentUser();
+                setState(() {});
+              }
             },
+
             child: const Text('Edit Profile'),
           ),
           const SizedBox(height: 20),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nomnom_safe/utils/auth_utils.dart';
+import 'package:nomnom_safe/utils/form_validation_utils.dart';
 import 'package:nomnom_safe/nav/nav_utils.dart';
 import 'package:nomnom_safe/widgets/password_field.dart';
 import 'package:nomnom_safe/widgets/text_form_field_with_controller.dart';
@@ -81,7 +81,7 @@ class _SignUpAccountViewState extends State<SignUpAccountView> {
                 isRequired: true,
                 keyboardType: TextInputType.emailAddress,
                 enabled: !widget.isLoading,
-                validator: validateEmailFormat,
+                validator: FormValidators.email,
               ),
               const SizedBox(height: 16),
               PasswordField(
@@ -95,7 +95,7 @@ class _SignUpAccountViewState extends State<SignUpAccountView> {
                   });
                 },
                 enabled: !widget.isLoading,
-                validator: validatePasswordFormat,
+                validator: FormValidators.password,
               ),
               const SizedBox(height: 16),
               PasswordField(
@@ -109,7 +109,10 @@ class _SignUpAccountViewState extends State<SignUpAccountView> {
                   });
                 },
                 enabled: !widget.isLoading,
-                validator: validatePasswordFormat,
+                validator: (value) => FormValidators.confirmPassword(
+                  value,
+                  widget.passwordController.text,
+                ),
               ),
               const SizedBox(height: 32),
               ElevatedButton(
@@ -118,23 +121,17 @@ class _SignUpAccountViewState extends State<SignUpAccountView> {
                     : () {
                         final isValid =
                             widget.formKey.currentState?.validate() ?? false;
-                        final passwordsMatch = validatePasswordsMatch(
-                          widget.passwordController.text,
-                          widget.confirmPasswordController.text,
-                        );
 
-                        if (!passwordsMatch) {
+                        if (!isValid) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('Passwords do not match'),
+                              content: Text('Please fix the errors above.'),
                             ),
                           );
                           return;
                         }
 
-                        if (isValid) {
-                          widget.onNext();
-                        }
+                        widget.onNext();
                       },
                 child: const Text('Next: Select Allergens'),
               ),

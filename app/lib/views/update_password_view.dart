@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nomnom_safe/utils/auth_utils.dart';
+import 'package:nomnom_safe/utils/form_validation_utils.dart';
 import 'package:nomnom_safe/widgets/password_field.dart';
 
 class UpdatePasswordView extends StatelessWidget {
@@ -60,7 +60,7 @@ class UpdatePasswordView extends StatelessWidget {
             isVisible: isVisible,
             onToggleVisibility: onToggleVisibility,
             enabled: !isLoading,
-            validator: validatePasswordFormat,
+            validator: FormValidators.password,
           ),
           const SizedBox(height: 16),
           PasswordField(
@@ -70,7 +70,10 @@ class UpdatePasswordView extends StatelessWidget {
             isVisible: isVisible,
             onToggleVisibility: onToggleVisibility,
             enabled: !isLoading,
-            validator: validatePasswordFormat,
+            validator: (value) => FormValidators.confirmPassword(
+              value,
+              newPasswordController.text,
+            ),
           ),
           const SizedBox(height: 32),
           Row(
@@ -89,19 +92,14 @@ class UpdatePasswordView extends StatelessWidget {
                       : () {
                           final isValid =
                               formKey.currentState?.validate() ?? false;
-                          final passwordsMatch = validatePasswordsMatch(
-                            newPasswordController.text,
-                            confirmPasswordController.text,
-                          );
-
-                          if (!isValid || !passwordsMatch) {
-                            if (!passwordsMatch) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Passwords do not match'),
+                          if (!isValid) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Please correct the highlighted fields.',
                                 ),
-                              );
-                            }
+                              ),
+                            );
                             return;
                           }
 

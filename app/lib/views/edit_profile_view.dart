@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nomnom_safe/utils/form_validation_utils.dart';
 import 'package:nomnom_safe/widgets/text_form_field_with_controller.dart';
 import 'package:nomnom_safe/widgets/multi_select_checkbox_list.dart';
 
@@ -43,19 +44,20 @@ class EditProfileView extends StatelessWidget {
           TextFormFieldWithController(
             controller: firstNameController,
             label: 'First Name',
-            isRequired: false,
+            isRequired: true,
           ),
           const SizedBox(height: 16),
           TextFormFieldWithController(
             controller: lastNameController,
             label: 'Last Name',
-            isRequired: false,
+            isRequired: true,
           ),
           const SizedBox(height: 16),
           TextFormFieldWithController(
             controller: emailController,
             label: 'Email',
-            isRequired: false,
+            isRequired: true,
+            validator: FormValidators.email,
           ),
           const SizedBox(height: 24),
           Align(
@@ -73,7 +75,19 @@ class EditProfileView extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           ElevatedButton(
-            onPressed: isLoading ? null : onSave,
+            onPressed: isLoading
+                ? null
+                : () {
+                    if (formKey.currentState!.validate()) {
+                      onSave();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please fix the errors above.'),
+                        ),
+                      );
+                    }
+                  },
             child: const Text('Save Changes'),
           ),
           const SizedBox(height: 16),

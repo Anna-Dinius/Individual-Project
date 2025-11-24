@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:nomnom_safe/utils/auth_utils.dart';
+import 'package:nomnom_safe/utils/form_validation_utils.dart';
 import 'package:nomnom_safe/widgets/text_form_field_with_controller.dart';
 import 'package:nomnom_safe/nav/route_tracker.dart';
 import 'package:nomnom_safe/widgets/password_field.dart';
@@ -137,7 +137,7 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
                   isRequired: true,
                   keyboardType: TextInputType.emailAddress,
                   enabled: !_isLoading,
-                  validator: validateEmailFormat,
+                  validator: FormValidators.email,
                 ),
                 const SizedBox(height: 16),
                 PasswordField(
@@ -157,7 +157,25 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: _isLoading ? null : _handleSignIn,
+                      onPressed: _isLoading
+                          ? null
+                          : () {
+                              final isValid =
+                                  _formKey.currentState?.validate() ?? false;
+
+                              if (!isValid) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Please fix the errors above.',
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              _handleSignIn();
+                            },
                       child: _isLoading
                           ? const SizedBox(
                               height: 20,
