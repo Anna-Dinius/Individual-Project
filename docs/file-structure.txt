@@ -169,6 +169,12 @@ Individual-Project-Repo/
 │   ├── pubspec.yaml
 │   └── README.md
 ├── docs/
+│   ├── design/
+│   │   ├── nomnom_safe_architecture.md
+│   │   └── nomnom_safe_architecture.pdf
+│   ├── manuals/
+│   │   ├── nomnom_safe_user_manual.md
+│   │   └── nomnom_safe_user_manual.pdf
 │   ├── preliminary/
 │   ├── Progress Reports/
 │   │   ├── Sprint 1/
@@ -263,4 +269,5 @@ Individual-Project-Repo/
 │   └── update_file_tree.py
 ├── .firebaserc
 ├── firebase.json
+├── index.html
 └── README.md
