@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nomnom_safe/models/user.dart';
 import 'package:nomnom_safe/services/adapters/auth_adapter.dart';
 import 'package:nomnom_safe/services/adapters/firestore_adapter.dart';
@@ -23,6 +22,12 @@ class AuthService {
       firestore ?? FirebaseFirestoreAdapter(),
     );
     return _instance!;
+  }
+
+  /// Test helper: reset the singleton so tests can create a fresh instance
+  /// by calling the factory with test adapters.
+  static void clearInstanceForTests() {
+    _instance = null;
   }
 
   /// Get the currently logged-in user, or null if not authenticated
@@ -68,9 +73,7 @@ class AuthService {
       // extract uid robustly.
       final uid = userCredential is Map && userCredential['user'] != null
           ? userCredential['user'].uid
-          : (userCredential is dynamic && userCredential.user != null
-                ? userCredential.user.uid
-                : null);
+          : (userCredential.user?.uid);
 
       if (uid == null) return 'Error signing up.';
 
@@ -102,6 +105,10 @@ class AuthService {
 
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+
+      // After sign-in, load the current user profile
+      await loadCurrentUser();
+
       final fbUser = _auth.currentUser;
       final uid = fbUser?.uid;
       if (uid == null) return 'User profile not found';
