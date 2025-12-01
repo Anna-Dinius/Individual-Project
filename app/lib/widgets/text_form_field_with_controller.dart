@@ -9,6 +9,7 @@ class TextFormFieldWithController extends StatelessWidget {
   final bool obscureText;
   final bool isRequired;
   final Widget? suffixIcon;
+  final Key? fieldKey;
 
   const TextFormFieldWithController({
     super.key,
@@ -20,6 +21,7 @@ class TextFormFieldWithController extends StatelessWidget {
     this.obscureText = false,
     this.isRequired = false,
     this.suffixIcon,
+    this.fieldKey,
   });
 
   @override
@@ -27,6 +29,7 @@ class TextFormFieldWithController extends StatelessWidget {
     final displayLabel = isRequired ? '$label *' : label;
 
     return TextFormField(
+      key: fieldKey,
       controller: controller,
       enabled: enabled,
       keyboardType: keyboardType,

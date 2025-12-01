@@ -9,6 +9,7 @@ class PasswordField extends StatelessWidget {
   final bool enabled;
   final String? Function(String?)? validator;
   final bool isRequired;
+  final Key? fieldKey;
 
   const PasswordField({
     super.key,
@@ -19,11 +20,13 @@ class PasswordField extends StatelessWidget {
     required this.enabled,
     this.validator,
     this.isRequired = false,
+    this.fieldKey,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormFieldWithController(
+      fieldKey: fieldKey,
       controller: controller,
       obscureText: !isVisible,
       enabled: enabled,

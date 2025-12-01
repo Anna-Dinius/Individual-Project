@@ -42,18 +42,21 @@ class EditProfileView extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           TextFormFieldWithController(
+            fieldKey: const Key('firstNameField'),
             controller: firstNameController,
             label: 'First Name',
             isRequired: true,
           ),
           const SizedBox(height: 16),
           TextFormFieldWithController(
+            fieldKey: const Key('lastNameField'),
             controller: lastNameController,
             label: 'Last Name',
             isRequired: true,
           ),
           const SizedBox(height: 16),
           TextFormFieldWithController(
+            fieldKey: const Key('emailField'),
             controller: emailController,
             label: 'Email',
             isRequired: true,
