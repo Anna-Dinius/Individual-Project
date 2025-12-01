@@ -1,0 +1,87 @@
+// Variables
+$font-stack: 'Segoe UI', sans-serif;
+$bg-light: #f7f7f7;
+$bg-footer: #f8f9fa;
+$text-color: #333;
+$text-muted: #666;
+$primary-color: #008080;
+$card-shadow: 8px 8px 12px rgba(0, 0, 0, 0.8);
+
+// Global styles
+html,
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: $font-stack;
+	background-color: $bg-light;
+	color: $text-color;
+	display: flex;
+	flex-direction: column;
+}
+
+html {
+	margin-top: 56px;
+}
+
+main {
+	flex: 1;
+	padding: 2rem 1rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+hr {
+	width: 80%;
+	margin: 0 auto;
+}
+
+// Navbar
+.navbar {
+	background-color: $primary-color;
+	position: fixed;
+	width: 100%;
+	top: 0;
+
+	&-brand {
+		color: #fff !important;
+	}
+}
+
+.nav-link {
+	color: #fff !important;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+// Cards
+.card {
+	box-shadow: $card-shadow;
+	border-radius: 0.5rem;
+
+	&-body {
+		padding: 30px;
+	}
+
+	&-title {
+		color: $primary-color;
+		margin-bottom: 20px;
+		font-size: 23px;
+	}
+
+	&-text {
+		font-size: 0.95rem;
+	}
+}
+
+// Footer
+footer {
+	background-color: $bg-footer;
+	padding: 1rem;
+	text-align: center;
+	font-size: 0.9rem;
+	color: $text-muted;
+}

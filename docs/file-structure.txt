@@ -1,13 +1,22 @@
 Individual-Project-Repo/
 ├── app/
 │   ├── lib/
+│   │   ├── controllers/
+│   │   │   ├── edit_profile_controller.dart
+│   │   │   └── profile_controller.dart
 │   │   ├── models/
 │   │   │   ├── address.dart
 │   │   │   ├── allergen.dart
 │   │   │   ├── menu.dart
 │   │   │   ├── menu_item.dart
+│   │   │   ├── profile_form_model.dart
 │   │   │   ├── restaurant.dart
 │   │   │   └── user.dart
+│   │   ├── nav/
+│   │   │   ├── nav_destination.dart
+│   │   │   ├── nav_utils.dart
+│   │   │   ├── route_constants.dart
+│   │   │   └── route_tracker.dart
 │   │   ├── providers/
 │   │   │   └── auth_state_provider.dart
 │   │   ├── screens/
@@ -19,47 +28,141 @@ Individual-Project-Repo/
 │   │   │   ├── sign_in_screen.dart
 │   │   │   └── sign_up_screen.dart
 │   │   ├── services/
+│   │   │   ├── adapters/
+│   │   │   │   ├── auth_adapter.dart
+│   │   │   │   └── firestore_adapter.dart
 │   │   │   ├── address_service.dart
 │   │   │   ├── allergen_service.dart
 │   │   │   ├── auth_service.dart
 │   │   │   ├── menu_service.dart
-│   │   │   └── restaurant_service.dart
+│   │   │   ├── restaurant_service.dart
+│   │   │   └── service_utils.dart
 │   │   ├── theme/
 │   │   │   ├── nomnom_theme.dart
 │   │   │   └── theme_constants.dart
 │   │   ├── utils/
 │   │   │   ├── allergen_utils.dart
+│   │   │   ├── auth_utils.dart
+│   │   │   ├── form_validation_utils.dart
 │   │   │   └── restaurant_utils.dart
+│   │   ├── views/
+│   │   │   ├── allergen_section.dart
+│   │   │   ├── edit_profile_body.dart
+│   │   │   ├── edit_profile_view.dart
+│   │   │   ├── profile_header.dart
+│   │   │   ├── sign_up_account_view.dart
+│   │   │   ├── sign_up_allergen_view.dart
+│   │   │   ├── update_password_view.dart
+│   │   │   └── verify_current_password_view.dart
 │   │   ├── widgets/
-│   │   │   ├── allergen_chip.dart
-│   │   │   ├── allergen_filter.dart
-│   │   │   ├── filter.dart
-│   │   │   ├── nomnom_safe_appbar.dart
+│   │   │   ├── back_button_row.dart
+│   │   │   ├── delete_account_dialog.dart
+│   │   │   ├── error_banner.dart
+│   │   │   ├── filter_modal.dart
+│   │   │   ├── multi_select_checkbox_list.dart
+│   │   │   ├── nomnom_appbar.dart
+│   │   │   ├── nomnom_scaffold.dart
+│   │   │   ├── password_field.dart
 │   │   │   ├── restaurant_card.dart
-│   │   │   └── restaurant_link.dart
+│   │   │   ├── restaurant_link.dart
+│   │   │   └── text_form_field_with_controller.dart
 │   │   ├── firebase_options.dart
 │   │   └── main.dart
 │   ├── test/
-│   │   ├── models/
-│   │   │   ├── address_model_test.dart
-│   │   │   ├── allergen_model_test.dart
-│   │   │   ├── menu_item_model_test.dart
-│   │   │   ├── menu_model_test.dart
-│   │   │   └── restaurant_model_test.dart
-│   │   ├── services/
-│   │   │   ├── address_service_test.dart
-│   │   │   ├── allergen_service_test.dart
-│   │   │   └── restaurant_service_test.dart
-│   │   ├── utils/
-│   │   │   ├── allergen_utils_test.dart
-│   │   │   └── restaurant_utils_test.dart
-│   │   ├── widgets/
-│   │   │   ├── allergen_chip_widget_test.dart
-│   │   │   ├── allergen_filter_widget_test.dart
-│   │   │   ├── filter_widget_test.dart
-│   │   │   ├── nomnom_safe_appbar_widget_test.dart
-│   │   │   ├── restaurant_card_widget_test.dart
-│   │   │   └── restaurant_link_widget_test.dart
+│   │   ├── acceptance/
+│   │   │   ├── sign_in_edit_profile_acceptance_test.dart
+│   │   │   └── sign_up_acceptance_test.dart
+│   │   ├── e2e/
+│   │   │   ├── edit_profile_e2e_test.dart
+│   │   │   ├── sign_in_e2e_test.dart
+│   │   │   └── sign_up_e2e_test.dart
+│   │   ├── integration/
+│   │   │   ├── edit_profile_integration_test.dart
+│   │   │   ├── home_integration_test.dart
+│   │   │   ├── sign_in_integration_test.dart
+│   │   │   └── sign_up_account_integration_test.dart
+│   │   ├── regression/
+│   │   │   ├── auth_service_regression_test.dart
+│   │   │   ├── auth_state_provider_regression_test.dart
+│   │   │   ├── edit_profile_controller_regression_test.dart
+│   │   │   └── restaurant_service_regression_test.dart
+│   │   ├── unit/
+│   │   │   ├── controllers/
+│   │   │   │   ├── edit_profile_controller_test.dart
+│   │   │   │   └── profile_controller_test.dart
+│   │   │   ├── models/
+│   │   │   │   ├── address_model_test.dart
+│   │   │   │   ├── allergen_model_test.dart
+│   │   │   │   ├── menu_item_model_test.dart
+│   │   │   │   ├── menu_model_test.dart
+│   │   │   │   ├── profile_form_model_test.dart
+│   │   │   │   ├── restaurant_model_test.dart
+│   │   │   │   └── user_model_test.dart
+│   │   │   ├── nav/
+│   │   │   │   ├── nav_destination_test.dart
+│   │   │   │   ├── nav_utils_test.dart
+│   │   │   │   ├── route_constants_test.dart
+│   │   │   │   └── route_tracker_test.dart
+│   │   │   ├── providers/
+│   │   │   │   └── auth_state_provider_test.dart
+│   │   │   ├── services/
+│   │   │   │   ├── address_service_test.dart
+│   │   │   │   ├── allergen_service_test.dart
+│   │   │   │   ├── auth_service_test.dart
+│   │   │   │   ├── fake_firestore.dart
+│   │   │   │   ├── menu_service_test.dart
+│   │   │   │   ├── restaurant_service_test.dart
+│   │   │   │   └── service_utils_test.dart
+│   │   │   ├── utils/
+│   │   │   │   ├── allergen_utils_test.dart
+│   │   │   │   ├── auth_utils_test.dart
+│   │   │   │   ├── form_validation_utils_test.dart
+│   │   │   │   └── restaurant_utils_test.dart
+│   │   │   ├── views/
+│   │   │   │   ├── allergen_section_test.dart
+│   │   │   │   └── edit_profile_body_test.dart
+│   │   │   └── widgets/
+│   │   │       ├── back_button_row_test.dart
+│   │   │       ├── error_banner_test.dart
+│   │   │       ├── filter_modal_test.dart
+│   │   │       ├── filter_widget_test.dart
+│   │   │       ├── multi_select_checkbox_list_test.dart
+│   │   │       ├── nomnom_safe_appbar_widget_test.dart
+│   │   │       ├── password_field_test.dart
+│   │   │       ├── restaurant_card_test.dart
+│   │   │       ├── restaurant_card_widget_test.dart
+│   │   │       ├── restaurant_link_test.dart
+│   │   │       ├── restaurant_link_widget_test.dart
+│   │   │       └── text_form_field_with_controller_test.dart
+│   │   ├── widget/
+│   │   │   ├── screens/
+│   │   │   │   ├── edit_profile_screen_test.dart
+│   │   │   │   ├── home_screen_test.dart
+│   │   │   │   ├── menu_screen_test.dart
+│   │   │   │   ├── profile_screen_test.dart
+│   │   │   │   ├── restaurant_screen_test.dart
+│   │   │   │   ├── sign_in_screen_test.dart
+│   │   │   │   └── sign_up_screen_test.dart
+│   │   │   ├── views/
+│   │   │   │   ├── allergen_section_widget_test.dart
+│   │   │   │   ├── edit_profile_body_widget_test.dart
+│   │   │   │   ├── edit_profile_view_test.dart
+│   │   │   │   ├── sign_up_account_view_test.dart
+│   │   │   │   ├── sign_up_allergen_view_test.dart
+│   │   │   │   ├── update_password_view_test.dart
+│   │   │   │   └── verify_current_password_view_test.dart
+│   │   │   ├── widgets/
+│   │   │   │   ├── back_button_row_test.dart
+│   │   │   │   ├── error_banner_test.dart
+│   │   │   │   ├── filter_modal_test.dart
+│   │   │   │   ├── filter_widget_test.dart
+│   │   │   │   ├── multi_select_checkbox_list_test.dart
+│   │   │   │   ├── nomnom_safe_appbar_widget_test.dart
+│   │   │   │   ├── password_field_test.dart
+│   │   │   │   ├── restaurant_card_test.dart
+│   │   │   │   ├── restaurant_link_test.dart
+│   │   │   │   └── text_form_field_with_controller_test.dart
+│   │   │   └── app_flow_test.dart
 │   │   └── main_smoke_test.dart
 │   ├── analysis_options.yaml
 │   ├── firebase.json
@@ -81,6 +184,9 @@ Individual-Project-Repo/
 │   │   ├── Week 1/
 │   │   │   ├── week-1.md
 │   │   │   └── week-1.pdf
+│   │   ├── Week 10/
+│   │   │   ├── week-10-detailed.md
+│   │   │   └── week-10.md
 │   │   ├── Week 2/
 │   │   │   ├── week-2.md
 │   │   │   └── week-2.pdf
@@ -103,10 +209,14 @@ Individual-Project-Repo/
 │   │   │   ├── week-7-detailed.md
 │   │   │   ├── week-7.md
 │   │   │   └── week-7.pdf
-│   │   └── Week 8/
-│   │       ├── week-8-detailed.md
-│   │       ├── week-8.md
-│   │       └── week-8.pdf
+│   │   ├── Week 8/
+│   │   │   ├── week-8-detailed.md
+│   │   │   ├── week-8.md
+│   │   │   └── week-8.pdf
+│   │   └── Week 9/
+│   │       ├── week-9-detailed.md
+│   │       ├── week-9.md
+│   │       └── week-9.pdf
 │   └── file-structure.txt
 ├── firestore/
 │   ├── firestore_uploader/
@@ -130,8 +240,27 @@ Individual-Project-Repo/
 │   │   └── upload_menu_items.js
 │   ├── add_item_type_attribute_to_menu_items.js
 │   └── rename_item_type_field.js
+├── functions/
+│   ├── .eslintrc.js
+│   ├── index.js
+│   ├── package-lock.json
+│   └── package.json
+├── nomnom-safe-site/
+│   ├── assets/
+│   │   ├── css/
+│   │   │   ├── style.css
+│   │   │   └── style.css.map
+│   │   ├── js/
+│   │   │   └── layout.js
+│   │   └── scss/
+│   │       └── style.scss
+│   ├── about.html
+│   ├── docs.html
+│   └── index.html
 ├── scripts/
 │   ├── compare_tree.py
 │   ├── loc_counter.py
 │   └── update_file_tree.py
+├── .firebaserc
+├── firebase.json
 └── README.md
