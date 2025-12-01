@@ -69,7 +69,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.text('Cuisines'));
+    await tester.tap(find.text('Test'));
     await tester.pumpAndSettle();
 
     // Select both options
