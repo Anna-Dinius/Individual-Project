@@ -132,6 +132,7 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
             child: Column(
               children: [
                 TextFormFieldWithController(
+                  fieldKey: const Key('emailField'),
                   controller: _emailController,
                   label: 'Email',
                   isRequired: true,
@@ -141,6 +142,7 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
                 ),
                 const SizedBox(height: 16),
                 PasswordField(
+                  fieldKey: const Key('passwordField'),
                   controller: _passwordController,
                   label: 'Password',
                   isRequired: true,
@@ -194,8 +196,8 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
             ),
           ),
           const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Wrap(
+            alignment: WrapAlignment.center,
             children: [
               const Text("Don't have an account? "),
               TextButton(
