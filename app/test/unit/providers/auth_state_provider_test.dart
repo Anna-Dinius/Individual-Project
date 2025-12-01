@@ -101,6 +101,10 @@ class _FakeFirestoreAdapter implements FirestoreAdapter {
 
 void main() {
   group('AuthStateProvider', () {
+    setUp(() {
+      // Ensure AuthService singleton is reset so each test can inject fakes
+      AuthService.clearInstanceForTests();
+    });
     test('verifyPassword returns true when underlying auth succeeds', () async {
       final fakeAuth = _FakeAuthAdapter(
         _FakeUserAdapter('u1', email: 'a@b.com'),
@@ -165,7 +169,18 @@ void main() {
       final fakeUser = _FakeUserAdapter('u1', email: 'a@b.com');
       final fakeAuth = _FakeAuthAdapter(fakeUser);
       final fakeFs = _FakeFirestoreAdapter();
+      // ensure a user document exists in the fake firestore so loadCurrentUser can populate
+      await fakeFs.collection('users').doc('u1').set({
+        'first_name': 'A',
+        'last_name': 'B',
+        'email': 'a@b.com',
+        'allergies': <String>[],
+      });
+
       final service = AuthService(auth: fakeAuth, firestore: fakeFs);
+      // load the current user into the service
+      await service.loadCurrentUser();
+
       final provider = AuthStateProvider(service);
 
       final u = provider.currentUser;

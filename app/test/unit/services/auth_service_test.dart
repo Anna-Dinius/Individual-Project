@@ -132,7 +132,6 @@ void main() {
     final fakeFs = FakeFirestore(
       {},
     ); // pass an empty fake Firestore to avoid Firebase initialization
-    final fakeAuth = FakeAuth();
 
     final fakeAuthAdapter = FakeAuthAdapter();
     final fakeFsAdapter = FakeFirestoreAdapter(fakeFs);

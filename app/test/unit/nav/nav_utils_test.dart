@@ -4,20 +4,6 @@ import 'package:nomnom_safe/nav/nav_utils.dart';
 import 'package:nomnom_safe/nav/route_constants.dart';
 
 void main() {
-  Widget makeTestApp({required String initialRoute}) {
-    return MaterialApp(
-      initialRoute: initialRoute,
-      routes: {
-        AppRoutes.home: (context) =>
-            Scaffold(body: Center(child: Text('HOME'))),
-        AppRoutes.menu: (context) =>
-            Scaffold(body: Center(child: Text('MENU'))),
-        AppRoutes.signIn: (context) =>
-            Scaffold(body: Center(child: Text('SIGNIN'))),
-      },
-    );
-  }
-
   testWidgets(
     'navigateIfNotCurrent pushes when target different from current',
     (tester) async {
