@@ -4,9 +4,9 @@ import 'package:nomnom_safe/models/menu_item.dart';
 
 /// Service class to handle menu-related Firestore operations
 class MenuService {
-  final FirebaseFirestore _firestore;
+  final dynamic _firestore;
 
-  MenuService([FirebaseFirestore? firestore])
+  MenuService([dynamic firestore])
     : _firestore = firestore ?? FirebaseFirestore.instance;
 
   /// Fetch a menu by restaurant ID
@@ -18,10 +18,14 @@ class MenuService {
           .limit(1)
           .get();
 
-      if (menuSnapshot.docs.isEmpty) return null;
+      final docs = (menuSnapshot.docs as List).cast<dynamic>();
+      if (docs.isEmpty) return null;
 
-      final menuDoc = menuSnapshot.docs.first;
-      return Menu.fromJson({'id': menuDoc.id, ...menuDoc.data()});
+      final menuDoc = docs.first;
+      return Menu.fromJson({
+        'id': menuDoc.id,
+        ...menuDoc.data() as Map<String, dynamic>,
+      });
     } catch (e) {
       throw Exception('Failed to load menu: ${e.toString()}');
     }
@@ -35,8 +39,12 @@ class MenuService {
           .where('menu_id', isEqualTo: menuId)
           .get();
 
-      return itemsSnapshot.docs.map((doc) {
-        return MenuItem.fromJson({'id': doc.id, ...doc.data()});
+      final docs = (itemsSnapshot.docs as List).cast<dynamic>();
+      return docs.map<MenuItem>((doc) {
+        return MenuItem.fromJson({
+          'id': doc.id,
+          ...doc.data() as Map<String, dynamic>,
+        });
       }).toList();
     } catch (e) {
       throw Exception('Failed to load menu items: ${e.toString()}');

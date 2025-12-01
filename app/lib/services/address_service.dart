@@ -3,9 +3,9 @@ import 'package:nomnom_safe/models/address.dart';
 
 /// Service class to handle address-related Firestore operations
 class AddressService {
-  final FirebaseFirestore _firestore;
+  final dynamic _firestore;
 
-  AddressService([FirebaseFirestore? firestore])
+  AddressService([dynamic firestore])
     : _firestore = firestore ?? FirebaseFirestore.instance;
 
   /// Get the full address string for a given address id
