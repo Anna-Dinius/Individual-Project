@@ -8,8 +8,13 @@ import 'package:nomnom_safe/nav/route_constants.dart';
 /// Screen displaying detailed information about a specific restaurant
 class RestaurantScreen extends StatefulWidget {
   final Restaurant restaurant;
+  final AddressService? addressService;
 
-  const RestaurantScreen({super.key, required this.restaurant});
+  const RestaurantScreen({
+    super.key,
+    required this.restaurant,
+    this.addressService,
+  });
 
   @override
   State<RestaurantScreen> createState() => _RestaurantScreenState();
@@ -17,11 +22,12 @@ class RestaurantScreen extends StatefulWidget {
 
 class _RestaurantScreenState extends State<RestaurantScreen> {
   String? address;
-  final AddressService _addressService = AddressService();
+  late AddressService _addressService;
 
   @override
   void initState() {
     super.initState();
+    _addressService = widget.addressService ?? AddressService();
     _loadAddress();
   }
 

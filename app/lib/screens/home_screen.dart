@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nomnom_safe/services/service_utils.dart';
 import 'package:nomnom_safe/models/restaurant.dart';
+import 'package:nomnom_safe/models/user.dart';
 import 'package:nomnom_safe/widgets/restaurant_card.dart';
 import 'package:nomnom_safe/services/allergen_service.dart';
 import 'package:nomnom_safe/services/restaurant_service.dart';
@@ -12,7 +13,18 @@ import 'package:nomnom_safe/nav/route_tracker.dart';
 
 /// Main screen displaying allergen filters and a list of restaurants
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final RestaurantService? restaurantService;
+  final AllergenService? allergenService;
+  final User? injectedCurrentUser;
+  final bool useInjectedCurrentUser;
+
+  const HomeScreen({
+    super.key,
+    this.restaurantService,
+    this.allergenService,
+    this.injectedCurrentUser,
+    this.useInjectedCurrentUser = false,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -21,7 +33,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with RouteAware {
   // Service classes
   late AllergenService _allergenService;
-  final RestaurantService _restaurantService = RestaurantService();
+  late RestaurantService _restaurantService;
 
   // State variables
   bool isLoadingRestaurants = true; // controls loading spinner visibility
@@ -51,6 +63,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   @override
   void initState() {
     super.initState();
+
+    // allow optional injection for tests
+    _restaurantService = (widget.restaurantService ?? RestaurantService());
 
     // Load restaurants when the widget is first built
     _fetchUnfilteredRestaurants();
@@ -97,7 +112,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   }
 
   void _applyUserAllergensIfLoggedIn() async {
-    final user = AuthService().currentUser;
+    final user = widget.useInjectedCurrentUser
+        ? widget.injectedCurrentUser
+        : AuthService().currentUser;
     if (user == null) {
       return;
     }

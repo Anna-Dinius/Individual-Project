@@ -4,9 +4,11 @@ import 'package:nomnom_safe/models/user.dart';
 
 /// AuthStateProvider notifies listeners when authentication state changes
 class AuthStateProvider extends ChangeNotifier {
-  final AuthService _authService = AuthService();
+  AuthService? _authService;
 
-  bool get isSignedIn => _authService.isSignedIn;
+  AuthStateProvider([AuthService? authService]) : _authService = authService;
+
+  bool get isSignedIn => (_authService ??= AuthService()).isSignedIn;
 
   /// Sign up and notify listeners
   Future<void> signUp({
@@ -17,7 +19,7 @@ class AuthStateProvider extends ChangeNotifier {
     required String confirmPassword,
     List<String>? allergies,
   }) async {
-    await _authService.signUp(
+    await (_authService ??= AuthService()).signUp(
       firstName: firstName,
       lastName: lastName,
       email: email,
@@ -30,13 +32,16 @@ class AuthStateProvider extends ChangeNotifier {
 
   /// Sign in and notify listeners
   Future<void> signIn({required String email, required String password}) async {
-    await _authService.signIn(email: email, password: password);
+    await (_authService ??= AuthService()).signIn(
+      email: email,
+      password: password,
+    );
     notifyListeners();
   }
 
   /// Sign out and notify listeners
   Future<void> signOut() async {
-    await _authService.signOut();
+    await (_auth_serviceOrCreate()).signOut();
     notifyListeners();
   }
 
@@ -49,7 +54,7 @@ class AuthStateProvider extends ChangeNotifier {
     required String confirmPassword,
     List<String>? allergies,
   }) async {
-    final error = await _authService.updateProfile(
+    final error = await (_authService ??= AuthService()).updateProfile(
       firstName: firstName,
       lastName: lastName,
       email: email,
@@ -62,14 +67,14 @@ class AuthStateProvider extends ChangeNotifier {
   }
 
   Future<void> loadCurrentUser() async {
-    await _authService.loadCurrentUser();
+    await (_authService ??= AuthService()).loadCurrentUser();
     notifyListeners();
   }
 
   /// Verify current password
   Future<bool> verifyPassword(String password) async {
     try {
-      return await _authService.verifyPassword(password);
+      return await (_authService ??= AuthService()).verifyPassword(password);
     } catch (_) {
       return false;
     }
@@ -80,7 +85,7 @@ class AuthStateProvider extends ChangeNotifier {
     required String newPassword,
     required String confirmPassword,
   }) async {
-    final error = await _authService.updatePassword(
+    final error = await (_authService ??= AuthService()).updatePassword(
       newPassword: newPassword,
       confirmPassword: confirmPassword,
     );
@@ -89,15 +94,20 @@ class AuthStateProvider extends ChangeNotifier {
   }
 
   Future<void> deleteAccount({required String password}) async {
-    final success = await _authService.verifyPassword(password);
+    final success = await (_authService ??= AuthService()).verifyPassword(
+      password,
+    );
     if (!success) {
       throw Exception('Please log in again before deleting your account.');
     }
 
-    await _authService.deleteAccount(); // your backend call
+    await (_authService ??= AuthService()).deleteAccount(); // your backend call
     notifyListeners();
   }
 
   /// Get current user (for profile display)
-  User? get currentUser => _authService.currentUser;
+  User? get currentUser => (_authService ??= AuthService()).currentUser;
+
+  // helper that ensures typed access in a couple of places
+  AuthService _auth_serviceOrCreate() => (_authService ??= AuthService());
 }

@@ -1,19 +1,28 @@
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nomnom_safe/models/user.dart';
+import 'package:nomnom_safe/services/adapters/auth_adapter.dart';
+import 'package:nomnom_safe/services/adapters/firestore_adapter.dart';
 
 /// AuthService manages user authentication and session state using Firebase Firestore.
 class AuthService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final fb_auth.FirebaseAuth _auth = fb_auth.FirebaseAuth.instance;
-  static final AuthService _instance = AuthService._internal();
+  final AuthAdapter _auth;
+  final FirestoreAdapter _firestore;
+  static AuthService? _instance;
 
   User? _currentUser;
 
-  AuthService._internal();
+  AuthService._internal(this._auth, this._firestore);
 
-  factory AuthService() {
-    return _instance;
+  /// Factory returns a singleton. Provide `auth` and `firestore` adapters
+  /// to inject test doubles (fakes/mocks) during unit tests. If no adapters
+  /// are provided, production adapters that wrap Firebase SDKs are used.
+  factory AuthService({AuthAdapter? auth, FirestoreAdapter? firestore}) {
+    _instance ??= AuthService._internal(
+      auth ?? FirebaseAuthAdapter(),
+      firestore ?? FirebaseFirestoreAdapter(),
+    );
+    return _instance!;
   }
 
   /// Get the currently logged-in user, or null if not authenticated
@@ -22,12 +31,10 @@ class AuthService {
   Future<void> loadCurrentUser() async {
     final fbUser = _auth.currentUser;
     if (fbUser != null) {
-      final userDoc = await _firestore
-          .collection('users')
-          .doc(fbUser.uid)
-          .get();
-      if (userDoc.exists) {
-        _currentUser = User.fromJson({...userDoc.data()!, 'id': fbUser.uid});
+      final doc = _firestore.collection('users').doc(fbUser.uid);
+      final userData = await doc.get();
+      if (userData != null) {
+        _currentUser = User.fromJson({...userData, 'id': fbUser.uid});
       }
     }
   }
@@ -57,7 +64,15 @@ class AuthService {
         email: email,
         password: password,
       );
-      final uid = userCredential.user!.uid;
+      // userCredential may be the SDK's UserCredential or a fake; try to
+      // extract uid robustly.
+      final uid = userCredential is Map && userCredential['user'] != null
+          ? userCredential['user'].uid
+          : (userCredential is dynamic && userCredential.user != null
+                ? userCredential.user.uid
+                : null);
+
+      if (uid == null) return 'Error signing up.';
 
       final newUser = User(
         id: uid,
@@ -87,12 +102,14 @@ class AuthService {
 
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      final uid = _auth.currentUser!.uid;
+      final fbUser = _auth.currentUser;
+      final uid = fbUser?.uid;
+      if (uid == null) return 'User profile not found';
 
-      final userDoc = await _firestore.collection('users').doc(uid).get();
-      if (!userDoc.exists) return 'User profile not found';
+      final userData = await _firestore.collection('users').doc(uid).get();
+      if (userData == null) return 'User profile not found';
 
-      _currentUser = User.fromJson({...userDoc.data()!, 'id': uid});
+      _currentUser = User.fromJson({...userData, 'id': uid});
     } on fb_auth.FirebaseAuthException {
       return 'Error signing in.';
     }
@@ -163,7 +180,7 @@ class AuthService {
     try {
       await fbUser.reauthenticateWithCredential(credential);
       return true;
-    } on fb_auth.FirebaseAuthException {
+    } catch (e) {
       return false;
     }
   }

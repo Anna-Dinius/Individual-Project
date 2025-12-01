@@ -11,8 +11,15 @@ import 'package:nomnom_safe/nav/route_constants.dart';
 
 class MenuScreen extends StatefulWidget {
   final Restaurant restaurant;
+  final MenuService? menuService;
+  final AllergenService? allergenService;
 
-  const MenuScreen({super.key, required this.restaurant});
+  const MenuScreen({
+    super.key,
+    required this.restaurant,
+    this.menuService,
+    this.allergenService,
+  });
 
   @override
   State<MenuScreen> createState() => _MenuScreenState();
@@ -20,7 +27,7 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   late AllergenService _allergenService;
-  final MenuService _menuService = MenuService();
+  late MenuService _menuService;
 
   Map<String, String> allergenIdToLabel = {};
   Map<String, String> _allergenLabelToId = {};
@@ -45,7 +52,10 @@ class _MenuScreenState extends State<MenuScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _allergenService = getAllergenService(context);
+    _allergenService = widget.allergenService ?? getAllergenService(context);
+
+    // allow injection for tests
+    _menuService = widget.menuService ?? MenuService();
 
     // Only fetch once
     if (allergenIdToLabel.isEmpty) {

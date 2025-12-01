@@ -26,7 +26,13 @@ class NomnomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSignedIn = context.watch<AuthStateProvider>().isSignedIn;
+    bool isSignedIn;
+    try {
+      isSignedIn = context.watch<AuthStateProvider>().isSignedIn;
+    } catch (_) {
+      // In tests the provider may not be present; treat as signed out.
+      isSignedIn = false;
+    }
 
     return AppBar(
       title: Text(title),
