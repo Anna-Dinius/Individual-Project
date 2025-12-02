@@ -56,7 +56,7 @@ Empower users to dine out with confidence, knowing their dietary needs are respe
 
 ### ✅ Quality Indicators
 
-- **Test Coverage:** 148 comprehensive test cases
+- **Test Coverage:** 135 comprehensive test cases
 - **Code Organization:** Clear module separation
 - **Documentation:** Comprehensive user manual & architecture design docs
 - **Error Handling:** Robust validation and exceptions
@@ -101,9 +101,9 @@ Empower users to dine out with confidence, knowing their dietary needs are respe
 
 ### 📊 Overall Statistics
 
-- **Total Lines of Code:** ~8,443
-  - Production Code: ~3,737 lines
-  - Test Code: ~4,706 lines
+- **Total Lines of Code:** ~8,193
+  - Production Code: ~3,843 lines
+  - Test Code: ~4,350 lines
 - **Total Features:** 8
   - Sprint 1: 4 features
   - Sprint 2: 4 features
@@ -113,8 +113,8 @@ Empower users to dine out with confidence, knowing their dietary needs are respe
 
 ---
 
-- **Total Tests:** 148 test cases
-- **Total Test Files:** 78
+- **Total Tests:** 135 test cases
+- **Total Test Files:** 64
 - **🔥 Burndown Rate:**
   - Sprint 1: 100% (4/4 requirements)
   - Sprint 2: 100% (20/20 requirements)
