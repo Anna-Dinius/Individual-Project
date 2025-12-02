@@ -1,3 +1,4 @@
+/* ------ Elements -------------------------- */
 html,
 body {
   height: 100%;
@@ -27,11 +28,25 @@ hr {
   margin: 0 auto;
 }
 
+h2 {
+  font-weight: bold;
+}
+
+footer {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* ------ Classes -------------------------- */
 .navbar {
   background-color: #008080;
   position: fixed;
   width: 100%;
   top: 0;
+  z-index: 1000;
 }
 .navbar-brand {
   color: #fff !important;
@@ -42,6 +57,15 @@ hr {
 }
 .nav-link:hover {
   text-decoration: underline;
+}
+
+.btn-primary {
+  background-color: #fa8072;
+  border-color: #fa8072;
+}
+.btn-primary:hover {
+  background-color: #e36d60;
+  border-color: #e36d60;
 }
 
 .card {
@@ -60,12 +84,12 @@ hr {
   font-size: 0.95rem;
 }
 
-footer {
-  background-color: #f8f9fa;
-  padding: 1rem;
-  text-align: center;
-  font-size: 0.9rem;
-  color: #666;
+/* ------ Ids -------------------------- */
+#docs-page h4 {
+  color: #034c53;
+}
+#docs-page .card-body h4 {
+  font-size: 26px;
 }
 
 /*# sourceMappingURL=style.css.map */

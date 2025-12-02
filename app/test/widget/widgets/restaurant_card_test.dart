@@ -28,4 +28,27 @@ void main() {
     expect(find.textContaining('Cuisine:'), findsOneWidget);
     expect(find.textContaining('Today:'), findsOneWidget);
   });
+
+  testWidgets('RestaurantCard renders and navigates', (tester) async {
+    final r = Restaurant.fromJson({
+      'id': 'r1',
+      'name': 'R1',
+      'address_id': 'addr1',
+      'website': '',
+      'hours': ['a', 'b', 'c', 'd', 'e', 'f', 'g'],
+      'phone': 'p',
+      'cuisine': 'c',
+      'disclaimers': [],
+      'logoUrl': null,
+    });
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(body: RestaurantCard(restaurant: r)),
+      ),
+    );
+
+    expect(find.text('R1'), findsOneWidget);
+    expect(find.text('Cuisine: c'), findsOneWidget);
+  });
 }
