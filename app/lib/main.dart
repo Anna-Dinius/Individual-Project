@@ -12,6 +12,7 @@ import 'screens/edit_profile_screen.dart';
 import 'theme/nomnom_theme.dart';
 import 'models/restaurant.dart';
 import 'providers/auth_state_provider.dart';
+import 'providers/allergen_selection_provider.dart';
 import 'nav/route_tracker.dart';
 import 'widgets/nomnom_appbar.dart';
 import 'widgets/nomnom_scaffold.dart';
@@ -30,10 +31,31 @@ void main() async {
   final authStateProvider = AuthStateProvider();
   await authStateProvider.loadCurrentUser(); // Load profile before UI starts
 
+  // Create selection provider here so we can initialize it from the loaded user
+  final selectionProvider = AllergenSelectionProvider();
+  // If the auth provider already has a user, initialize selection from their allergies
+  final currentUser = authStateProvider.currentUser;
+  if (currentUser != null && currentUser.allergies.isNotEmpty) {
+    selectionProvider.setSelectedIds(currentUser.allergies.toSet());
+  }
+
+  // When auth state changes (sign in / sign up), update the selection to match user profile
+  authStateProvider.addListener(() {
+    final u = authStateProvider.currentUser;
+    if (u != null) {
+      selectionProvider.setSelectedIds(u.allergies.toSet());
+    } else {
+      selectionProvider.clear();
+    }
+  });
+
   runApp(
     MultiProvider(
       providers: [
         Provider<AllergenService>.value(value: allergenService),
+        ChangeNotifierProvider<AllergenSelectionProvider>.value(
+          value: selectionProvider,
+        ),
         ChangeNotifierProvider<AuthStateProvider>.value(
           value: authStateProvider,
         ),

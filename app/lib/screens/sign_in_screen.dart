@@ -64,13 +64,22 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
         password: _passwordController.text,
       );
 
-      if (mounted) {
+      // Determine success by checking provider state
+      final signedIn = authStateProvider.isSignedIn;
+      if (mounted && signedIn) {
         // Navigate back to home screen and trigger AppBar rebuild
         replaceIfNotCurrent(
           context,
           AppRoutes.home,
           blockIfCurrent: [AppRoutes.home],
         );
+      } else {
+        // Invalid credentials — show snackbar and don't navigate
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Invalid email or password.')),
+          );
+        }
       }
     } catch (e) {
       setState(() {
@@ -198,6 +207,7 @@ class _SignInScreenState extends State<SignInScreen> with RouteAware {
           const SizedBox(height: 24),
           Wrap(
             alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               const Text("Don't have an account? "),
               TextButton(

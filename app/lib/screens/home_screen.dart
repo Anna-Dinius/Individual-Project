@@ -4,6 +4,8 @@ import 'package:nomnom_safe/models/restaurant.dart';
 import 'package:nomnom_safe/models/user.dart';
 import 'package:nomnom_safe/widgets/restaurant_card.dart';
 import 'package:nomnom_safe/services/allergen_service.dart';
+import 'package:provider/provider.dart';
+import 'package:nomnom_safe/providers/allergen_selection_provider.dart';
 import 'package:nomnom_safe/services/restaurant_service.dart';
 import 'package:nomnom_safe/utils/allergen_utils.dart';
 import 'package:nomnom_safe/widgets/filter_modal.dart';
@@ -54,6 +56,17 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
     _allergenService = getAllergenService(context);
+
+    // Initialize selection from global provider if available
+    try {
+      final selectionProvider = context.read<AllergenSelectionProvider>();
+      if (_selectedAllergenIds.isEmpty &&
+          selectionProvider.selectedIds.isNotEmpty) {
+        _selectedAllergenIds = selectionProvider.selectedIds;
+      }
+    } catch (_) {
+      // Provider not present in this test harness — ignore
+    }
 
     if (isLoadingAllergens) {
       _fetchAllergens();
@@ -129,6 +142,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         _selectedAllergenIds = userAllergenIds;
         _selectedAllergenLabels = labels.toSet();
       });
+      // Persist profile-based selection globally
+      if (mounted) {
+        try {
+          context.read<AllergenSelectionProvider>().setSelectedIds(
+            userAllergenIds,
+          );
+        } catch (_) {}
+      }
       _applyAllergenFilter();
     }
   }
@@ -235,6 +256,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                             _selectedAllergenIds = matchedIds;
                             _selectedAllergenLabels = selectedLabels.toSet();
                           });
+                          // Persist selection globally so other screens (menu) can pick it up
+                          try {
+                            context
+                                .read<AllergenSelectionProvider>()
+                                .setSelectedIds(matchedIds);
+                          } catch (_) {}
                           _applyAllergenFilter();
                         },
                       ),

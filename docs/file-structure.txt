@@ -18,6 +18,7 @@ Individual-Project-Repo/
 │   │   │   ├── route_constants.dart
 │   │   │   └── route_tracker.dart
 │   │   ├── providers/
+│   │   │   ├── allergen_selection_provider.dart
 │   │   │   └── auth_state_provider.dart
 │   │   ├── screens/
 │   │   │   ├── edit_profile_screen.dart
@@ -113,27 +114,11 @@ Individual-Project-Repo/
 │   │   │   │   ├── menu_service_test.dart
 │   │   │   │   ├── restaurant_service_test.dart
 │   │   │   │   └── service_utils_test.dart
-│   │   │   ├── utils/
-│   │   │   │   ├── allergen_utils_test.dart
-│   │   │   │   ├── auth_utils_test.dart
-│   │   │   │   ├── form_validation_utils_test.dart
-│   │   │   │   └── restaurant_utils_test.dart
-│   │   │   ├── views/
-│   │   │   │   ├── allergen_section_test.dart
-│   │   │   │   └── edit_profile_body_test.dart
-│   │   │   └── widgets/
-│   │   │       ├── back_button_row_test.dart
-│   │   │       ├── error_banner_test.dart
-│   │   │       ├── filter_modal_test.dart
-│   │   │       ├── filter_widget_test.dart
-│   │   │       ├── multi_select_checkbox_list_test.dart
-│   │   │       ├── nomnom_safe_appbar_widget_test.dart
-│   │   │       ├── password_field_test.dart
-│   │   │       ├── restaurant_card_test.dart
-│   │   │       ├── restaurant_card_widget_test.dart
-│   │   │       ├── restaurant_link_test.dart
-│   │   │       ├── restaurant_link_widget_test.dart
-│   │   │       └── text_form_field_with_controller_test.dart
+│   │   │   └── utils/
+│   │   │       ├── allergen_utils_test.dart
+│   │   │       ├── auth_utils_test.dart
+│   │   │       ├── form_validation_utils_test.dart
+│   │   │       └── restaurant_utils_test.dart
 │   │   ├── widget/
 │   │   │   ├── screens/
 │   │   │   │   ├── edit_profile_screen_test.dart
@@ -166,6 +151,7 @@ Individual-Project-Repo/
 │   │   └── main_smoke_test.dart
 │   ├── analysis_options.yaml
 │   ├── firebase.json
+│   ├── flutter_01.log
 │   ├── pubspec.yaml
 │   └── README.md
 ├── docs/
@@ -175,8 +161,10 @@ Individual-Project-Repo/
 │   ├── manuals/
 │   │   ├── nomnom_safe_user_manual.md
 │   │   └── nomnom_safe_user_manual.pdf
-│   ├── preliminary/
 │   ├── Progress Reports/
+│   │   ├── Final Report/
+│   │   │   ├── final-presentation.md
+│   │   │   └── final-presentation.pdf
 │   │   ├── Sprint 1/
 │   │   │   ├── screenshots/
 │   │   │   │   ├── cheesecake-factory-spreadsheet.png
@@ -192,7 +180,8 @@ Individual-Project-Repo/
 │   │   │   └── week-1.pdf
 │   │   ├── Week 10/
 │   │   │   ├── week-10-detailed.md
-│   │   │   └── week-10.md
+│   │   │   ├── week-10.md
+│   │   │   └── week-10.pdf
 │   │   ├── Week 2/
 │   │   │   ├── week-2.md
 │   │   │   └── week-2.pdf
@@ -268,6 +257,7 @@ Individual-Project-Repo/
 │   ├── loc_counter.py
 │   └── update_file_tree.py
 ├── .firebaserc
+├── .markdownlint.yaml
 ├── firebase.json
 ├── index.html
 └── README.md

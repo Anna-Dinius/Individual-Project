@@ -6,6 +6,8 @@ import 'package:nomnom_safe/nav/nav_utils.dart';
 import 'package:nomnom_safe/widgets/filter_modal.dart';
 import 'package:nomnom_safe/services/allergen_service.dart';
 import 'package:nomnom_safe/services/menu_service.dart';
+import 'package:provider/provider.dart';
+import 'package:nomnom_safe/providers/allergen_selection_provider.dart';
 import 'package:nomnom_safe/models/menu.dart';
 import 'package:nomnom_safe/nav/route_constants.dart';
 
@@ -28,6 +30,7 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   late AllergenService _allergenService;
   late MenuService _menuService;
+  AllergenSelectionProvider? _selectionProvider;
 
   Map<String, String> allergenIdToLabel = {};
   Map<String, String> _allergenLabelToId = {};
@@ -57,10 +60,42 @@ class _MenuScreenState extends State<MenuScreen> {
     // allow injection for tests
     _menuService = widget.menuService ?? MenuService();
 
+    // Initialize selection provider and subscribe to changes (if present)
+    try {
+      _selectionProvider = context.read<AllergenSelectionProvider>();
+      if (_selectedAllergenIds.isEmpty &&
+          _selectionProvider!.selectedIds.isNotEmpty) {
+        _selectedAllergenIds = _selectionProvider!.selectedIds;
+      }
+      _selectionProvider!.addListener(_onSelectionChanged);
+    } catch (_) {
+      _selectionProvider = null;
+    }
+
     // Only fetch once
     if (allergenIdToLabel.isEmpty) {
       _loadData();
     }
+  }
+
+  void _onSelectionChanged() async {
+    if (_selectionProvider == null) return;
+    final ids = _selectionProvider!.selectedIds;
+    final labels = await _allergenService.idsToLabels(ids.toList());
+    if (!mounted) return;
+    setState(() {
+      _selectedAllergenIds = ids;
+      _selectedAllergenLabels = labels.toSet();
+      _updateFilteredMenuItems();
+    });
+  }
+
+  @override
+  void dispose() {
+    try {
+      _selectionProvider?.removeListener(_onSelectionChanged);
+    } catch (_) {}
+    super.dispose();
   }
 
   Future<void> _loadData() async {
@@ -213,6 +248,12 @@ class _MenuScreenState extends State<MenuScreen> {
                       _selectedAllergenLabels = selectedLabels.toSet();
                       _updateFilteredMenuItems();
                     });
+                    // Persist selection so HomeScreen and other screens update
+                    try {
+                      context.read<AllergenSelectionProvider>().setSelectedIds(
+                        matchedIds,
+                      );
+                    } catch (_) {}
                   },
                 ),
               ),
